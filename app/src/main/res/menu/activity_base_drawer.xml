@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_happy_hours"
+            android:title="@string/happy_hours"/>
+        <!--android:icon="@drawable/ic_av_timer_black_24dp"-->
+        <item
+            android:id="@+id/nav_near_by"
+            android:title="@string/Near_by"/>
+        <item
+            android:id="@+id/nav_offers"
+            android:title="@string/offers" />
+        <item
+            android:id="@+id/nav_events"
+            android:title="@string/Events" />
+        <item
+            android:id="@+id/nav_user_fav_places"
+            android:title="@string/Favorite_Places" />
+        <item
+            android:id="@+id/nav_chat"
+            android:title="@string/chat" />
+        <item
+            android:id="@+id/nav_manage"
+            android:title="@string/Settings" />
+    </group>
+
+</menu>

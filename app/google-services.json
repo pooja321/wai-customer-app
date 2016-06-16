@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "655879953653",
+    "project_id": "maid-it"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655879953653:android:2a38fd9d487bc862",
+        "android_client_info": {
+          "package_name": "com.maidit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "655879953653-kllndlfemq4f5n4goqeo2lls1kv0l7dt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.maidit",
+            "certificate_hash": "A7E96898E3C9F81554885A3E1D1B379FECE2AC13"
+          }
+        },
+        {
+          "client_id": "655879953653-hl22idc9ps6557c42duk2se4k1nl9gqm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3hTjBTKwNTn7BR2WR8-CqCTCl5O_6dpI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
