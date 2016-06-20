@@ -1,6 +1,5 @@
 package com.maidit;
 
-import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -78,19 +77,19 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        if (id == R.id.nav_near_by) {
+        if (id == R.id.nav_history) {
 
-        } else if (id == R.id.nav_happy_hours) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+        } else if (id == R.id.nav_address) {
 
-        } else if (id == R.id.nav_offers) {
+        } else if (id == R.id.nav_notifications) {
 
-        } else if (id == R.id.nav_user_fav_places) {
+        } else if (id == R.id.nav_chat_with_us) {
 
-        } else if (id == R.id.nav_chat) {
+        } else if (id == R.id.nav_invite_and_earn) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.nav_settings) {
+
+        } else if (id == R.id.nav_about) {
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

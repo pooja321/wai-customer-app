@@ -231,7 +231,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_sign_up:
-                SignUpFragment signUpFragment = new com.tiffincourt.app.Login.SignUpFragment();
+                SignUpFragment signUpFragment = new SignUpFragment();
                 OnSignUpButtonClickedInterface listener = (OnSignUpButtonClickedInterface) getActivity();
                 listener.onSignUpFragmentSelected(signUpFragment);
                 break;
@@ -383,5 +383,26 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
         };
 
         task.execute();
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mGoogleApiClient.stopAutoManage(getActivity());
+        mGoogleApiClient.disconnect();
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null)
+            mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.stopAutoManage(getActivity());
+            mGoogleApiClient.disconnect();
+        }
     }
 }

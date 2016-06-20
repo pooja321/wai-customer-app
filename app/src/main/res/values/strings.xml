@@ -60,17 +60,17 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
     <!-- navigation Drawer Strings -->
-    <string name="UserName">UserName</string>
-    <string name="Profile_Picture_content_desc">User Profile Picture</string>
-    <string name="Favorite_Places">FAVORITES</string>
-    <string name="Settings">SETTINGS</string>
-    <string name="chat">MESSAGES</string>
-    <string name="offers">OFFERS</string>
-    <string name="happy_hours">HAPPY HOURS</string>
-    <string name="Near_by">NEAR BY</string>
-    <string name="Events">EVENTS</string>
+    <string name="history">HISTORY</string>
+    <string name="your_address">YOUR ADDRESSES</string>
+    <string name="notifications">NOTIFICATIONS</string>
+    <string name="chat_with_us">CHAT WITH US</string>
+    <string name="invite_and_earn">INVITE AND EARN</string>
+    <string name="need_help">NEED HELP?</string>
+    <string name="settings">SETTINGS</string>
+    <string name="about">ABOUT</string>
 
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="Profile_Picture_content_desc">person name</string>
 </resources>
