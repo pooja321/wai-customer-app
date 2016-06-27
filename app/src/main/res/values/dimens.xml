@@ -12,7 +12,7 @@
     <dimen name="login_buttons_text_size">15.3sp</dimen>
 
     <dimen name="edit_text_padding_land">6dp</dimen>
-    <dimen name="lists_title_bottom_margin">13dp</dimen>
+    <dimen name="lists_title_bottom_margin">12dp</dimen>
     <dimen name="edit_text_padding">14dp</dimen>
     <dimen name="margin_small">16dp</dimen>
     <dimen name="btn_shopping_height">30dp</dimen>

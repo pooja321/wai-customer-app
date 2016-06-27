@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
             LoginFragment loginFragment = new LoginFragment();
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.placeHolder, loginFragment, LOGIN_FRAGMENT);
+            fragmentTransaction.add(R.id.login_frame_placeholder, loginFragment, LOGIN_FRAGMENT);
             fragmentTransaction.commit();
         }
     }
@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
     public void onSignUpFragmentSelected(Fragment fragment) {
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.placeHolder, fragment, SIGNUP_FRAGMENT);
+        fragmentTransaction.replace(R.id.login_frame_placeholder, fragment, SIGNUP_FRAGMENT);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

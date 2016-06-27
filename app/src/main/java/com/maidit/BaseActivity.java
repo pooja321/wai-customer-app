@@ -34,12 +34,11 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 ////        });
 
         toolbar = (Toolbar) findViewById(R.id.toolbar_base);
-        if (useToolbar())
-        {
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        if (useToolbar())  {
             setSupportActionBar(toolbar);
         }
-        else
-        {
+        else   {
             toolbar.setVisibility(View.GONE);
         }
         setUpNavView();
