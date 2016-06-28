@@ -7,11 +7,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.maidit.Booking.ListViewFragment;
 import com.maidit.Booking.MapViewFragment;
 
-public class MainActivity extends BaseActivity implements MapViewFragment.onAddressSearchClick {
+public class MainActivity extends BaseActivity implements MapViewFragment.onAddressSearchClick, ListViewFragment.OnResourceSelectedInterface {
 
     public static final String MAP_VIEW_FRAGMENT = "map_view_fragment";
     public static final String LIST_VIEW_FRAGMENT = "list_view_fragment";
@@ -91,4 +92,8 @@ public class MainActivity extends BaseActivity implements MapViewFragment.onAddr
         startActivity(intent);
     }
 
+    @Override
+    public void onListResourceSelected(int index) {
+        Toast.makeText(MainActivity.this, "You selected ".concat(String.valueOf(index)), Toast.LENGTH_SHORT).show();
+    }
 }
