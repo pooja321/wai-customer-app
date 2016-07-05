@@ -1,13 +1,22 @@
 package com.maidit;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
+import android.widget.PopupWindow;
 import android.widget.Switch;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.maidit.Booking.ListViewFragment;
 import com.maidit.Booking.MapViewFragment;
@@ -19,6 +28,7 @@ public class MainActivity extends BaseActivity implements MapViewFragment.onAddr
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     Switch mMapListSwitch;
+    private PopupWindow mPopConfirmationWindow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +104,46 @@ public class MainActivity extends BaseActivity implements MapViewFragment.onAddr
 
     @Override
     public void onListResourceSelected(int index) {
-        Toast.makeText(MainActivity.this, "You selected ".concat(String.valueOf(index)), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MainActivity.this, "You selected ".concat(String.valueOf(index)), Toast.LENGTH_SHORT).show();
+//        Intent intent = new Intent(MainActivity.this, BookingConfirmationActivity.class);
+//        startActivity(intent);
+        final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this
+                .findViewById(android.R.id.content));
+        startCommentsPopUpView(viewGroup);
+    }
+
+    public void startCommentsPopUpView(View view) {
+        LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        // inflate the custom popup layout
+        final View inflatedView = layoutInflater.inflate(R.layout.popup_booking_confirmation_layout, null,false);
+        ImageButton _PopWindowDismissBT = (ImageButton) inflatedView.findViewById(R.id.confirm_ib_pop_dismiss);
+        TextView _totalAmountTextView = (TextView) inflatedView.findViewById(R.id.confirm_tv_total_amount);
+        if (_totalAmountTextView != null) {
+            _totalAmountTextView.setText("TOTAL: Rs 172.5");
+        }
+        // set height depends on the device size
+//        mPopConfirmationWindow = new PopupWindow(inflatedView, size.x - 50,size.y - 400, true );
+        mPopConfirmationWindow = new PopupWindow(inflatedView, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT );
+        // set a background drawable with rounders corners
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mPopConfirmationWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.fb_popup_bg, getTheme()));
+        }
+        // make it focusable to show the keyboard to enter in `EditText`
+        mPopConfirmationWindow.setFocusable(true);
+        // make it outside touchable to dismiss the popup window
+        mPopConfirmationWindow.setOutsideTouchable(true);
+
+        // show the popup at bottom of the screen and set some margin at bottom ie,
+        mPopConfirmationWindow.showAtLocation(view, Gravity.BOTTOM, 0,100);
+
+        if (_PopWindowDismissBT != null) {
+            _PopWindowDismissBT.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mPopConfirmationWindow.dismiss();
+                }
+            });
+        }
     }
 }

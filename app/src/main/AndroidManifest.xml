@@ -6,6 +6,8 @@
         android:glEsVersion="0x00020000"
         android:required="true" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
@@ -38,7 +40,13 @@
         </activity>
         <activity android:name=".Login.LoginActivity" />
         <activity android:name=".BaseActivity" />
-        <activity android:name=".SearchAddressActivity"></activity>
+        <activity android:name=".SearchAddressActivity" />
+        <activity android:name=".Booking.BookingConfirmationActivity"
+            android:label="@string/confirm_booking_activity_title">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
     </application>
 
 </manifest>

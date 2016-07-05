@@ -69,8 +69,10 @@
     <string name="settings">SETTINGS</string>
     <string name="about">ABOUT</string>
 
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="Profile_Picture_content_desc">person name</string>
+    <string name="confirm_booking_activity_title">Confirm Booking</string>
+    <string name="Rs">\u20B9</string>
+    <string name="rs">\u20A8</string>
 </resources>

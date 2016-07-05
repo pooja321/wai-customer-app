@@ -1,5 +1,6 @@
 package com.maidit.Booking;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.maidit.R;
 
@@ -24,12 +26,14 @@ import com.maidit.R;
  */
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
-    public interface onAddressSearchClick{
+    public interface onAddressSearchClick {
         void startAddressSearchActivity();
     }
+
     private GoogleMap mGoogleMap;
     MapView mMapView;
-    boolean mapReady=false;
+    Location mLocation;
+    boolean mapReady = false;
     EditText mAddressSearchEditText;
 
     @Override
@@ -92,23 +96,38 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
-        mapReady=true;
-        this.mGoogleMap = googleMap;
-        LatLng intensofy = new LatLng(28.4189245,77.0383607);
-        LatLng jmd = new LatLng(28.4204117,77.0383323);
+        double _lat = 0.00, _lon = 0.00;
+        mapReady = true;
+        mGoogleMap = googleMap;
+        LatLng intensofy = new LatLng(28.4189245, 77.0383607);
+        LatLng jmd = new LatLng(28.4204117, 77.0383323);
+//
+//        if (ContextCompat.checkSelfPermission((MainActivity)getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+//                && ContextCompat.checkSelfPermission((MainActivity)getActivity(),
+//                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+////            mGoogleMap.setMyLocationEnabled(true);
+//            LocationManager mng = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+//            mLocation = mng.getLastKnownLocation(mng.getBestProvider(new Criteria(), false));
+//            _lat = mLocation.getLatitude();
+//            _lon = mLocation.getLongitude();
+//        }
+//        LatLng currentPosition = new LatLng(_lat,_lon);
         CameraPosition target = CameraPosition.builder().target(jmd).zoom(14).build();
-        this.mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(target));
-
-        this.mGoogleMap.addMarker(new MarkerOptions()
+//        CameraPosition target = CameraPosition.builder().target(currentPosition).zoom(14).build();
+        mGoogleMap.moveCamera(CameraUpdateFactory.newCameraPosition(target));
+        mGoogleMap.addMarker(new MarkerOptions()
                 .title("JMD")
                 .snippet("JMD Megapolis")
                 .position(jmd).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_dining_black_24dp)));
 
-        this.mGoogleMap.addMarker(new MarkerOptions()
-                .title("Intensofy Solutions")
-                .snippet("Iris tech Park")
-                .position(intensofy));
-
+        final Marker currentPositionMarker = mGoogleMap.addMarker(new MarkerOptions().position(intensofy));
+        mGoogleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+            @Override
+            public void onCameraChange(CameraPosition cameraPosition) {
+                // Get the center of the Map.
+                LatLng centerOfMap = mGoogleMap.getCameraPosition().target;
+                    currentPositionMarker.setPosition(centerOfMap);
+            }
+        });
     }
 }

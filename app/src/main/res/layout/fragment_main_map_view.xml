@@ -36,10 +36,12 @@
         android:tint="@color/colorAccent"/>
 
     <LinearLayout
+        android:id="@+id/main_ll_resource_detail_layout"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignBottom="@id/main_map"
         android:background="@color/colorwhite"
+        android:orientation="vertical"
         android:visibility="gone">
 
     </LinearLayout>
