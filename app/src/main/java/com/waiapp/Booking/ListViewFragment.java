@@ -1,4 +1,4 @@
-package com.maidit.Booking;
+package com.waiapp.Booking;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.maidit.R;
+import com.waiapp.R;
 
 /**
  * Created by keviv on 27/06/2016.

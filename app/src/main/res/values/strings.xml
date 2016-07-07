@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Maid it</string>
+    <string name="app_name">WAI</string>
 
     <!-- Login and Create Account Screen  -->
     <string name="text_dont_have_account">Don\'t have an account?</string>
@@ -75,4 +75,5 @@
     <string name="confirm_booking_activity_title">Confirm Booking</string>
     <string name="Rs">\u20B9</string>
     <string name="rs">\u20A8</string>
+    <string name="logout">LOGOUT</string>
 </resources>

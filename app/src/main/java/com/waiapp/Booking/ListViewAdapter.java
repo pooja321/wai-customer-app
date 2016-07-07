@@ -1,4 +1,4 @@
-package com.maidit.Booking;
+package com.waiapp.Booking;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.maidit.Model.Resources;
-import com.maidit.R;
+import com.waiapp.Model.Resources;
+import com.waiapp.R;
 
 /**
  * Created by keviv on 28/06/2016.

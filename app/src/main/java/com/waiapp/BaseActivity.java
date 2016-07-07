@@ -1,5 +1,6 @@
-package com.maidit;
+package com.waiapp;
 
+import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -9,6 +10,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.waiapp.Login.LoginActivity;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -90,9 +96,19 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_about) {
 
+        }else if (id == R.id.nav_logout) {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user != null) {
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(this, LoginActivity.class));
+            } else {
+                Toast.makeText(BaseActivity.this, "Please Login First", Toast.LENGTH_SHORT).show();
+            }
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        if (drawer != null) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
         return true;
     }
 }

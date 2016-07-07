@@ -1,4 +1,4 @@
-package com.maidit.Login;
+package com.waiapp.Login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,8 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.maidit.MainActivity;
-import com.maidit.R;
+import com.waiapp.MainActivity;
+import com.waiapp.R;
 
 public class LoginActivity extends AppCompatActivity implements LoginFragment.OnSignUpButtonClickedInterface {
 

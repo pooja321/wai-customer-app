@@ -1,10 +1,10 @@
-package com.maidit;
+package com.waiapp;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.maidit.Login.LoginActivity;
+import com.waiapp.Login.LoginActivity;
 
 public class SplashActivity extends AppCompatActivity {
 

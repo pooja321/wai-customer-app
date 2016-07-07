@@ -1,4 +1,4 @@
-package com.maidit;
+package com.waiapp;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,8 +18,8 @@ import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.maidit.Booking.ListViewFragment;
-import com.maidit.Booking.MapViewFragment;
+import com.waiapp.Booking.ListViewFragment;
+import com.waiapp.Booking.MapViewFragment;
 
 public class MainActivity extends BaseActivity implements MapViewFragment.onAddressSearchClick, ListViewFragment.OnResourceSelectedInterface {
 

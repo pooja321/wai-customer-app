@@ -1,4 +1,4 @@
-package com.maidit;
+package com.waiapp;
 
 import org.junit.Test;
 

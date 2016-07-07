@@ -1,9 +1,9 @@
-package com.maidit.Booking;
+package com.waiapp.Booking;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.maidit.R;
+import com.waiapp.R;
 
 public class BookingConfirmationActivity extends AppCompatActivity {
 

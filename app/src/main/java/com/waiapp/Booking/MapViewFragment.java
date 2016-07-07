@@ -1,4 +1,4 @@
-package com.maidit.Booking;
+package com.waiapp.Booking;
 
 import android.location.Location;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.maidit.R;
+import com.waiapp.R;
 
 /**
  * Created by keviv on 27/06/2016.

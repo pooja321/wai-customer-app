@@ -1,4 +1,4 @@
-package com.maidit.Model;
+package com.waiapp.Model;
 
 /**
  * Created by keviv on 28/06/2016.

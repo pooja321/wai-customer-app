@@ -1,6 +1,6 @@
-package com.maidit.Utility;
+package com.waiapp.Utility;
 
-import com.maidit.BuildConfig;
+import com.waiapp.BuildConfig;
 
 /**
  * Created by keviv on 16/06/2016.
