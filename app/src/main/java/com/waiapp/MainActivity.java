@@ -146,4 +146,9 @@ public class MainActivity extends BaseActivity implements MapViewFragment.onAddr
             });
         }
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finishAffinity();
+    }
 }

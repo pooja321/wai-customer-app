@@ -45,4 +45,10 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finishAffinity();
+    }
 }
