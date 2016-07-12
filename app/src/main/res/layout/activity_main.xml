@@ -19,13 +19,48 @@
         android:layout_height="1dp"
         android:background="@color/black">
     </LinearLayout>
+    <!--<LinearLayout-->
+        <!--android:id="@+id/main_booking_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center"-->
+        <!--android:padding="4dp"-->
+        <!--android:orientation="horizontal">-->
+
+
+        <!--<Button-->
+        <!--android:id="@+id/main_bt_booklater"-->
+        <!--style="?android:attr/buttonBarButtonStyle"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@color/black"-->
+        <!--android:text="Book Later"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textColor="@color/colorwhite" />-->
+
+        <!--<LinearLayout-->
+        <!--android:layout_width="4dp"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--</LinearLayout>-->
+        <!--<Button-->
+        <!--android:id="@+id/main_bt_booknow"-->
+        <!--style="?android:attr/buttonBarButtonStyle"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@color/black"-->
+        <!--android:text="Book Now"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textColor="@color/colorwhite" />-->
+    <!--</LinearLayout>-->
     <LinearLayout
         android:id="@+id/main_category_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="4dp"
         android:orientation="horizontal">
-
         <TextView
             android:id="@+id/main_tv_Domestic_help"
             android:layout_width="0dp"
@@ -60,49 +95,22 @@
 
         <Switch
             android:id="@+id/main_switch_map_list"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingLeft="10dp"
+            android:layout_marginRight="8dp"
+            android:switchPadding="10dp"
             android:text="Map"
             android:textSize="14sp"
             android:textColor="@color/dark_grey"
             android:thumbTint="@color/colorAccent"/>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/main_booking_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/main_bt_booklater"
-            style="?android:attr/buttonBarButtonStyle"
+        <ImageButton
+            android:id="@+id/main_ib_sort_filter"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/black"
-            android:text="Book Later"
-            android:textStyle="bold"
-            android:textColor="@color/colorwhite" />
+            android:layout_height="match_parent"
+            android:padding="8dp"
+            android:src="@drawable/ic_filter_list_black_24dp"
+            android:background="@color/white" />
 
-        <LinearLayout
-            android:layout_width="4dp"
-            android:layout_height="match_parent">
-
-        </LinearLayout>
-        <Button
-            android:id="@+id/main_bt_booknow"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/black"
-            android:text="Book Now"
-            android:textStyle="bold"
-            android:textColor="@color/colorwhite" />
     </LinearLayout>
 </LinearLayout>

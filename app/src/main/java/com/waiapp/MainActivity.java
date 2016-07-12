@@ -28,12 +28,13 @@ public class MainActivity extends BaseActivity implements MapViewFragment.onAddr
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     Switch mMapListSwitch;
+    ImageButton mSortFilterImageButton;
     private PopupWindow mPopConfirmationWindow;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        mSortFilterImageButton = (ImageButton) findViewById(R.id.main_ib_sort_filter);
         MapViewFragment savedMapFragment = (MapViewFragment) getSupportFragmentManager().findFragmentByTag(MAP_VIEW_FRAGMENT);
         if (savedMapFragment == null) {
             Log.v("MainActivity","mapViewFragment1");
@@ -58,6 +59,15 @@ public class MainActivity extends BaseActivity implements MapViewFragment.onAddr
                     mMapListSwitch.setText("List");
                     loadListViewFragment();
                 }
+            }
+        });
+        mSortFilterImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getSupportFragmentManager();
+                SortFilterDialogFragment sortFilterDialogFragment = SortFilterDialogFragment.newInstance("");
+                sortFilterDialogFragment.show(fm, "fragment_sort_filter");
+
             }
         });
     }
