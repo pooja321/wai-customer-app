@@ -27,9 +27,9 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAB_b3rfb_k8NO6SZHQYP-rUr_phIamn6Q" />
 
-        <activity android:name="com.waiapp.MainActivity" />
+        <activity android:name=".MainActivity" />
         <activity
-            android:name="com.waiapp.SplashActivity"
+            android:name=".SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
@@ -38,10 +38,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.waiapp.Login.LoginActivity" />
-        <activity android:name="com.waiapp.BaseActivity" />
-        <activity android:name="com.waiapp.SearchAddressActivity" />
-        <activity android:name="com.waiapp.Booking.BookingConfirmationActivity"
+        <activity android:name=".Login.LoginActivity" />
+        <activity android:name=".BaseActivity" />
+        <activity android:name=".SearchAddressActivity" />
+        <activity
+            android:name=".Booking.BookingConfirmationActivity"
             android:label="@string/confirm_booking_activity_title">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

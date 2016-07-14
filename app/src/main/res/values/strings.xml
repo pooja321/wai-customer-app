@@ -76,4 +76,5 @@
     <string name="Rs">\u20B9</string>
     <string name="rs">\u20A8</string>
     <string name="logout">LOGOUT</string>
+    <string name="add_resource">Add Resource</string>
 </resources>

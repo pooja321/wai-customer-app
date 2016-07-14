@@ -36,7 +36,6 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:9.2.0'
     /* For Google Play Services */
     compile 'com.google.android.gms:play-services:9.2.0'
-    compile 'com.google.android.gms:play-services-safetynet:9.2.0'
     compile 'com.google.android.gms:play-services-auth:9.2.0'
 
     compile 'de.hdodenhof:circleimageview:1.2.1'

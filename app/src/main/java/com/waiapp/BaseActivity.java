@@ -96,7 +96,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_about) {
 
-        }else if (id == R.id.nav_logout) {
+        } else if (id == R.id.nav_logout) {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 FirebaseAuth.getInstance().signOut();
@@ -110,5 +110,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         }
         return true;
+    }
+    public String getUid() {
+        return FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
 }
