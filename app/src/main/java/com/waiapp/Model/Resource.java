@@ -1,16 +1,16 @@
 package com.waiapp.Model;
 
-import java.util.HashMap;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
 
-/**
- * Created by keviv on 12/07/2016.
- */
+import java.util.HashMap;
+import java.util.Map;
+
+@IgnoreExtraProperties
 public class Resource {
     private String firstName, lastName, Email, gender;
     private long mobileNumber;
     private int rating;
-    private HashMap<String, Object> timestampLastChanged;
-    private HashMap<String, Object> timestampCreated;
 
     public Resource() {
     }
@@ -22,6 +22,18 @@ public class Resource {
         this.lastName = lastName;
         this.mobileNumber = mobileNumber;
         this.rating = rating;
+    }
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("fname", getFirstName());
+        result.put("lname", getLastName());
+        result.put("email", getEmail());
+        result.put("gender", getGender());
+        result.put("mobileNumber", getMobileNumber());
+        result.put("rating", getRating());
+
+        return result;
     }
 
     public String getEmail() {
@@ -71,4 +83,6 @@ public class Resource {
     public void setRating(int rating) {
         this.rating = rating;
     }
+
+
 }

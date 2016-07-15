@@ -40,22 +40,24 @@ public class ListViewAdapter extends RecyclerView.Adapter {
     //View.OnClickListener is used to tap on list item click
     private class ListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView mTextView;
-        private ImageView mImageView;
+        private TextView mTextViewName, mTextViewResourceRating;
+        private ImageView mImageViewResourcePic, mImageViewResourceIcon;
         private int mIndex;
 
         //bind List item views here
         public ListViewHolder(View itemView) {
             super(itemView);
-            mTextView = (TextView) itemView.findViewById(R.id.list_item_name);
-            mImageView = (ImageView) itemView.findViewById(R.id.list_item_profilePic);
+            mTextViewName = (TextView) itemView.findViewById(R.id.list_item_name);
+            mTextViewResourceRating = (TextView) itemView.findViewById(R.id.list_item_rating);
+            mImageViewResourcePic = (ImageView) itemView.findViewById(R.id.list_item_profilePic);
+            mImageViewResourceIcon = (ImageView) itemView.findViewById(R.id.list_item_resource_icon);
             //set click listener on list item
             itemView.setOnClickListener(this);
         }
         //set what views will display
         public void bindView(int position){
             mIndex = position;
-            mTextView.setText(Resources.names[position]);
+            mTextViewName.setText(Resources.names[position]);
         }
 
         @Override

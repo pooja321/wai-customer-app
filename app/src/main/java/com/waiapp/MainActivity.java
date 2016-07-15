@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
@@ -30,10 +31,19 @@ public class MainActivity extends BaseActivity implements MapViewFragment.onAddr
     Switch mMapListSwitch;
     ImageButton mSortFilterImageButton;
     private PopupWindow mPopConfirmationWindow;
+
+    int _membersCount, _mainCourseCount;
+    int membersAmount,mainCourseAmount;
+    double totalAmount;
+    int baseAmount = 50;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        _membersCount = 2;
+        _mainCourseCount = 2;
+        membersAmount = 50;
+        mainCourseAmount = 50;
         mSortFilterImageButton = (ImageButton) findViewById(R.id.main_ib_sort_filter);
         MapViewFragment savedMapFragment = (MapViewFragment) getSupportFragmentManager().findFragmentByTag(MAP_VIEW_FRAGMENT);
         if (savedMapFragment == null) {
@@ -124,14 +134,9 @@ public class MainActivity extends BaseActivity implements MapViewFragment.onAddr
 
     public void startCommentsPopUpView(View view) {
         LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
         // inflate the custom popup layout
         final View inflatedView = layoutInflater.inflate(R.layout.popup_booking_confirmation_layout, null,false);
-        ImageButton _PopWindowDismissBT = (ImageButton) inflatedView.findViewById(R.id.confirm_ib_pop_dismiss);
-        TextView _totalAmountTextView = (TextView) inflatedView.findViewById(R.id.confirm_tv_total_amount);
-        if (_totalAmountTextView != null) {
-            _totalAmountTextView.setText("TOTAL: Rs 172.5");
-        }
+
         // set height depends on the device size
 //        mPopConfirmationWindow = new PopupWindow(inflatedView, size.x - 50,size.y - 400, true );
         mPopConfirmationWindow = new PopupWindow(inflatedView, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT );
@@ -146,16 +151,121 @@ public class MainActivity extends BaseActivity implements MapViewFragment.onAddr
 
         // show the popup at bottom of the screen and set some margin at bottom ie,
         mPopConfirmationWindow.showAtLocation(view, Gravity.BOTTOM, 0,100);
+        ImageButton _PopWindowDismissBT = (ImageButton) inflatedView.findViewById(R.id.booking_ib_pop_dismiss);
+        final TextView _TextViewMembersCount = (TextView) inflatedView.findViewById(R.id.booking_tv_members_count);
+        final TextView _TextViewMainCourseCount = (TextView) inflatedView.findViewById(R.id.booking_tv_maincourse_count);
+        final TextView _TextViewMembersAmount = (TextView) inflatedView.findViewById(R.id.booking_tv_members_price);
+        final TextView _TextViewMainCourseAmount = (TextView) inflatedView.findViewById(R.id.booking_tv_maincourse_price);
+        final TextView _TextViewBaseAmount = (TextView) inflatedView.findViewById(R.id.booking_tv_base_price);
+        final TextView _TextViewServiceTaxAmount = (TextView) inflatedView.findViewById(R.id.booking_tv_service_tax_amount);
+        final TextView _TextViewTotalAmount = (TextView) inflatedView.findViewById(R.id.booking_tv_total_amount);
+        Button _ButtonIncrementMembers = (Button) inflatedView.findViewById(R.id.booking_bt_members_count_increment);
+        Button _ButtonDecrementMembers = (Button) inflatedView.findViewById(R.id.booking_bt_members_count_decrement);
+        Button _ButtonIncrementMainCourse = (Button) inflatedView.findViewById(R.id.booking_bt_maincourse_count_increment);
+        Button _ButtonDecrementMainCourse = (Button) inflatedView.findViewById(R.id.booking_bt_maincourse_count_decrement);
+
+        _ButtonIncrementMembers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("wai","increment members: " + _membersCount);
+                _membersCount = _membersCount + 1;
+                _TextViewMembersCount.setText(String.valueOf(_membersCount));
+                if(_membersCount >= 2){
+                    membersAmount =_membersCount * 50;
+                }else{
+                    membersAmount = 50;}
+
+                _TextViewMembersAmount.setText(String.valueOf(membersAmount));
+                int tempAmount = baseAmount + membersAmount + mainCourseAmount;
+                double serviceTaxAmount = tempAmount*.125;
+                _TextViewServiceTaxAmount.setText(String.valueOf(serviceTaxAmount));
+                totalAmount = (serviceTaxAmount+tempAmount);
+                _TextViewTotalAmount.setText(String.valueOf(totalAmount));
+                Log.v("wai","increment members Amount: " + membersAmount);
+                Log.v("wai","increment members temp Amount: " + tempAmount);
+                Log.v("wai","increment tax Amount: " + serviceTaxAmount);
+                Log.v("wai","increment total Amount: " + totalAmount);
+            }
+        });
+        _ButtonDecrementMembers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(_membersCount > 2){
+                    Log.v("wai","decrement members: " + _membersCount);
+                    _membersCount = _membersCount - 1;
+                    membersAmount =_membersCount * 50;
+                }else{membersAmount = 50;}
+                _TextViewMembersCount.setText(String.valueOf(_membersCount));
+
+//                if(_membersCount >= 2){
+//                    membersAmount =_membersCount * 50;
+//                }else{membersAmount = 50;}
+
+                _TextViewMembersAmount.setText(String.valueOf(membersAmount));
+                int tempAmount = baseAmount + membersAmount + mainCourseAmount;
+                double serviceTaxAmount = tempAmount*.125;
+                _TextViewServiceTaxAmount.setText(String.valueOf(serviceTaxAmount));
+                totalAmount = (serviceTaxAmount+tempAmount);
+                _TextViewTotalAmount.setText(String.valueOf(totalAmount));
+                Log.v("wai","decrement members Amount: " + membersAmount);
+                Log.v("wai","decrement members temp Amount: " + tempAmount);
+                Log.v("wai","decrement tax Amount: " + serviceTaxAmount);
+                Log.v("wai","decrement total Amount: " + totalAmount);
+            }
+        });
+        _ButtonIncrementMainCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                _mainCourseCount = _mainCourseCount + 1;
+                _TextViewMainCourseCount.setText(String.valueOf(_mainCourseCount));
+                if(_mainCourseCount >= 2){
+                    mainCourseAmount =_mainCourseCount * 50;
+                }else{mainCourseAmount = 50;}
+
+                _TextViewMainCourseAmount.setText(String.valueOf(mainCourseAmount));
+                int tempAmount = baseAmount + membersAmount + mainCourseAmount;
+                double serviceTaxAmount = tempAmount*.125;
+                _TextViewServiceTaxAmount.setText(String.valueOf(serviceTaxAmount));
+                totalAmount = (serviceTaxAmount+tempAmount);
+                _TextViewTotalAmount.setText(String.valueOf(totalAmount));
+            }
+        });
+        _ButtonDecrementMainCourse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(_mainCourseCount >2) {
+                    _mainCourseCount = _mainCourseCount - 1;
+                    membersAmount =_mainCourseCount * 50;
+                }else{
+                    mainCourseAmount = 50;
+                }
+                _TextViewMainCourseCount.setText(String.valueOf(_mainCourseCount));
+//                if(_mainCourseCount >= 2){
+//                    membersAmount =_mainCourseCount * 50;
+//                }else{mainCourseAmount = 50;}
+
+                _TextViewMainCourseAmount.setText(String.valueOf(mainCourseAmount));
+                int tempAmount = baseAmount + membersAmount + mainCourseAmount;
+                double serviceTaxAmount = tempAmount*.125;
+                _TextViewServiceTaxAmount.setText(String.valueOf(serviceTaxAmount));
+                totalAmount = (serviceTaxAmount+tempAmount);
+                _TextViewTotalAmount.setText(String.valueOf(totalAmount));
+            }
+        });
 
         if (_PopWindowDismissBT != null) {
             _PopWindowDismissBT.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mPopConfirmationWindow.dismiss();
+                    _membersCount = 2;
+                    _mainCourseCount = 2;
                 }
             });
         }
     }
+
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
