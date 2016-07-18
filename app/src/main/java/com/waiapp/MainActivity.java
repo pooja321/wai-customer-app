@@ -167,7 +167,6 @@ public class MainActivity extends BaseActivity implements MapViewFragment.onAddr
         _ButtonIncrementMembers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("wai","increment members: " + _membersCount);
                 _membersCount = _membersCount + 1;
                 _TextViewMembersCount.setText(String.valueOf(_membersCount));
                 if(_membersCount >= 2){
@@ -181,17 +180,12 @@ public class MainActivity extends BaseActivity implements MapViewFragment.onAddr
                 _TextViewServiceTaxAmount.setText(String.valueOf(serviceTaxAmount));
                 totalAmount = (serviceTaxAmount+tempAmount);
                 _TextViewTotalAmount.setText(String.valueOf(totalAmount));
-                Log.v("wai","increment members Amount: " + membersAmount);
-                Log.v("wai","increment members temp Amount: " + tempAmount);
-                Log.v("wai","increment tax Amount: " + serviceTaxAmount);
-                Log.v("wai","increment total Amount: " + totalAmount);
             }
         });
         _ButtonDecrementMembers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(_membersCount > 2){
-                    Log.v("wai","decrement members: " + _membersCount);
                     _membersCount = _membersCount - 1;
                     membersAmount =_membersCount * 50;
                 }else{membersAmount = 50;}
@@ -207,10 +201,6 @@ public class MainActivity extends BaseActivity implements MapViewFragment.onAddr
                 _TextViewServiceTaxAmount.setText(String.valueOf(serviceTaxAmount));
                 totalAmount = (serviceTaxAmount+tempAmount);
                 _TextViewTotalAmount.setText(String.valueOf(totalAmount));
-                Log.v("wai","decrement members Amount: " + membersAmount);
-                Log.v("wai","decrement members temp Amount: " + tempAmount);
-                Log.v("wai","decrement tax Amount: " + serviceTaxAmount);
-                Log.v("wai","decrement total Amount: " + totalAmount);
             }
         });
         _ButtonIncrementMainCourse.setOnClickListener(new View.OnClickListener() {

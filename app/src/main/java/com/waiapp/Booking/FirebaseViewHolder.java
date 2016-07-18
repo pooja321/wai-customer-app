@@ -28,7 +28,7 @@ public class FirebaseViewHolder extends RecyclerView.ViewHolder implements View.
 //        mIndex = position;
         String _fullName = resource.getFirstName().concat(" ").concat(resource.getLastName());
         mTextViewName.setText(_fullName);
-        mTextViewResourceRating.setText(resource.getRating());
+        mTextViewResourceRating.setText(String.valueOf(resource.getRating()));
     }
 
     @Override

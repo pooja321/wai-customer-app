@@ -72,7 +72,7 @@
                 android:layout_height="1dp"
                 android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp"
-                android:background="@color/grey"></LinearLayout>
+                android:background="@color/grey"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -92,7 +92,7 @@
                 android:layout_height="1dp"
                 android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp"
-                android:background="@color/grey"></LinearLayout>
+                android:background="@color/grey"/>
 
         </LinearLayout>
 
@@ -141,7 +141,7 @@
                 android:layout_height="1dp"
                 android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp"
-                android:background="@color/grey"></LinearLayout>
+                android:background="@color/grey"/>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp">
@@ -203,7 +203,7 @@
                 android:layout_height="1dp"
                 android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp"
-                android:background="@color/grey"></LinearLayout>
+                android:background="@color/grey"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -265,25 +265,28 @@
                 android:layout_height="1dp"
                 android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp"
-                android:background="@color/grey"></LinearLayout>
+                android:background="@color/grey"/>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp">
 
-            <!--<RelativeLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="Distance(If more than 2 km)" />
 
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:padding="4dp"-->
-            <!--android:text="Late night Charges" />-->
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:padding="4dp"-->
-            <!--android:text="0.00"/>-->
-            <!--</RelativeLayout>-->
+                <TextView
+                    android:id="@+id/booking_tv_distance_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="0" />
+            </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="36dp">
@@ -310,7 +313,7 @@
                 android:layout_height="1dp"
                 android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp"
-                android:background="@color/grey"></LinearLayout>
+                android:background="@color/grey"/>
         </LinearLayout>
 
         <TextView
