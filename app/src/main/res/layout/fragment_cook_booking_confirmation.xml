@@ -45,7 +45,7 @@
             android:layout_margin="8dp"
             android:background="@color/white"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -55,6 +55,7 @@
                 android:textSize="10sp" />
 
             <TextView
+                android:id="@+id/cook_booking_tv_resource_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
@@ -102,7 +103,7 @@
             android:layout_margin="8dp"
             android:background="@color/white"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="8dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -115,7 +116,7 @@
                     android:text="Base Price" />
 
                 <TextView
-                    android:id="@+id/booking_tv_base_price"
+                    android:id="@+id/cook_booking_tv_base_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -155,14 +156,14 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/booking_bt_members_count_increment"
+                        android:id="@+id/cook_booking_bt_members_count_increment"
                         android:layout_width="36dp"
                         android:layout_height="match_parent"
                         android:background="@color/white"
                         android:text="+" />
 
                     <TextView
-                        android:id="@+id/booking_tv_members_count"
+                        android:id="@+id/cook_booking_tv_members_count"
                         android:layout_width="40dp"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="4dp"
@@ -173,7 +174,7 @@
                         android:textAlignment="center" />
 
                     <Button
-                        android:id="@+id/booking_bt_members_count_decrement"
+                        android:id="@+id/cook_booking_bt_members_count_decrement"
                         android:layout_width="36dp"
                         android:layout_height="match_parent"
                         android:background="@color/white"
@@ -181,13 +182,13 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/booking_tv_members_price"
+                    android:id="@+id/cook_booking_tv_members_price"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:gravity="center"
                     android:padding="4dp"
-                    android:text="50" />
+                    android:text="100" />
 
             </RelativeLayout>
 
@@ -217,14 +218,14 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/booking_bt_maincourse_count_increment"
+                        android:id="@+id/cook_booking_bt_maincourse_count_increment"
                         android:layout_width="36dp"
                         android:layout_height="match_parent"
                         android:background="@color/white"
                         android:text="+" />
 
                     <TextView
-                        android:id="@+id/booking_tv_maincourse_count"
+                        android:id="@+id/cook_booking_tv_maincourse_count"
                         android:layout_width="40dp"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="4dp"
@@ -235,7 +236,7 @@
                         android:textAlignment="center" />
 
                     <Button
-                        android:id="@+id/booking_bt_maincourse_count_decrement"
+                        android:id="@+id/cook_booking_bt_maincourse_count_decrement"
                         android:layout_width="36dp"
                         android:layout_height="match_parent"
                         android:background="@color/white"
@@ -243,7 +244,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/booking_tv_maincourse_price"
+                    android:id="@+id/cook_booking_tv_maincourse_price"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
@@ -272,7 +273,7 @@
                     android:text="Distance(If more than 2 km)" />
 
                 <TextView
-                    android:id="@+id/booking_tv_distance_amount"
+                    android:id="@+id/cook_booking_tv_distance_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
@@ -292,7 +293,7 @@
                     android:text="Service Tax" />
 
                 <TextView
-                    android:id="@+id/booking_tv_service_tax_amount"
+                    android:id="@+id/cook_booking_tv_service_tax_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
@@ -310,18 +311,20 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/booking_tv_total_amount"
+            android:id="@+id/cook_booking_tv_total_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginRight="20dp"
             android:padding="8dp"
             android:text="172.5"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold"/>
 
     </LinearLayout>
 
     <Button
+        android:id="@+id/cook_booking_bt_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

@@ -43,7 +43,10 @@ public abstract class ListViewFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         recyclerView = (RecyclerView) view.findViewById(R.id.main_rv_list_view);
-
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.show();
 //        ListViewAdapter listAdapter = new ListViewAdapter(listener);
 //        recyclerView.setAdapter(listAdapter);
 //        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -61,12 +64,7 @@ public abstract class ListViewFragment extends Fragment {
 
         resourceQuery = mDatabase.child(Constants.CHILD_RESOURCE).child(Constants.CHILD_COOK);
         resourceQuery = setQuery();
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setMessage("Loading...");
-        mProgressDialog.show();
         initFirebaseUI(resourceQuery);
-
     }
     public abstract Query setQuery();
     public abstract String getCallingFragmentName();
@@ -82,7 +80,6 @@ public abstract class ListViewFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         callingFragment = getCallingFragmentName();
-//                        listener.onListResourceSelected(position,callingFragment);
                         listener.onListResourceSelected(model,callingFragment);
                     }
                 });
