@@ -2,36 +2,50 @@ package com.waiapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnMenuTabClickListener;
 import com.waiapp.Booking.ListViewFragment;
 import com.waiapp.Booking.MapViewFragment;
+import com.waiapp.Booking.clean.CleaningFragment;
+import com.waiapp.Booking.cook.CookingFragment;
+import com.waiapp.Booking.wash.WashingFragment;
 
-public class MainActivity extends BaseActivity implements MapViewFragment.onAddressSearchClick, ListViewFragment.OnResourceSelectedInterface {
+public class MainActivity extends BaseActivity implements CookingFragment.OnFragmentInteractionListener,
+        CleaningFragment.OnFragmentInteractionListener,WashingFragment.OnFragmentInteractionListener,
+        MapViewFragment.onAddressSearchClick, ListViewFragment.OnResourceSelectedInterface{
 
     public static final String MAP_VIEW_FRAGMENT = "map_view_fragment";
     public static final String LIST_VIEW_FRAGMENT = "list_view_fragment";
+    public static final String COOK_FRAGMENT = "cook_fragment";
+    public static final String WASH_FRAGMENT = "wash_fragment";
+    public static final String CLEAN_FRAGMENT = "clean_fragment";
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     Switch mMapListSwitch;
     ImageButton mSortFilterImageButton;
     private PopupWindow mPopConfirmationWindow;
-
+    private BottomBar mBottomBar;
     int _membersCount, _mainCourseCount;
     int membersAmount,mainCourseAmount;
     double totalAmount;
@@ -44,42 +58,80 @@ public class MainActivity extends BaseActivity implements MapViewFragment.onAddr
         _mainCourseCount = 2;
         membersAmount = 50;
         mainCourseAmount = 50;
-        mSortFilterImageButton = (ImageButton) findViewById(R.id.main_ib_sort_filter);
-        MapViewFragment savedMapFragment = (MapViewFragment) getSupportFragmentManager().findFragmentByTag(MAP_VIEW_FRAGMENT);
-        if (savedMapFragment == null) {
-            Log.v("MainActivity","mapViewFragment1");
-            MapViewFragment mapViewFragment = new MapViewFragment();
-            fragmentManager = getSupportFragmentManager();
-            fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.add(R.id.main_placeholder, mapViewFragment, MAP_VIEW_FRAGMENT);
-            fragmentTransaction.commit();
-        }
 
-        mMapListSwitch = (Switch) findViewById(R.id.main_switch_map_list);
-        if (mMapListSwitch != null) {
-            mMapListSwitch.setChecked(true);
-        }
-        mMapListSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mBottomBar = BottomBar.attach(findViewById(R.id.main_placeholder), savedInstanceState);
+        mBottomBar.noTopOffset();
+        mBottomBar.setItems(R.menu.mainactivity_bottombar);
+        mBottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
+
+            Fragment fragment;
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    mMapListSwitch.setText("Map");
-                    LoadMapViewFragment();
-                }else{
-                    mMapListSwitch.setText("List");
-                    loadListViewFragment();
+            public void onMenuTabSelected(@IdRes int menuItemId) {
+                if (menuItemId == R.id.bottomBarItemCook){
+                    fragment = new CookingFragment();
+                }else if (menuItemId == R.id.bottomBarItemWashing){
+                    fragment = new WashingFragment();
+                }else if(menuItemId == R.id.bottomBarItemCleaning){
+                    fragment = new CleaningFragment();
                 }
+                fragmentManager = getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_placeholder, fragment);
+                fragmentTransaction.commit();
             }
-        });
-        mSortFilterImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                SortFilterDialogFragment sortFilterDialogFragment = SortFilterDialogFragment.newInstance("");
-                sortFilterDialogFragment.show(fm, "fragment_sort_filter");
 
+            @Override
+            public void onMenuTabReSelected(@IdRes int menuItemId) {
+//                if (menuItemId == R.id.bottomBarItemCook){
+//                    loadCookFragment();
+//                }else if (menuItemId == R.id.bottomBarItemWashing){
+//                    loadWashingFragment();
+//                }else if(menuItemId == R.id.bottomBarItemCleaning){
+//                    loadCleaningFragment();
+//                }
             }
         });
+
+        mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
+        mBottomBar.mapColorForTab(1, 0xFF5D4037);
+        mBottomBar.mapColorForTab(2, "#7B1FA2");
+
+//        mSortFilterImageButton = (ImageButton) findViewById(R.id.main_ib_sort_filter);
+//        MapViewFragment savedMapFragment = (MapViewFragment) getSupportFragmentManager().findFragmentByTag(MAP_VIEW_FRAGMENT);
+//        if (savedMapFragment == null) {
+//            Log.v("MainActivity","mapViewFragment1");
+//            MapViewFragment mapViewFragment = new MapViewFragment();
+//            fragmentManager = getSupportFragmentManager();
+//            fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.add(R.id.main_placeholder, mapViewFragment, MAP_VIEW_FRAGMENT);
+//            fragmentTransaction.commit();
+//        }
+//
+//        mMapListSwitch = (Switch) findViewById(R.id.main_switch_map_list);
+//        if (mMapListSwitch != null) {
+//            mMapListSwitch.setChecked(true);
+//        }
+//        mMapListSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if(isChecked){
+//                    mMapListSwitch.setText("Map");
+//                    LoadMapViewFragment();
+//                }else{
+//                    mMapListSwitch.setText("List");
+//                    loadListViewFragment();
+//                }
+//            }
+//        });
+//        mSortFilterImageButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FragmentManager fm = getSupportFragmentManager();
+//                SortFilterDialogFragment sortFilterDialogFragment = SortFilterDialogFragment.newInstance("");
+//                sortFilterDialogFragment.show(fm, "fragment_sort_filter");
+//
+//            }
+//        });
     }
 
     private void LoadMapViewFragment() {
@@ -87,42 +139,35 @@ public class MainActivity extends BaseActivity implements MapViewFragment.onAddr
         fragmentTransaction = fragmentManager.beginTransaction();
         MapViewFragment savedMapFragment = (MapViewFragment) getSupportFragmentManager().findFragmentByTag(MAP_VIEW_FRAGMENT);
         if(savedMapFragment == null) {
-            Log.v("MainActivity","mapViewFragment2");
             MapViewFragment mapViewFragment = new MapViewFragment();
             fragmentTransaction.replace(R.id.main_placeholder, mapViewFragment, MAP_VIEW_FRAGMENT);
             fragmentTransaction.commit();
         }else{
-            Log.v("MainActivity","savedMapFragment");
             fragmentTransaction.replace(R.id.main_placeholder,savedMapFragment, MAP_VIEW_FRAGMENT);
             fragmentTransaction.commit();
         }
     }
 
-    private void loadListViewFragment() {
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        ListViewFragment savedListFragment = (ListViewFragment) getSupportFragmentManager().findFragmentByTag(LIST_VIEW_FRAGMENT);
-        if (savedListFragment == null){
-            Log.v("MainActivity","listViewFragment");
-            ListViewFragment listViewFragment = new ListViewFragment();
-            fragmentTransaction.replace(R.id.main_placeholder,listViewFragment, LIST_VIEW_FRAGMENT);
-//            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        }else {
-            Log.v("MainActivity","savedListFragment");
-            fragmentTransaction.replace(R.id.main_placeholder,savedListFragment, LIST_VIEW_FRAGMENT);
-//            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        }
-    }
+//    private void loadListViewFragment() {
+//        fragmentManager = getSupportFragmentManager();
+//        fragmentTransaction = fragmentManager.beginTransaction();
+//        ListViewFragment savedListFragment = (ListViewFragment) getSupportFragmentManager().findFragmentByTag(LIST_VIEW_FRAGMENT);
+//        if (savedListFragment == null){
+//            ListViewFragment listViewFragment = new ListViewFragment();
+//            fragmentTransaction.replace(R.id.main_placeholder,listViewFragment, LIST_VIEW_FRAGMENT);
+//            fragmentTransaction.commit();
+//        }else {
+//            fragmentTransaction.replace(R.id.main_placeholder,savedListFragment, LIST_VIEW_FRAGMENT);
+//            fragmentTransaction.commit();
+//        }
+//    }
 
-    @Override
+
     public void startAddressSearchActivity() {
         Intent intent = new Intent(MainActivity.this, SearchAddressActivity.class);
         startActivity(intent);
     }
 
-    @Override
     public void onListResourceSelected(int index) {
 //        Toast.makeText(MainActivity.this, "You selected ".concat(String.valueOf(index)), Toast.LENGTH_SHORT).show();
 //        Intent intent = new Intent(MainActivity.this, BookingConfirmationActivity.class);
@@ -260,5 +305,31 @@ public class MainActivity extends BaseActivity implements MapViewFragment.onAddr
     public void onBackPressed() {
         super.onBackPressed();
         this.finishAffinity();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

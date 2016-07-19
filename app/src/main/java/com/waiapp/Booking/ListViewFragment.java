@@ -19,7 +19,7 @@ import com.waiapp.Model.Resource;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
 
-public class ListViewFragment extends Fragment {
+public abstract class ListViewFragment extends Fragment {
 
     private DatabaseReference mDatabase;
     private RecyclerView recyclerView;
@@ -36,7 +36,7 @@ public class ListViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        OnResourceSelectedInterface listener = (OnResourceSelectedInterface) getActivity();
+//        OnResourceSelectedInterface listener = (OnResourceSelectedInterface) getActivity();
         View view = inflater.inflate(R.layout.fragment_main_listview, container, false);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -59,9 +59,11 @@ public class ListViewFragment extends Fragment {
         recyclerView.setLayoutManager(mManager);
 
         resourceQuery = mDatabase.child(Constants.CHILD_RESOURCE).child(Constants.CHILD_COOK);
+        resourceQuery = setQuery();
         initFirebaseUI(resourceQuery);
 
     }
+    public abstract Query setQuery();
 
     private void initFirebaseUI(Query resourceQuery) {
         mAdapter = new FirebaseRecyclerAdapter<Resource, FirebaseViewHolder>(Resource.class,R.layout.list_resource_item,

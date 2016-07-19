@@ -14,11 +14,11 @@ import com.waiapp.R;
  */
 public class ListViewAdapter extends RecyclerView.Adapter {
 
-    private final ListViewFragment.OnResourceSelectedInterface mListener;
+//    private final ListViewFragment.OnResourceSelectedInterface mListener;
 
-    public ListViewAdapter(ListViewFragment.OnResourceSelectedInterface listener) {
-        mListener = listener;
-    }
+//    public ListViewAdapter(ListViewFragment.OnResourceSelectedInterface listener) {
+//        mListener = listener;
+//    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -62,7 +62,7 @@ public class ListViewAdapter extends RecyclerView.Adapter {
 
         @Override
         public void onClick(View v) {
-            mListener.onListResourceSelected(mIndex);
+//            mListener.onListResourceSelected(mIndex);
         }
     }
 }
