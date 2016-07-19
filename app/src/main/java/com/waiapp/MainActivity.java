@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,11 +26,15 @@ import android.widget.TextView;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
+import com.waiapp.confirmation.BookingConfirmationActivity;
 import com.waiapp.Booking.ListViewFragment;
 import com.waiapp.Booking.MapViewFragment;
 import com.waiapp.Booking.clean.CleaningFragment;
 import com.waiapp.Booking.cook.CookingFragment;
 import com.waiapp.Booking.wash.WashingFragment;
+import com.waiapp.Model.Resource;
+
+import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity implements CookingFragment.OnFragmentInteractionListener,
         CleaningFragment.OnFragmentInteractionListener,WashingFragment.OnFragmentInteractionListener,
@@ -59,8 +64,11 @@ public class MainActivity extends BaseActivity implements CookingFragment.OnFrag
         membersAmount = 50;
         mainCourseAmount = 50;
 
-        mBottomBar = BottomBar.attach(findViewById(R.id.main_placeholder), savedInstanceState);
+//        mBottomBar = BottomBar.attach(findViewById(R.id.main_placeholder), savedInstanceState);
+        mBottomBar = BottomBar.attachShy((CoordinatorLayout) findViewById(R.id.main_coordinatorLayout),findViewById(R.id.main_placeholder), savedInstanceState);
         mBottomBar.noTopOffset();
+        mBottomBar.setMaxFixedTabs(2);
+        mBottomBar.noNavBarGoodness();
         mBottomBar.setItems(R.menu.mainactivity_bottombar);
         mBottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
 
@@ -134,19 +142,19 @@ public class MainActivity extends BaseActivity implements CookingFragment.OnFrag
 //        });
     }
 
-    private void LoadMapViewFragment() {
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        MapViewFragment savedMapFragment = (MapViewFragment) getSupportFragmentManager().findFragmentByTag(MAP_VIEW_FRAGMENT);
-        if(savedMapFragment == null) {
-            MapViewFragment mapViewFragment = new MapViewFragment();
-            fragmentTransaction.replace(R.id.main_placeholder, mapViewFragment, MAP_VIEW_FRAGMENT);
-            fragmentTransaction.commit();
-        }else{
-            fragmentTransaction.replace(R.id.main_placeholder,savedMapFragment, MAP_VIEW_FRAGMENT);
-            fragmentTransaction.commit();
-        }
-    }
+//    private void LoadMapViewFragment() {
+//        fragmentManager = getSupportFragmentManager();
+//        fragmentTransaction = fragmentManager.beginTransaction();
+//        MapViewFragment savedMapFragment = (MapViewFragment) getSupportFragmentManager().findFragmentByTag(MAP_VIEW_FRAGMENT);
+//        if(savedMapFragment == null) {
+//            MapViewFragment mapViewFragment = new MapViewFragment();
+//            fragmentTransaction.replace(R.id.main_placeholder, mapViewFragment, MAP_VIEW_FRAGMENT);
+//            fragmentTransaction.commit();
+//        }else{
+//            fragmentTransaction.replace(R.id.main_placeholder,savedMapFragment, MAP_VIEW_FRAGMENT);
+//            fragmentTransaction.commit();
+//        }
+//    }
 
 //    private void loadListViewFragment() {
 //        fragmentManager = getSupportFragmentManager();
@@ -168,13 +176,16 @@ public class MainActivity extends BaseActivity implements CookingFragment.OnFrag
         startActivity(intent);
     }
 
-    public void onListResourceSelected(int index) {
-//        Toast.makeText(MainActivity.this, "You selected ".concat(String.valueOf(index)), Toast.LENGTH_SHORT).show();
-//        Intent intent = new Intent(MainActivity.this, BookingConfirmationActivity.class);
-//        startActivity(intent);
-        final ViewGroup viewGroup = (ViewGroup) ((ViewGroup) this
-                .findViewById(android.R.id.content));
-        startCommentsPopUpView(viewGroup);
+    public void onListResourceSelected(Resource resource, String callingFragment) {
+        ArrayList<Resource> resourceList = new ArrayList<>();
+        resourceList.add(resource);
+        Intent intent = new Intent(MainActivity.this, BookingConfirmationActivity.class);
+        intent.putExtra("resource",resource);
+        intent.putExtra("fragment_name",callingFragment);
+//        intent.putExtra("resource", resourceList);
+        startActivity(intent);
+        final ViewGroup viewGroup = (ViewGroup) ( this.findViewById(android.R.id.content));
+//        startCommentsPopUpView(viewGroup);
     }
 
     public void startCommentsPopUpView(View view) {

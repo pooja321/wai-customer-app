@@ -27,10 +27,11 @@ public abstract class ListViewFragment extends Fragment {
     private ProgressDialog mProgressDialog;
     private FirebaseRecyclerAdapter<Resource, FirebaseViewHolder> mAdapter;
     Query resourceQuery;
+    String callingFragment;
 
     // callback interface to implement on item list click listener
     public interface OnResourceSelectedInterface{
-        void onListResourceSelected(int index);
+        void onListResourceSelected(Resource index, String callingFragment);
     }
     @Nullable
     @Override
@@ -60,28 +61,38 @@ public abstract class ListViewFragment extends Fragment {
 
         resourceQuery = mDatabase.child(Constants.CHILD_RESOURCE).child(Constants.CHILD_COOK);
         resourceQuery = setQuery();
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.show();
         initFirebaseUI(resourceQuery);
 
     }
     public abstract Query setQuery();
+    public abstract String getCallingFragmentName();
 
     private void initFirebaseUI(Query resourceQuery) {
         mAdapter = new FirebaseRecyclerAdapter<Resource, FirebaseViewHolder>(Resource.class,R.layout.list_resource_item,
                 FirebaseViewHolder.class,resourceQuery) {
             @Override
-            protected void populateViewHolder(FirebaseViewHolder viewHolder, Resource model, final int position) {
+            protected void populateViewHolder(FirebaseViewHolder viewHolder, final Resource model, final int position) {
                 final DatabaseReference resourceRef = getRef(position);
                 final OnResourceSelectedInterface listener = (OnResourceSelectedInterface) getActivity();
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        listener.onListResourceSelected(position);
+                        callingFragment = getCallingFragmentName();
+//                        listener.onListResourceSelected(position,callingFragment);
+                        listener.onListResourceSelected(model,callingFragment);
                     }
                 });
                 viewHolder.bindView(model);
+
             }
+
         };
         recyclerView.setAdapter(mAdapter);
+        mProgressDialog.dismiss();
     }
 
     public String getUid() {

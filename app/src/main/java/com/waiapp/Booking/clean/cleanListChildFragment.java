@@ -10,11 +10,17 @@ import com.waiapp.Utility.Constants;
  * Created by keviv on 19/07/2016.
  */
 public class cleanListChildFragment extends ListViewFragment {
+
     private DatabaseReference mDatabase;
 
     @Override
     public Query setQuery() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         return mDatabase.child(Constants.CHILD_RESOURCE).child(Constants.CHILD_CLEANING);
+    }
+
+    @Override
+    public String getCallingFragmentName() {
+        return Constants.CHILD_CLEANING;
     }
 }

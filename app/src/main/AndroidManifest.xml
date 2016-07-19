@@ -42,7 +42,7 @@
         <activity android:name=".BaseActivity" />
         <activity android:name=".SearchAddressActivity" />
         <activity
-            android:name=".Booking.BookingConfirmationActivity"
+            android:name=".confirmation.BookingConfirmationActivity"
             android:label="@string/confirm_booking_activity_title">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

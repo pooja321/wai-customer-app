@@ -3,15 +3,16 @@ package com.waiapp.Model;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 @IgnoreExtraProperties
-public class Resource {
+public class Resource implements Serializable {
     private String firstName, lastName, Email, gender;
     private long mobileNumber;
     private int rating;
-
+    private static final long serialVersionUID = 1L;
     public Resource() {
     }
 
@@ -83,6 +84,5 @@ public class Resource {
     public void setRating(int rating) {
         this.rating = rating;
     }
-
 
 }

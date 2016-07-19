@@ -17,4 +17,9 @@ public class washListChildFragment extends ListViewFragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         return mDatabase.child(Constants.CHILD_RESOURCE).child(Constants.CHILD_WASHING);
     }
+
+    @Override
+    public String getCallingFragmentName() {
+        return Constants.CHILD_WASHING;
+    }
 }

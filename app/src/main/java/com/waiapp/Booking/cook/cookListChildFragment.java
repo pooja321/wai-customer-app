@@ -17,4 +17,9 @@ public class CookListChildFragment extends ListViewFragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         return mDatabase.child(Constants.CHILD_RESOURCE).child(Constants.CHILD_COOK);
     }
+
+    @Override
+    public String getCallingFragmentName() {
+        return Constants.CHILD_COOK;
+    }
 }
