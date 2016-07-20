@@ -47,12 +47,12 @@
                         android:text="Vivek Naik"
                         android:textSize="@dimen/text_size_normal" />
 
-                    <ImageView
-                        android:id="@+id/list_item_resource_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:src="@drawable/ic_local_dining_black_24dp" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/list_item_resource_icon"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_alignParentRight="true"-->
+                        <!--android:src="@drawable/ic_local_dining_black_24dp" />-->
                 </RelativeLayout>
 
                 <RelativeLayout

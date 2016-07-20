@@ -1,9 +1,11 @@
 package com.waiapp.confirmation;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.waiapp.OrderConfirmActivity;
 import com.waiapp.R;
 
 public class CookBookingConfirmationFragment extends Fragment implements View.OnClickListener {
@@ -23,6 +28,9 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     int _membersCount, _mainCourseCount;
     int membersAmount,mainCourseAmount;
     double totalAmount;
+
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     public CookBookingConfirmationFragment() {
         // Required empty public constructor
@@ -38,6 +46,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         _mainCourseCount = 2;
         membersAmount = 100;
         mainCourseAmount = 50;
+        mAuth = FirebaseAuth.getInstance();
         return view;
     }
 
@@ -58,11 +67,20 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         mTextViewBaseAmount = (TextView) view.findViewById(R.id.cook_booking_tv_base_price);
         mTextViewServiceTaxAmount = (TextView) view.findViewById(R.id.cook_booking_tv_service_tax_amount);
         mTextViewTotalAmount = (TextView) view.findViewById(R.id.cook_booking_tv_total_amount);
+
         mButtonIncrementMembers = (Button) view.findViewById(R.id.cook_booking_bt_members_count_increment);
         mButtonDecrementMembers = (Button) view.findViewById(R.id.cook_booking_bt_members_count_decrement);
         mButtonIncrementMainCourse = (Button) view.findViewById(R.id.cook_booking_bt_maincourse_count_increment);
         mButtonDecrementMainCourse = (Button) view.findViewById(R.id.cook_booking_bt_maincourse_count_decrement);
         mButtonConfirm = (Button) view.findViewById(R.id.cook_booking_bt_confirm);
+
+        mTextViewMembersCount.setText(String.valueOf(2));
+        mTextViewMainCourseCount.setText(String.valueOf(2));
+        mTextViewMembersAmount.setText(String.valueOf(100));
+        mTextViewMainCourseAmount.setText(String.valueOf(50));
+        mTextViewBaseAmount.setText(String.valueOf(50));
+        mTextViewServiceTaxAmount.setText(String.valueOf(18.75));
+        mTextViewTotalAmount.setText(String.valueOf(218.75));
 
         mButtonIncrementMainCourse.setOnClickListener(this);
         mButtonIncrementMembers.setOnClickListener(this);
@@ -77,7 +95,17 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         int id = v.getId();
         switch(id){
             case(R.id.cook_booking_bt_confirm):
-                Toast.makeText(getActivity(), "Booking Confirmed", Toast.LENGTH_SHORT).show();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.v("wai", "onAuthStateChanged:signed_in");
+                    Intent intent = new Intent(getActivity(), OrderConfirmActivity.class);
+                    startActivity(intent);
+                } else {
+                    // User is signed out
+                    Toast.makeText(getActivity(), "Please Login First", Toast.LENGTH_SHORT).show();
+                    Log.v("wai", "onAuthStateChanged:signed_out");
+                }
                 break;
             case(R.id.cook_booking_bt_maincourse_count_decrement):
                 if(_mainCourseCount > 2) {

@@ -50,7 +50,7 @@ public class ListViewAdapter extends RecyclerView.Adapter {
             mTextViewName = (TextView) itemView.findViewById(R.id.list_item_name);
             mTextViewResourceRating = (TextView) itemView.findViewById(R.id.list_item_rating);
             mImageViewResourcePic = (ImageView) itemView.findViewById(R.id.list_item_profilePic);
-            mImageViewResourceIcon = (ImageView) itemView.findViewById(R.id.list_item_resource_icon);
+//            mImageViewResourceIcon = (ImageView) itemView.findViewById(R.id.list_item_resource_icon);
             //set click listener on list item
             itemView.setOnClickListener(this);
         }

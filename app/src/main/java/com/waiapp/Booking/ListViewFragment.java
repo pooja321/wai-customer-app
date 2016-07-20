@@ -29,6 +29,11 @@ public abstract class ListViewFragment extends Fragment {
     Query resourceQuery;
     String callingFragment;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     // callback interface to implement on item list click listener
     public interface OnResourceSelectedInterface{
         void onListResourceSelected(Resource index, String callingFragment);
@@ -37,31 +42,29 @@ public abstract class ListViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-//        OnResourceSelectedInterface listener = (OnResourceSelectedInterface) getActivity();
         View view = inflater.inflate(R.layout.fragment_main_listview, container, false);
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
         recyclerView = (RecyclerView) view.findViewById(R.id.main_rv_list_view);
-        mProgressDialog = new ProgressDialog(getActivity());
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setMessage("Loading...");
-        mProgressDialog.show();
+//        OnResourceSelectedInterface listener = (OnResourceSelectedInterface) getActivity();
 //        ListViewAdapter listAdapter = new ListViewAdapter(listener);
 //        recyclerView.setAdapter(listAdapter);
 //        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
 //        recyclerView.setLayoutManager(layoutManager);
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.show();
         return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         mManager = new LinearLayoutManager(getActivity());
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(mManager);
-
         resourceQuery = mDatabase.child(Constants.CHILD_RESOURCE).child(Constants.CHILD_COOK);
         resourceQuery = setQuery();
         initFirebaseUI(resourceQuery);
@@ -84,9 +87,7 @@ public abstract class ListViewFragment extends Fragment {
                     }
                 });
                 viewHolder.bindView(model);
-
             }
-
         };
         recyclerView.setAdapter(mAdapter);
         mProgressDialog.dismiss();

@@ -37,7 +37,7 @@ public class BookingConfirmationActivity extends BaseActivity {
                 Toast.makeText(BookingConfirmationActivity.this, "Clean is the Calling Fragment ", Toast.LENGTH_SHORT).show();
                 break;
             case(Constants.CHILD_WASHING):
-                Toast.makeText(BookingConfirmationActivity.this, "Wash is the Calling Fragment ", Toast.LENGTH_SHORT).show();
+                fragment = new WashBookingConfirmationFragment();
                 break;
         }
         if (!(fragment == null)) {
