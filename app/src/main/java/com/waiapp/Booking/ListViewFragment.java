@@ -65,7 +65,7 @@ public abstract class ListViewFragment extends Fragment {
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(mManager);
-        resourceQuery = mDatabase.child(Constants.CHILD_RESOURCE).child(Constants.CHILD_COOK);
+        resourceQuery = mDatabase.child(Constants.CHILD_RESOURCES).child(Constants.CHILD_COOK);
         resourceQuery = setQuery();
         initFirebaseUI(resourceQuery);
     }

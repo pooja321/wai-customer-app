@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,7 +34,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private EditText mEditTextUsernameCreate, mEditTextEmailCreate, mEditTextPasswordCreate;
     private Button mButtonSignUp;
+    private TextView mTextViewSignInLink;
     private String mUserName, mUserEmail, mPassword;
+    public interface OnSignInButtonClickedInterface {
+        public void onSignInFragmentSelected(Fragment fragment);
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,6 +69,9 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         mEditTextUsernameCreate = (EditText) view.findViewById(R.id.edit_text_username_create);
         mEditTextEmailCreate = (EditText) view.findViewById(R.id.edit_text_email_create);
         mEditTextPasswordCreate = (EditText) view.findViewById(R.id.edit_text_password_create);
+
+        mTextViewSignInLink = (TextView) view.findViewById(R.id.tv_sign_in);
+        mTextViewSignInLink.setOnClickListener(this);
         mButtonSignUp = (Button) view.findViewById(R.id.btn_create_account_final);
         mButtonSignUp.setOnClickListener(this);
         /* Setup the progress dialog that is displayed later when authenticating with Firebase */
@@ -80,6 +88,11 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             case R.id.btn_create_account_final:
                 onCreateAccountPressed();
                 break;
+            case R.id.tv_sign_in:
+                LoginFragment loginFragment = new LoginFragment();
+                OnSignInButtonClickedInterface listener = (OnSignInButtonClickedInterface) getActivity();
+                listener.onSignInFragmentSelected(loginFragment);
+
         }
     }
 
@@ -109,13 +122,17 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                             Log.d(LOG_TAG, "createUserWithEmail:onComplete:" + task.getException().getMessage());
                             Toast.makeText(getActivity(), "Authentication failed.",Toast.LENGTH_SHORT).show();
                         }else{
-                            startActivity(new Intent(getActivity(),MainActivity.class));
+                            onAuthSuccess(task.getResult().getUser());
+//                            startActivity(new Intent(getActivity(),MainActivity.class));
                             Toast.makeText(getActivity(),"User registered",Toast.LENGTH_SHORT).show();
                         }
-
                         mAuthProgressDialog.dismiss();
                     }
                 });
+    }
+
+    private void onAuthSuccess(FirebaseUser user) {
+        startActivity(new Intent(getActivity(),FillDetailsActivity.class).putExtra("user",new String[]{user.getUid(),user.getEmail()}));
     }
 
     private boolean isEmailValid(String email) {

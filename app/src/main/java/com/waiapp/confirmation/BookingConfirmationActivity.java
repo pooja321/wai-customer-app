@@ -4,29 +4,32 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.waiapp.BaseActivity;
+import com.waiapp.Login.LoginFragment;
+import com.waiapp.Login.SignUpFragment;
 import com.waiapp.Model.Resource;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
 
-public class BookingConfirmationActivity extends BaseActivity {
+public class BookingConfirmationActivity extends BaseActivity implements WashBookingConfirmationFragment.OnUserSignUpRequired,
+        CookBookingConfirmationFragment.OnUserSignUpRequired,SignUpFragment.OnSignInButtonClickedInterface,
+        LoginFragment.OnSignUpButtonClickedInterface {
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     Resource resource;
     String callingFragment;
+    public static final String LOGIN_FRAGMENT = "login_fragment";
+    public static final String SIGNUP_FRAGMENT = "SignUp_fragment";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_confirmation);
         resource = (Resource) getIntent().getSerializableExtra("resource");
         callingFragment = getIntent().getStringExtra("fragment_name");
-
-        TextView textView = (TextView) findViewById(R.id.book_confirm_tv_name);
-        textView.setText(resource.getFirstName().concat(" ").concat(resource.getLastName()));
 
         Fragment fragment = null;
         switch(callingFragment){
@@ -46,5 +49,30 @@ public class BookingConfirmationActivity extends BaseActivity {
             fragmentTransaction.add(R.id.booking_confirmation_placeholder, fragment);
             fragmentTransaction.commit();
         }
+    }
+
+    @Override
+    public void UserSignUpRequired() {
+        SignUpFragment fragment = new SignUpFragment();
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.booking_confirmation_placeholder, fragment);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onSignInFragmentSelected(Fragment fragment) {
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.booking_confirmation_placeholder, fragment, LOGIN_FRAGMENT);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onSignUpFragmentSelected(Fragment fragment) {
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.booking_confirmation_placeholder, fragment, SIGNUP_FRAGMENT);
+        fragmentTransaction.commit();
     }
 }

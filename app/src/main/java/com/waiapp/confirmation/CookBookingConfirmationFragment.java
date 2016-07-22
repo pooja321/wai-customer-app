@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,9 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.waiapp.OrderConfirmActivity;
+import com.waiapp.Order.OrderConfirmActivity;
 import com.waiapp.R;
+import com.waiapp.WaiApplication;
 
 public class CookBookingConfirmationFragment extends Fragment implements View.OnClickListener {
 
@@ -31,6 +31,13 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private OnUserSignUpRequired listener;
+    WaiApplication app;
+
+    // callback interface to implement on item list click listener
+    public interface OnUserSignUpRequired{
+        void UserSignUpRequired();
+    }
 
     public CookBookingConfirmationFragment() {
         // Required empty public constructor
@@ -47,6 +54,8 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         membersAmount = 100;
         mainCourseAmount = 50;
         mAuth = FirebaseAuth.getInstance();
+        listener = (OnUserSignUpRequired) getActivity();
+        app = (WaiApplication) getActivity().getApplication();
         return view;
     }
 
@@ -98,13 +107,13 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    Log.v("wai", "onAuthStateChanged:signed_in");
                     Intent intent = new Intent(getActivity(), OrderConfirmActivity.class);
                     startActivity(intent);
                 } else {
                     // User is signed out
                     Toast.makeText(getActivity(), "Please Login First", Toast.LENGTH_SHORT).show();
-                    Log.v("wai", "onAuthStateChanged:signed_out");
+                    app.setOrderPending(true);
+                    listener.UserSignUpRequired();
                 }
                 break;
             case(R.id.cook_booking_bt_maincourse_count_decrement):

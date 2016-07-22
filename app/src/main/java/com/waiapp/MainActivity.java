@@ -55,6 +55,7 @@ public class MainActivity extends BaseActivity implements CookingFragment.OnFrag
     int membersAmount,mainCourseAmount;
     double totalAmount;
     int baseAmount = 50;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +70,7 @@ public class MainActivity extends BaseActivity implements CookingFragment.OnFrag
         mBottomBar.noTopOffset();
         mBottomBar.setMaxFixedTabs(2);
         mBottomBar.noNavBarGoodness();
+        mBottomBar.useFixedMode();
         mBottomBar.setItems(R.menu.mainactivity_bottombar);
         mBottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
 
@@ -342,5 +344,13 @@ public class MainActivity extends BaseActivity implements CookingFragment.OnFrag
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Necessary to restore the BottomBar's state, otherwise we would
+        // lose the current tab on orientation change.
+        mBottomBar.onSaveInstanceState(outState);
     }
 }

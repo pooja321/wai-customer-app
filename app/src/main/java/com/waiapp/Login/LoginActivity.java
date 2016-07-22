@@ -11,7 +11,8 @@ import android.view.View;
 import com.waiapp.MainActivity;
 import com.waiapp.R;
 
-public class LoginActivity extends AppCompatActivity implements LoginFragment.OnSignUpButtonClickedInterface {
+public class LoginActivity extends AppCompatActivity implements LoginFragment.OnSignUpButtonClickedInterface,
+        SignUpFragment.OnSignInButtonClickedInterface {
 
     public static final String LOGIN_FRAGMENT = "login_fragment";
     public static final String SIGNUP_FRAGMENT = "SignUp_fragment";
@@ -33,14 +34,7 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
         }
     }
 
-    @Override
-    public void onSignUpFragmentSelected(Fragment fragment) {
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.login_frame_placeholder, fragment, SIGNUP_FRAGMENT);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-    }
+
     public void onSkipLoginButtonClick(View view){
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
@@ -50,5 +44,21 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
     public void onBackPressed() {
         super.onBackPressed();
         this.finishAffinity();
+    }
+    @Override
+    public void onSignUpFragmentSelected(Fragment fragment) {
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.login_frame_placeholder, fragment, SIGNUP_FRAGMENT);
+//        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+    @Override
+    public void onSignInFragmentSelected(Fragment fragment) {
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.login_frame_placeholder, fragment, LOGIN_FRAGMENT);
+//        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

@@ -14,8 +14,9 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.waiapp.OrderConfirmActivity;
+import com.waiapp.Order.OrderConfirmActivity;
 import com.waiapp.R;
+import com.waiapp.WaiApplication;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,8 +28,13 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
     int baseAmount = 50;
     int bucketCount,bucketAmount;
     double totalAmount;
-    private FirebaseAuth.AuthStateListener mAuthListener;
+    private OnUserSignUpRequired listener;
+    WaiApplication app;
 
+    // callback interface to implement on item list click listener
+    public interface OnUserSignUpRequired{
+        void UserSignUpRequired();
+    }
     public WashBookingConfirmationFragment() {
         // Required empty public constructor
     }
@@ -41,6 +47,8 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
         View view = inflater.inflate(R.layout.fragment_wash_booking_confirmation, container, false);
         bucketCount = 1;
         bucketAmount = 100;
+        listener = (OnUserSignUpRequired) getActivity();
+        app = (WaiApplication) getActivity().getApplication();
         return view;
     }
 
@@ -91,6 +99,8 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
                 } else {
                     // User is signed out
                     Toast.makeText(getActivity(), "Please Login First", Toast.LENGTH_SHORT).show();
+                    app.setOrderPending(true);
+                    listener.UserSignUpRequired();
                 }
                 break;
             case(R.id.wash_booking_bt_bucket_count_decrement):

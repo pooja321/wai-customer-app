@@ -106,7 +106,8 @@
                 style="@style/LoginCreateTextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/button_sign_in" />
+                android:text="@string/button_sign_in"
+                android:clickable="true"/>
         </LinearLayout>
     </LinearLayout>
 

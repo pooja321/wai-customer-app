@@ -1,7 +1,9 @@
 package com.waiapp.Order;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
+import com.waiapp.R;
 
 public class OrderSummaryActivity extends AppCompatActivity {
 

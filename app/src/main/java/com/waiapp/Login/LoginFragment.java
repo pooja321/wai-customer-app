@@ -35,9 +35,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.waiapp.MainActivity;
 import com.waiapp.R;
 
-/**
- * Created by keviv on 03/05/2016.
- */
 public class LoginFragment extends Fragment implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
@@ -95,10 +92,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                 .build();
 
         /*** Build a GoogleApiClient with access to the Google Sign-In API and the options specified by gso.      */
-        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
-                .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+        if(mGoogleApiClient == null){
+            mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                    .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+        }
 
         /*** Link layout elements from XML and setup progress dialog    */
         initializeScreen(view);
@@ -249,8 +248,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mGoogleApiClient.stopAutoManage(getActivity());
-        mGoogleApiClient.disconnect();
+        if (mGoogleApiClient != null){
+            mGoogleApiClient.stopAutoManage(getActivity());
+            mGoogleApiClient.disconnect();
+        }
+
     }
     @Override
     public void onStart() {

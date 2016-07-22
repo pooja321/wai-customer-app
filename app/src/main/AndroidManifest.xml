@@ -49,7 +49,9 @@
                 android:value="com.waiapp.MainActivity" />
         </activity>
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".OrderConfirmActivity"></activity>
+        <activity android:name=".Order.OrderConfirmActivity" />
+        <activity android:name=".Login.FillDetailsActivity" />
+        <activity android:name=".Order.OrderSummaryActivity"></activity>
     </application>
 
 </manifest>
