@@ -1,9 +1,11 @@
-package com.waiapp;
+package com.waiapp.Order;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
+
+import com.waiapp.R;
 
 public class OrderConfirmActivity extends AppCompatActivity {
 
