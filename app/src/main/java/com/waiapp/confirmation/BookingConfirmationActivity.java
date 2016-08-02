@@ -4,21 +4,23 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
-import com.waiapp.BaseActivity;
 import com.waiapp.Login.LoginFragment;
 import com.waiapp.Login.SignUpFragment;
 import com.waiapp.Model.Resource;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
 
-public class BookingConfirmationActivity extends BaseActivity implements WashBookingConfirmationFragment.OnUserSignUpRequired,
+public class BookingConfirmationActivity extends AppCompatActivity implements WashBookingConfirmationFragment.OnUserSignUpRequired,
         CookBookingConfirmationFragment.OnUserSignUpRequired,SignUpFragment.OnSignInButtonClickedInterface,
         LoginFragment.OnSignUpButtonClickedInterface {
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
+    private Toolbar mtoolbar;
     Resource resource;
     String callingFragment;
     public static final String LOGIN_FRAGMENT = "login_fragment";
@@ -28,6 +30,12 @@ public class BookingConfirmationActivity extends BaseActivity implements WashBoo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_confirmation);
+
+        mtoolbar = (Toolbar) findViewById(R.id.booking_toolbar);
+        mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
+        setSupportActionBar(mtoolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         resource = (Resource) getIntent().getSerializableExtra("resource");
         callingFragment = getIntent().getStringExtra("fragment_name");
 

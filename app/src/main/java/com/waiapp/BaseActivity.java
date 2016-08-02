@@ -8,7 +8,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -39,14 +38,14 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 ////            }
 ////        });
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar_base);
-        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        if (useToolbar())  {
-            setSupportActionBar(toolbar);
-        }
-        else   {
-            toolbar.setVisibility(View.GONE);
-        }
+//        toolbar = (Toolbar) findViewById(R.id.toolbar_base);
+//        toolbar.setTitleTextColor(getResources().getColor( R.color.white));
+//        if (useToolbar())  {
+//            setSupportActionBar(toolbar);
+//        }
+//        else   {
+//            toolbar.setVisibility(View.GONE);
+//        }
         setUpNavView();
     }
 

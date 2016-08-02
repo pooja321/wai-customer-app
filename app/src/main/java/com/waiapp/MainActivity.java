@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,6 +52,7 @@ public class MainActivity extends BaseActivity implements CookingFragment.OnFrag
     ImageButton mSortFilterImageButton;
     private PopupWindow mPopConfirmationWindow;
     private BottomBar mBottomBar;
+    private Toolbar mtoolbar;
     int _membersCount, _mainCourseCount;
     int membersAmount,mainCourseAmount;
     double totalAmount;
@@ -60,6 +62,11 @@ public class MainActivity extends BaseActivity implements CookingFragment.OnFrag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mtoolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
+        setSupportActionBar(mtoolbar);
+
         _membersCount = 2;
         _mainCourseCount = 2;
         membersAmount = 50;

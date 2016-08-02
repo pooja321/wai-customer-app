@@ -49,7 +49,11 @@
                 android:value="com.waiapp.MainActivity" />
         </activity>
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".Order.OrderConfirmActivity" />
+        <activity android:name=".Order.OrderConfirmActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".confirmation.BookingConfirmationActivity" />
+        </activity>
         <activity android:name=".Login.FillDetailsActivity" />
         <activity android:name=".Order.OrderSummaryActivity"></activity>
     </application>

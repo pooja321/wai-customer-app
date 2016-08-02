@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,11 +35,16 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
     private int _rating;
     private long _mobile;
     private String[] values;
+    private Toolbar mtoolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fill_details);
+        mtoolbar = (Toolbar) findViewById(R.id.fill_detail_toolbar);
+        mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
+        setSupportActionBar(mtoolbar);
+
         values = getIntent().getExtras().getStringArray("user");
         context = this;
         mDatabase = FirebaseDatabase.getInstance().getReference();
