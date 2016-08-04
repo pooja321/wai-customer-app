@@ -13,6 +13,7 @@
 
     <dimen name="edit_text_padding_land">6dp</dimen>
     <dimen name="lists_title_bottom_margin">12dp</dimen>
+    <dimen name="textinputlayout_margin">8dp</dimen>
     <dimen name="edit_text_padding">14dp</dimen>
     <dimen name="margin_small">16dp</dimen>
     <dimen name="btn_shopping_height">30dp</dimen>
@@ -25,6 +26,7 @@
     <dimen name="logo_image_size">100dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
+    <!--text size -->
     <dimen name="text_size_normal">14sp</dimen>
     <dimen name="text_size_medium">18sp</dimen>
     <dimen name="text_size_large">24sp</dimen>

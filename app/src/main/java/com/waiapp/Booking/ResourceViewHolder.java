@@ -8,13 +8,13 @@ import android.widget.TextView;
 import com.waiapp.Model.Resource;
 import com.waiapp.R;
 
-public class FirebaseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private TextView mTextViewName, mTextViewResourceRating;
     private ImageView mImageViewResourcePic, mImageViewResourceIcon;
 //    private int mIndex;
 
-    public FirebaseViewHolder(View itemView) {
+    public ResourceViewHolder(View itemView) {
         super(itemView);
 
         mTextViewName = (TextView) itemView.findViewById(R.id.list_item_name);

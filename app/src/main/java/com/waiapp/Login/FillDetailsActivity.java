@@ -14,9 +14,9 @@ import android.widget.Spinner;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.waiapp.Address.AddressActivity;
 import com.waiapp.MainActivity;
 import com.waiapp.Model.User;
-import com.waiapp.Order.OrderConfirmActivity;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
 import com.waiapp.WaiApplication;
@@ -85,7 +85,7 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
         if(!app.getOrderPending() && !(app.getOrderPending()== null)) {
             startActivity(new Intent(FillDetailsActivity.this, MainActivity.class));
         }else{
-            startActivity(new Intent(FillDetailsActivity.this, OrderConfirmActivity.class));
+            startActivity(new Intent(FillDetailsActivity.this, AddressActivity.class));
         }
     }
 

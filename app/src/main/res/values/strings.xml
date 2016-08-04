@@ -15,6 +15,12 @@
 
     <!-- Activity Titles  -->
     <string name="title_activity_create_account">Create Account</string>
+    <string name="title_activity_orders">OrdersActivity</string>
+    <string name="confirm_booking_activity_title">Booking Details</string>
+    <string name="label_order_confirm">Order Confirmed</string>
+    <string name="label_add_address">Add Address</string>
+    <string name="label_select_address">Select Address</string>
+    <string name="label_fill_details">Provide Basic Details</string>
 
     <!-- Instructions and Loading Text -->
     <string name="progress_dialog_loading">Loading…</string>
@@ -55,7 +61,6 @@
     <string name="google_error_cant_connect_to_api">Are you sure that you set up a project for your app?
         Check out : https://console.developers.google.com/project. Also make sure you have all the proper
     gradle dependencies</string>
-    <string name="title_activity_orders">OrdersActivity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
@@ -72,7 +77,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="Profile_Picture_content_desc">person name</string>
-    <string name="confirm_booking_activity_title">Booking Details</string>
     <string name="Rs">\u20B9</string>
     <string name="rs">\u20A8</string>
     <string name="logout">LOGOUT</string>
@@ -83,4 +87,11 @@
     <string name="hint_enter_last_name">Last Name</string>
     <string name="hint_enter_mobile">Mobile Number</string>
     <string name="hint_enter_first_name">First Name</string>
+    <string name="action_add">Add</string>
+    <string name="hint_enter_address_name">Address Title</string>
+    <string name="hint_enter_house_no">Flat No/House No</string>
+    <string name="hint_enter_area_name">Area Name</string>
+    <string name="hint_enter_landmark">Landmark</string>
+    <string name="hint_enter_cityname">City</string>
+    <string name="hint_enter_pincode">pincode</string>
 </resources>

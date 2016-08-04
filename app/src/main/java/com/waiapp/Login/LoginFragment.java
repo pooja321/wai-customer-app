@@ -32,8 +32,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.waiapp.Address.AddressActivity;
 import com.waiapp.MainActivity;
 import com.waiapp.R;
+import com.waiapp.WaiApplication;
 
 public class LoginFragment extends Fragment implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
@@ -177,7 +179,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                             Toast.makeText(getActivity(), "Authentication failed.",Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(getActivity(), "Authentication Successful.",Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getActivity(),MainActivity.class));
+//                            startActivity(new Intent(getActivity(),MainActivity.class));
+                            WaiApplication app = (WaiApplication) getActivity().getApplication();
+                            if(!app.getOrderPending() && !(app.getOrderPending()== null)) {
+                                Toast.makeText(getActivity(), String.valueOf(app.getOrderPending()), Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getActivity(), MainActivity.class));
+                            }else{
+                                Toast.makeText(getActivity(), String.valueOf(app.getOrderPending()), Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getActivity(), AddressActivity.class));
+                            }
                         }
                         mAuthProgressDialog.dismiss();
                     }
@@ -218,7 +228,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                                 Toast.makeText(getActivity(), "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
                             }else{
-                                startActivity(new Intent(getActivity(),MainActivity.class));
+//                                startActivity(new Intent(getActivity(),MainActivity.class));
+                                WaiApplication app = (WaiApplication) getActivity().getApplication();
+                                if(!app.getOrderPending() && !(app.getOrderPending()== null)) {
+                                    Toast.makeText(getActivity(), String.valueOf(app.getOrderPending()), Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(getActivity(), MainActivity.class));
+                                }else{
+                                    Toast.makeText(getActivity(), String.valueOf(app.getOrderPending()), Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(getActivity(), AddressActivity.class));
+                                }
                             }
                         }
                     });

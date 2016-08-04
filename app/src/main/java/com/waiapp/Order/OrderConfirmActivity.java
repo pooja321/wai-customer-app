@@ -8,16 +8,19 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.waiapp.MainActivity;
+import com.waiapp.Model.Address;
 import com.waiapp.R;
 
 public class OrderConfirmActivity extends AppCompatActivity {
 
     private Toolbar mtoolbar;
+    private Address address;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirm);
 
+        address = (Address) getIntent().getSerializableExtra("address");
         mtoolbar = (Toolbar) findViewById(R.id.order_confirm_toolbar);
         mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
         setSupportActionBar(mtoolbar);

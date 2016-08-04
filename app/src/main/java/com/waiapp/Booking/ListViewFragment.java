@@ -25,7 +25,7 @@ public abstract class ListViewFragment extends Fragment {
     private RecyclerView recyclerView;
     private LinearLayoutManager mManager;
     private ProgressDialog mProgressDialog;
-    private FirebaseRecyclerAdapter<Resource, FirebaseViewHolder> mAdapter;
+    private FirebaseRecyclerAdapter<Resource, ResourceViewHolder> mAdapter;
     Query resourceQuery;
     String callingFragment;
 
@@ -73,10 +73,10 @@ public abstract class ListViewFragment extends Fragment {
     public abstract String getCallingFragmentName();
 
     private void initFirebaseUI(Query resourceQuery) {
-        mAdapter = new FirebaseRecyclerAdapter<Resource, FirebaseViewHolder>(Resource.class,R.layout.list_resource_item,
-                FirebaseViewHolder.class,resourceQuery) {
+        mAdapter = new FirebaseRecyclerAdapter<Resource, ResourceViewHolder>(Resource.class,R.layout.list_resource_item,
+                ResourceViewHolder.class,resourceQuery) {
             @Override
-            protected void populateViewHolder(FirebaseViewHolder viewHolder, final Resource model, final int position) {
+            protected void populateViewHolder(ResourceViewHolder viewHolder, final Resource model, final int position) {
                 final DatabaseReference resourceRef = getRef(position);
                 final OnResourceSelectedInterface listener = (OnResourceSelectedInterface) getActivity();
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -11,6 +11,7 @@ public class Constants {
     public static final String CHILD_WASHING = "Washing";
     public static final String CHILD_CLEANING = "Cleaning";
     public static final String CHILD_ORDER = "Orders";
+    public static final String CHILD_ADDRESS = "Address";
 
     public static final String ORDER_STATUS_COMPLETED = "Completed";
     public static final String ORDER_STATUS_STARTED = "Started";
