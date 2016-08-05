@@ -83,8 +83,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         if (id == R.id.nav_history) {
 
-        } else if (id == R.id.nav_address) {
-
         } else if (id == R.id.nav_notifications) {
 
         } else if (id == R.id.nav_chat_with_us) {
