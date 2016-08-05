@@ -2,7 +2,6 @@ package com.waiapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -27,18 +26,17 @@ import android.widget.TextView;
 
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
-import com.waiapp.confirmation.BookingConfirmationActivity;
 import com.waiapp.Booking.ListViewFragment;
 import com.waiapp.Booking.MapViewFragment;
 import com.waiapp.Booking.clean.CleaningFragment;
 import com.waiapp.Booking.cook.CookingFragment;
 import com.waiapp.Booking.wash.WashingFragment;
 import com.waiapp.Model.Resource;
+import com.waiapp.confirmation.BookingConfirmationActivity;
 
 import java.util.ArrayList;
 
-public class MainActivity extends BaseActivity implements CookingFragment.OnFragmentInteractionListener,
-        CleaningFragment.OnFragmentInteractionListener,WashingFragment.OnFragmentInteractionListener,
+public class MainActivity extends BaseActivity implements
         MapViewFragment.onAddressSearchClick, ListViewFragment.OnResourceSelectedInterface{
 
     public static final String MAP_VIEW_FRAGMENT = "map_view_fragment";
@@ -185,10 +183,11 @@ public class MainActivity extends BaseActivity implements CookingFragment.OnFrag
         startActivity(intent);
     }
 
-    public void onListResourceSelected(Resource resource, String callingFragment) {
+    public void onListResourceSelected(String key, Resource resource, String callingFragment) {
         ArrayList<Resource> resourceList = new ArrayList<>();
         resourceList.add(resource);
         Intent intent = new Intent(MainActivity.this, BookingConfirmationActivity.class);
+        intent.putExtra("key",key);
         intent.putExtra("resource",resource);
         intent.putExtra("fragment_name",callingFragment);
 //        intent.putExtra("resource", resourceList);
@@ -325,11 +324,6 @@ public class MainActivity extends BaseActivity implements CookingFragment.OnFrag
     public void onBackPressed() {
         super.onBackPressed();
         this.finishAffinity();
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

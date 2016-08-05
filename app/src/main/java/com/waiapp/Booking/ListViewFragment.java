@@ -36,7 +36,7 @@ public abstract class ListViewFragment extends Fragment {
 
     // callback interface to implement on item list click listener
     public interface OnResourceSelectedInterface{
-        void onListResourceSelected(Resource index, String callingFragment);
+        void onListResourceSelected(String key, Resource index, String callingFragment);
     }
     @Nullable
     @Override
@@ -83,7 +83,7 @@ public abstract class ListViewFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         callingFragment = getCallingFragmentName();
-                        listener.onListResourceSelected(model,callingFragment);
+                        listener.onListResourceSelected(resourceRef.getKey(),model,callingFragment);
                     }
                 });
                 viewHolder.bindView(model);

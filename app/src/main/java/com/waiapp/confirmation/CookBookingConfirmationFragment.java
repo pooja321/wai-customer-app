@@ -16,13 +16,14 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.waiapp.Address.AddressActivity;
+import com.waiapp.Model.Resource;
 import com.waiapp.R;
 import com.waiapp.WaiApplication;
 
 public class CookBookingConfirmationFragment extends Fragment implements View.OnClickListener {
 
     TextView mTextViewMembersCount,mTextViewMainCourseCount,mTextViewMembersAmount, mTextViewMainCourseAmount,
-            mTextViewBaseAmount, mTextViewServiceTaxAmount, mTextViewTotalAmount;
+            mTextViewBaseAmount, mTextViewServiceTaxAmount, mTextViewTotalAmount, mTextViewResourceName;
     Button mButtonIncrementMembers,mButtonDecrementMembers, mButtonIncrementMainCourse,mButtonDecrementMainCourse,
             mButtonConfirm;
     int baseAmount = 50;
@@ -35,6 +36,12 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     private OnUserSignUpRequired listener;
     WaiApplication app;
 
+    private static final String ARG_KEY = "key";
+    private static final String ARG_RESOURCE = "resource";
+
+    private String mParamKey;
+    private Resource mParamResource;
+
     // callback interface to implement on item list click listener
     public interface OnUserSignUpRequired{
         void UserSignUpRequired();
@@ -42,6 +49,24 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
 
     public CookBookingConfirmationFragment() {
         // Required empty public constructor
+    }
+
+    public static CookBookingConfirmationFragment newInstance(String key, Resource resource) {
+        CookBookingConfirmationFragment fragment = new CookBookingConfirmationFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_KEY, key);
+        args.putSerializable(ARG_RESOURCE, resource);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParamKey = getArguments().getString(ARG_KEY);
+            mParamResource = (Resource) getArguments().getSerializable(ARG_RESOURCE);
+        }
     }
 
 
@@ -78,6 +103,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.v("wai","onViewCreated");
+        mTextViewResourceName = (TextView) view.findViewById(R.id.cook_booking_tv_resource_name);
         mTextViewMembersCount = (TextView) view.findViewById(R.id.cook_booking_tv_members_count);
         mTextViewMainCourseCount = (TextView) view.findViewById(R.id.cook_booking_tv_maincourse_count);
         mTextViewMembersAmount = (TextView) view.findViewById(R.id.cook_booking_tv_members_price);
@@ -98,6 +124,16 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         mButtonDecrementMembers.setOnClickListener(this);
         mButtonConfirm.setOnClickListener(this);
 
+        String _firstName = "First Name";
+        if(!(mParamResource == null)){
+            _firstName = mParamResource.getFirstName();
+        }
+        String _lastName = "Last Name";
+        if(!(mParamResource== null)){
+            _lastName = mParamResource.getLastName();
+        }
+
+        mTextViewResourceName.setText(String.format("%s %s", _firstName, _lastName));
         mTextViewMembersCount.setText(String.valueOf(membersCount));
         mTextViewMainCourseCount.setText(String.valueOf(mainCourseCount));
         mTextViewMembersAmount.setText(String.valueOf(membersAmount));

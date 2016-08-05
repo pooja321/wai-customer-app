@@ -22,7 +22,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
     FragmentTransaction fragmentTransaction;
     private Toolbar mtoolbar;
     Resource resource;
-    String callingFragment;
+    String callingFragment, key;
     public static final String LOGIN_FRAGMENT = "login_fragment";
     public static final String SIGNUP_FRAGMENT = "SignUp_fragment";
     public static final String SAVED_FRAGMENT = "saved_fragment";
@@ -40,6 +40,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
 
         resource = (Resource) getIntent().getSerializableExtra("resource");
         callingFragment = getIntent().getStringExtra("fragment_name");
+        key = getIntent().getStringExtra("key");
 //        if(savedInstanceState != null && savedInstanceState.getString(KEY_CALLING_FRAGMENT) != null){
 //            Log.v("wai","if");
 //            callingFragment = savedInstanceState.getString(KEY_CALLING_FRAGMENT);
@@ -60,7 +61,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
         switch(callingFragment){
             case(Constants.CHILD_COOK):
                 Toast.makeText(BookingConfirmationActivity.this, "cook fragment called", Toast.LENGTH_SHORT).show();
-                fragment = new CookBookingConfirmationFragment();
+                fragment = CookBookingConfirmationFragment.newInstance(key,resource);
                 break;
             case(Constants.CHILD_CLEANING):
                 Toast.makeText(BookingConfirmationActivity.this, "Clean is the Calling Fragment ", Toast.LENGTH_SHORT).show();
