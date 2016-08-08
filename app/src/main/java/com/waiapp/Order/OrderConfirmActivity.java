@@ -13,17 +13,21 @@ import com.waiapp.R;
 
 public class OrderConfirmActivity extends AppCompatActivity {
 
+    TextView mTextViewOrderKey;
     private Toolbar mtoolbar;
     private Address address;
+    String orderKey;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirm);
+        orderKey = getIntent().getStringExtra("orderKey");
 
         address = (Address) getIntent().getSerializableExtra("address");
         mtoolbar = (Toolbar) findViewById(R.id.order_confirm_toolbar);
         mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
         setSupportActionBar(mtoolbar);
+        setTitle("Your Order");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final TextView mTextViewTimer = (TextView) findViewById(R.id.order_confirm_tv_timer);
@@ -37,6 +41,8 @@ public class OrderConfirmActivity extends AppCompatActivity {
                 mTextViewTimer.setText("done!");
             }
         }.start();
+        mTextViewOrderKey = (TextView)  findViewById(R.id.order_confirm_orderkey);
+        mTextViewOrderKey.setText(orderKey);
     }
     @Override
     public void onBackPressed() {

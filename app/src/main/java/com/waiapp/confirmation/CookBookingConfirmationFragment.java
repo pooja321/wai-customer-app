@@ -3,6 +3,7 @@ package com.waiapp.confirmation;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,11 +14,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.waiapp.Address.AddressActivity;
+import com.waiapp.Model.Order;
 import com.waiapp.Model.Resource;
 import com.waiapp.R;
+import com.waiapp.Utility.Constants;
+import com.waiapp.Utility.common;
 import com.waiapp.WaiApplication;
 
 public class CookBookingConfirmationFragment extends Fragment implements View.OnClickListener {
@@ -31,9 +39,8 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     int membersAmount,mainCourseAmount;
     double totalAmount;
 
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
     private OnUserSignUpRequired listener;
+    private DatabaseReference mDatabase;
     WaiApplication app;
 
     private static final String ARG_KEY = "key";
@@ -75,9 +82,9 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         // Inflate the layout for this fragment
         Log.v("wai","oncreateView");
         View view =  inflater.inflate(R.layout.fragment_cook_booking_confirmation, container, false);
-        mAuth = FirebaseAuth.getInstance();
         listener = (OnUserSignUpRequired) getActivity();
         app = (WaiApplication) getActivity().getApplication();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         if(savedInstanceState != null){
             Log.v("wai","if");
             membersCount = savedInstanceState.getInt("membercount");
@@ -150,6 +157,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user != null) {
                     // User is signed in
+                    createOrder();
                     Intent intent = new Intent(getActivity(), AddressActivity.class);
                     startActivity(intent);
                 } else {
@@ -201,6 +209,25 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
                 calculateAmount();
                 break;
         }
+    }
+
+    private void createOrder() {
+        final String key = mDatabase.child(Constants.CHILD_ORDER).push().getKey();
+        Order order = new Order("11011", common.getUid(),mParamKey,null,Constants.ORDER_STATUS_ADDRESS_NOT_SET,null,
+                String.valueOf(totalAmount),null,null,null,null,null);
+        mDatabase.child(Constants.CHILD_ORDER).child(key).setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(!task.isSuccessful()){
+                    Toast.makeText(getActivity(), "Order saving failed", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getActivity(), "Order saved", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), AddressActivity.class);
+                    intent.putExtra("Order_key",key);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     private void calculateAmount() {

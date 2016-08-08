@@ -49,28 +49,37 @@
                 android:value="com.waiapp.MainActivity" />
         </activity>
         <activity android:name=".SettingsActivity" />
-        <activity android:name=".Login.FillDetailsActivity"
-            android:label="@string/label_fill_details"/>
+        <activity
+            android:name=".Login.FillDetailsActivity"
+            android:label="@string/label_fill_details" />
         <activity android:name=".Order.OrderSummaryActivity" />
-        <activity android:name=".Address.AddressActivity"
+        <activity
+            android:name=".Address.AddressActivity"
             android:label="@string/label_select_address"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".confirmation.BookingConfirmationActivity" />
         </activity>
-        <activity android:name=".Address.AddAddressActivity"
+        <activity
+            android:name=".Address.AddAddressActivity"
             android:label="@string/label_add_address"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Address.AddressActivity" />
         </activity>
-        <activity android:name=".Order.OrderConfirmActivity"
+        <activity
+            android:name=".Order.OrderConfirmActivity"
             android:label="@string/label_order_confirm">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Address.AddAddressActivity" />
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".payment.PaymentActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Address.AddressActivity" />
         </activity>
     </application>
 

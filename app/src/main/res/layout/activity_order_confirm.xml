@@ -27,11 +27,18 @@
         android:gravity="center"
         android:text="Thank you for your order"/>
     <TextView
+        android:id="@+id/order_confirm_orderkey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:gravity="center"
+        android:text="Order No: "/>
+    <TextView
         android:id="@+id/order_confirm_tv_timer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:gravity="center"
-        android:text="Thank you for your order"
+        android:text="30: 00"
         android:textSize="24sp"/>
 </LinearLayout>
