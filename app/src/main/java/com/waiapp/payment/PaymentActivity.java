@@ -80,7 +80,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
         OrderUpdates.put("paymentMode",_paymentMode);
-        OrderUpdates.put("orderStatus",Constants.ORDER_STATUS_INCOMPLETE);
+        OrderUpdates.put("orderStatus",Constants.ORDER_STATUS_WAITING_FOR_RESOURCE);
 
         mDatabase.child(Constants.CHILD_ORDER).child(orderKey).updateChildren(OrderUpdates, new DatabaseReference.CompletionListener() {
             @Override

@@ -31,10 +31,13 @@ public class OrderConfirmActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final TextView mTextViewTimer = (TextView) findViewById(R.id.order_confirm_tv_timer);
-        new CountDownTimer(300000, 1000) {
+        new CountDownTimer(2700000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                mTextViewTimer.setText("seconds remaining: " + millisUntilFinished / 1000);
+                int durationSeconds = (int) (millisUntilFinished/1000);
+                String time = String.format("%02d:%02d:%02d", durationSeconds / 3600,
+                        (durationSeconds % 3600) / 60, (durationSeconds % 60));
+                mTextViewTimer.setText(time);
             }
 
             public void onFinish() {

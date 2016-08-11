@@ -9,20 +9,21 @@ import java.util.Map;
 
 @IgnoreExtraProperties
 public class Resource implements Serializable {
-    private String firstName, lastName, Email, gender;
+    private String firstName, lastName, Email, gender,status;
     private long mobileNumber;
     private int rating;
     private static final long serialVersionUID = 1L;
     public Resource() {
     }
 
-    public Resource(String firstName, String lastName, String email, String gender, long mobileNumber, int rating) {
+    public Resource(String firstName, String lastName, String email, String gender, long mobileNumber, int rating, String status) {
         Email = email;
         this.firstName = firstName;
         this.gender = gender;
         this.lastName = lastName;
         this.mobileNumber = mobileNumber;
         this.rating = rating;
+        this.status = status;
     }
     @Exclude
     public Map<String, Object> toMap() {
@@ -85,4 +86,11 @@ public class Resource implements Serializable {
         this.rating = rating;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

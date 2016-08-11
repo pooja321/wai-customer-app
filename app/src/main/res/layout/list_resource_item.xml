@@ -45,11 +45,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+                    <ImageView
+                        android:id="@+id/list_item_gender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/human_male"  />
+
                     <TextView
                         android:id="@+id/list_item_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
+                        android:layout_toRightOf="@+id/list_item_gender"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
                         android:text="Vivek Naik"
                         android:textSize="@dimen/text_size_normal" />
 
@@ -74,7 +82,7 @@
                         android:padding="8dp"
                         android:text="4"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_medium" />
+                        android:textSize="@dimen/text_size_normal" />
 
                     <TextView
                         android:id="@+id/list_item_distance"

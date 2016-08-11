@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,7 +26,7 @@ import com.waiapp.Model.Order;
 import com.waiapp.Model.Resource;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
-import com.waiapp.Utility.common;
+import com.waiapp.Utility.Utilities;
 import com.waiapp.WaiApplication;
 
 public class CookBookingConfirmationFragment extends Fragment implements View.OnClickListener {
@@ -34,6 +35,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
             mTextViewBaseAmount, mTextViewServiceTaxAmount, mTextViewTotalAmount, mTextViewResourceName;
     Button mButtonIncrementMembers,mButtonDecrementMembers, mButtonIncrementMainCourse,mButtonDecrementMainCourse,
             mButtonConfirm;
+    CheckBox mCheckBoxTerms;
     int baseAmount = 50;
     int membersCount, mainCourseCount;
     int membersAmount,mainCourseAmount;
@@ -110,6 +112,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.v("wai","onViewCreated");
+        mCheckBoxTerms = (CheckBox) view.findViewById(R.id.cook_booking_cb_terms);
         mTextViewResourceName = (TextView) view.findViewById(R.id.cook_booking_tv_resource_name);
         mTextViewMembersCount = (TextView) view.findViewById(R.id.cook_booking_tv_members_count);
         mTextViewMainCourseCount = (TextView) view.findViewById(R.id.cook_booking_tv_maincourse_count);
@@ -154,18 +157,22 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         int id = v.getId();
         switch(id){
             case(R.id.cook_booking_bt_confirm):
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    createOrder();
-                    Intent intent = new Intent(getActivity(), AddressActivity.class);
-                    startActivity(intent);
-                } else {
-                    // User is signed out
-                    Toast.makeText(getActivity(), "Please Login First", Toast.LENGTH_SHORT).show();
-                    app.setOrderPending(true);
-                    listener.UserSignUpRequired();
+
+                if (mCheckBoxTerms.isChecked()){
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user != null) {
+                        // User is signed in
+                        createOrder();
+                    } else {
+                        // User is signed out
+                        Toast.makeText(getActivity(), "Please Login First", Toast.LENGTH_SHORT).show();
+                        app.setOrderPending(true);
+                        listener.UserSignUpRequired();
+                    }
+                } else{
+                    Toast.makeText(getActivity(), "Please accept the terms and conditions", Toast.LENGTH_SHORT).show();
                 }
+
                 break;
             case(R.id.cook_booking_bt_maincourse_count_decrement):
                 if(mainCourseCount > 2) {
@@ -213,7 +220,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
 
     private void createOrder() {
         final String key = mDatabase.child(Constants.CHILD_ORDER).push().getKey();
-        Order order = new Order("11011", common.getUid(),mParamKey,null,Constants.ORDER_STATUS_ADDRESS_NOT_SET,null,
+        Order order = new Order("11011", "Cooking", Utilities.getUid(),mParamKey,null,Constants.ORDER_STATUS_ADDRESS_NOT_SET,null,
                 String.valueOf(totalAmount),null,null,null,null,null);
         mDatabase.child(Constants.CHILD_ORDER).child(key).setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

@@ -13,10 +13,16 @@ public class Constants {
     public static final String CHILD_ORDER = "Orders";
     public static final String CHILD_ADDRESS = "Address";
 
-    public static final String ORDER_STATUS_ADDRESS_NOT_SET = "Address not selected";
+    public static final String ORDER_STATUS_ADDRESS_NOT_SET = "Address Not Selected";
     public static final String ORDER_STATUS_COMPLETED = "Completed";
     public static final String ORDER_STATUS_CANCELLED = "Cancelled";
     public static final String ORDER_STATUS_STARTED = "Started";
     public static final String ORDER_STATUS_PAYMENT_PENDING = "Payment Pending";
-    public static final String ORDER_STATUS_INCOMPLETE = "Incomplete";
+    public static final String ORDER_STATUS_WAITING_FOR_RESOURCE = "Waiting For Resource";
+    public static final String ORDER_STATUS_ORDERED = "Ordered";
+
+    public static final String RESOURCE_STATUS_LOGGED_IN = "LoggedIn";
+    public static final String RESOURCE_STATUS_ONLINE = "Online";
+    public static final String RESOURCE_STATUS_OFFLINE = "Offline";
+    public static final String RESOURCE_STATUS_WORKING = "Working";
 }

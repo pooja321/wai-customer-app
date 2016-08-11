@@ -5,6 +5,7 @@ package com.waiapp.Model;
  */
 public class Order  {
     private String orderId;
+    private String orderType;
     private String customerId;
     private String resourceId;
     private String customerAddressId;
@@ -17,7 +18,7 @@ public class Order  {
     private String serviceEndTime;
     private String feedbackProvided;
 
-    public Order(String orderId, String customerId, String resourceId, String customerAddressId, String orderStatus,
+    public Order(String orderId, String orderType, String customerId, String resourceId, String customerAddressId, String orderStatus,
                  String paymentMode,String orderAmount, String orderCreationTime, String orderbookingTime,
                  String serviceStartTime, String serviceEndTime, String feedbackProvided) {
         this.customerAddressId = customerAddressId;
@@ -27,11 +28,20 @@ public class Order  {
         this.orderbookingTime = orderbookingTime;
         this.orderCreationTime = orderCreationTime;
         this.orderId = orderId;
+        this.orderType = orderType;
         this.orderStatus = orderStatus;
         this.paymentMode = paymentMode;
         this.resourceId = resourceId;
         this.serviceEndTime = serviceEndTime;
         this.serviceStartTime = serviceStartTime;
+    }
+
+    public String getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(String orderType) {
+        this.orderType = orderType;
     }
 
     public String getCustomerAddressId() {

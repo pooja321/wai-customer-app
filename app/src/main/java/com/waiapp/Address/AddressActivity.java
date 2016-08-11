@@ -22,7 +22,7 @@ import com.google.firebase.database.Query;
 import com.waiapp.Model.Address;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
-import com.waiapp.Utility.common;
+import com.waiapp.Utility.Utilities;
 import com.waiapp.payment.PaymentActivity;
 
 import java.util.HashMap;
@@ -48,7 +48,7 @@ public class AddressActivity extends AppCompatActivity {
         mtoolbar = (Toolbar) findViewById(R.id.address_toolbar);
         mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
         setSupportActionBar(mtoolbar);
-        setTitle("Address");
+        setTitle("Select Service Address");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView = (RecyclerView) findViewById(R.id.address_listview);
@@ -60,7 +60,7 @@ public class AddressActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            UID = common.getUid();
+            UID = Utilities.getUid();
         }
 
         resourceQuery = mDatabase.child(Constants.CHILD_ADDRESS).child(UID);

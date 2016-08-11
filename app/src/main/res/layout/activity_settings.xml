@@ -51,14 +51,6 @@
                     android:textSize="14sp" />
 
                 <RadioButton
-                    android:id="@+id/sort_rb_az"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="A - Z"
-                    android:textSize="14sp" />
-
-                <RadioButton
                     android:id="@+id/sort_filter_rb_distance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

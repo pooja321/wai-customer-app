@@ -52,7 +52,6 @@
         <activity
             android:name=".Login.FillDetailsActivity"
             android:label="@string/label_fill_details" />
-        <activity android:name=".Order.OrderSummaryActivity" />
         <activity
             android:name=".Address.AddressActivity"
             android:label="@string/label_select_address"
