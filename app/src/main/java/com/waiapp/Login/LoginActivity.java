@@ -50,7 +50,6 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.login_frame_placeholder, fragment, SIGNUP_FRAGMENT);
-//        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
     @Override
@@ -58,7 +57,6 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.login_frame_placeholder, fragment, LOGIN_FRAGMENT);
-//        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 }

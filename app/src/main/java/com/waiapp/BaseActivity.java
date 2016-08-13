@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.waiapp.Login.LoginActivity;
+import com.waiapp.Order.OrderHistoryActivity;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -82,7 +83,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_history) {
-
+            startActivity(new Intent(this, OrderHistoryActivity.class));
         } else if (id == R.id.nav_notifications) {
 
         } else if (id == R.id.nav_chat_with_us) {

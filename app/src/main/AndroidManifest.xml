@@ -80,6 +80,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Address.AddressActivity" />
         </activity>
+        <activity android:name=".Order.OrderHistoryActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".Order.OrderDetailActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Order.OrderHistoryActivity" />
+        </activity>
     </application>
 
 </manifest>

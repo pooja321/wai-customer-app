@@ -3,7 +3,6 @@ package com.waiapp.confirmation;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,19 +14,13 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.waiapp.Address.AddressActivity;
-import com.waiapp.Model.Order;
 import com.waiapp.Model.Resource;
 import com.waiapp.R;
-import com.waiapp.Utility.Constants;
-import com.waiapp.Utility.Utilities;
-import com.waiapp.WaiApplication;
 
 public class CookBookingConfirmationFragment extends Fragment implements View.OnClickListener {
 
@@ -43,12 +36,11 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
 
     private OnUserSignUpRequired listener;
     private DatabaseReference mDatabase;
-    WaiApplication app;
 
     private static final String ARG_KEY = "key";
     private static final String ARG_RESOURCE = "resource";
 
-    private String mParamKey;
+    private String mParamResourceKey;
     private Resource mParamResource;
 
     // callback interface to implement on item list click listener
@@ -73,7 +65,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParamKey = getArguments().getString(ARG_KEY);
+            mParamResourceKey = getArguments().getString(ARG_KEY);
             mParamResource = (Resource) getArguments().getSerializable(ARG_RESOURCE);
         }
     }
@@ -85,7 +77,6 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         Log.v("wai","oncreateView");
         View view =  inflater.inflate(R.layout.fragment_cook_booking_confirmation, container, false);
         listener = (OnUserSignUpRequired) getActivity();
-        app = (WaiApplication) getActivity().getApplication();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         if(savedInstanceState != null){
             Log.v("wai","if");
@@ -162,11 +153,14 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if (user != null) {
                         // User is signed in
-                        createOrder();
+                        Intent intent = new Intent(getActivity(), AddressActivity.class);
+                        intent.putExtra("resourceKey",mParamResourceKey);
+                        intent.putExtra("totalAmount",String.valueOf(totalAmount));
+                        intent.putExtra("orderType","Cooking");
+                        startActivity(intent);
                     } else {
                         // User is signed out
                         Toast.makeText(getActivity(), "Please Login First", Toast.LENGTH_SHORT).show();
-                        app.setOrderPending(true);
                         listener.UserSignUpRequired();
                     }
                 } else{
@@ -216,25 +210,6 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
                 calculateAmount();
                 break;
         }
-    }
-
-    private void createOrder() {
-        final String key = mDatabase.child(Constants.CHILD_ORDER).push().getKey();
-        Order order = new Order("11011", "Cooking", Utilities.getUid(),mParamKey,null,Constants.ORDER_STATUS_ADDRESS_NOT_SET,null,
-                String.valueOf(totalAmount),null,null,null,null,null);
-        mDatabase.child(Constants.CHILD_ORDER).child(key).setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(!task.isSuccessful()){
-                    Toast.makeText(getActivity(), "Order saving failed", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(getActivity(), "Order saved", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getActivity(), AddressActivity.class);
-                    intent.putExtra("Order_key",key);
-                    startActivity(intent);
-                }
-            }
-        });
     }
 
     private void calculateAmount() {

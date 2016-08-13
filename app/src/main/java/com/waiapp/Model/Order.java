@@ -10,6 +10,7 @@ public class Order  {
     private String resourceId;
     private String customerAddressId;
     private String orderStatus;
+    private String orderProgressStatus;
     private String paymentMode;
     private String OrderAmount;
     private String orderCreationTime;
@@ -18,8 +19,12 @@ public class Order  {
     private String serviceEndTime;
     private String feedbackProvided;
 
+    public Order(){
+
+    }
+
     public Order(String orderId, String orderType, String customerId, String resourceId, String customerAddressId, String orderStatus,
-                 String paymentMode,String orderAmount, String orderCreationTime, String orderbookingTime,
+                 String orderProgressStatus, String paymentMode,String orderAmount, String orderCreationTime, String orderbookingTime,
                  String serviceStartTime, String serviceEndTime, String feedbackProvided) {
         this.customerAddressId = customerAddressId;
         this.customerId = customerId;
@@ -34,6 +39,15 @@ public class Order  {
         this.resourceId = resourceId;
         this.serviceEndTime = serviceEndTime;
         this.serviceStartTime = serviceStartTime;
+        this.orderProgressStatus = orderProgressStatus;
+    }
+
+    public String getOrderProgressStatus() {
+        return orderProgressStatus;
+    }
+
+    public void setOrderProgressStatus(String orderProgressStatus) {
+        this.orderProgressStatus = orderProgressStatus;
     }
 
     public String getOrderType() {

@@ -2,31 +2,30 @@ package com.waiapp.Address;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.waiapp.Model.Address;
+import com.waiapp.Model.Order;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
 import com.waiapp.Utility.Utilities;
 import com.waiapp.payment.PaymentActivity;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class AddressActivity extends AppCompatActivity {
 
@@ -37,14 +36,16 @@ public class AddressActivity extends AppCompatActivity {
     private Toolbar mtoolbar;
     private RecyclerView recyclerView;
     private LinearLayoutManager mManager;
-    String orderKey;
+    String mTotalAmount, mOrderType, mResourceKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
-        orderKey = getIntent().getStringExtra("Order_key");
-        Log.v("wai", "address oncreate");
+        mTotalAmount = getIntent().getStringExtra("totalAmount");
+        mOrderType = getIntent().getStringExtra("orderType");
+        mResourceKey = getIntent().getStringExtra("resourceKey");
+
         mtoolbar = (Toolbar) findViewById(R.id.address_toolbar);
         mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
         setSupportActionBar(mtoolbar);
@@ -73,12 +74,10 @@ public class AddressActivity extends AppCompatActivity {
             @Override
             protected void populateViewHolder(AddressViewHolder viewHolder, final Address model, final int position) {
                 final DatabaseReference resourceRef = getRef(position);
-//                final OnResourceSelectedInterface listener = (OnResourceSelectedInterface) getActivity();
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-//                        listener.onListResourceSelected(model,callingFragment);
-                        updateAddressInorder(resourceRef.getKey());
+                        createOrder(resourceRef.getKey());
                     }
                 });
                 viewHolder.bindView(model);
@@ -87,18 +86,19 @@ public class AddressActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
-    private void updateAddressInorder(String key) {
-        Map<String, Object> OrderUpdates = new HashMap<>();
-        OrderUpdates.put("customerAddressId",key);
-        OrderUpdates.put("orderStatus",Constants.ORDER_STATUS_PAYMENT_PENDING);
-        mDatabase.child(Constants.CHILD_ORDER).child(orderKey).updateChildren(OrderUpdates, new DatabaseReference.CompletionListener() {
+    private void createOrder(String addressKey) {
+        String _UID = Utilities.getUid();
+        final String _orderKey = mDatabase.child(Constants.CHILD_ORDER).child(_UID).push().getKey();
+        Order order = new Order("11011", mOrderType, _UID, mResourceKey,addressKey,Constants.ORDER_STATUS_INCOMPLETE,
+                Constants.ORDER_STATUS_PAYMENT_PENDING,null,mTotalAmount,null,null,null,null,null);
+        mDatabase.child(Constants.CHILD_ORDER).child(_UID).child(_orderKey).setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if(!(databaseError == null)){
-                    Toast.makeText(AddressActivity.this, "Address updated failed", Toast.LENGTH_SHORT).show();
+            public void onComplete(@NonNull Task<Void> task) {
+                if(!task.isSuccessful()){
+                    Toast.makeText(AddressActivity.this, "Order saving failed", Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(AddressActivity.this, "Address updated successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(AddressActivity.this, PaymentActivity.class).putExtra("orderKey",orderKey));
+                    Toast.makeText(AddressActivity.this, "Order Saved successfully", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(AddressActivity.this, PaymentActivity.class).putExtra("orderKey",_orderKey));
                 }
             }
         });

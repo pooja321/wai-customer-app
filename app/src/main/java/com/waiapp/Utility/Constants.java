@@ -20,9 +20,15 @@ public class Constants {
     public static final String ORDER_STATUS_PAYMENT_PENDING = "Payment Pending";
     public static final String ORDER_STATUS_WAITING_FOR_RESOURCE = "Waiting For Resource";
     public static final String ORDER_STATUS_ORDERED = "Ordered";
+    public static final String ORDER_STATUS_INCOMPLETE = "Incomplete";
 
     public static final String RESOURCE_STATUS_LOGGED_IN = "LoggedIn";
     public static final String RESOURCE_STATUS_ONLINE = "Online";
     public static final String RESOURCE_STATUS_OFFLINE = "Offline";
     public static final String RESOURCE_STATUS_WORKING = "Working";
+
+    public static final String SORTBY_RATING = "rating";
+    public static final String SORTBY_DISTANCE = "distance";
+    public static final String FILTERBY_GENDER_MALE = "Male";
+    public static final String FILTERBY_GENDER_FEMALE = "Female";
 }

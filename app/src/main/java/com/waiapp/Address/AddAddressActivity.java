@@ -1,11 +1,11 @@
 package com.waiapp.Address;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,6 +32,7 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
     private Spinner mSpinnerAddressType;
     private Button mButtonSubmit;
     private Toolbar mtoolbar;
+    private ProgressDialog mSaveProgressDialog;
 
     String addressName, addressType, houseNo, areaName, landmark, city, state, country, pincode, UID;
     public static final String selectAddressTypeLabel = "Select Address Type";
@@ -42,7 +43,6 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_address);
 
-        Log.v("wai", "add address oncreate");
         mtoolbar = (Toolbar) findViewById(R.id.addaddress_toolbar);
         mtoolbar.setTitle("Add Address");
         mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
@@ -69,6 +69,10 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
 
         mButtonSubmit = (Button) findViewById(R.id.addaddress_button_submit);
         mButtonSubmit.setOnClickListener(this);
+
+        mSaveProgressDialog = new ProgressDialog(this);
+        mSaveProgressDialog.setMessage("Saving Your Address");
+        mSaveProgressDialog.setCancelable(false);
     }
 
     @Override
@@ -76,6 +80,7 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
         int id = v.getId();
         switch (id){
             case (R.id.addaddress_button_submit):
+                mSaveProgressDialog.show();
                 addAddress(v);
                 break;
         }
@@ -101,6 +106,7 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
         mDatabase.child(Constants.CHILD_ADDRESS).child(UID).push().setValue(address).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+                mSaveProgressDialog.dismiss();
                 if (!task.isSuccessful()) {
                     Toast.makeText(AddAddressActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 } else {

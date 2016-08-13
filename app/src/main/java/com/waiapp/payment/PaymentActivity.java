@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.waiapp.Order.OrderConfirmActivity;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
+import com.waiapp.Utility.Utilities;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -80,9 +81,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
         OrderUpdates.put("paymentMode",_paymentMode);
-        OrderUpdates.put("orderStatus",Constants.ORDER_STATUS_WAITING_FOR_RESOURCE);
+        OrderUpdates.put("orderStatus",Constants.ORDER_STATUS_ORDERED);
+        OrderUpdates.put("orderProgressStatus",Constants.ORDER_STATUS_WAITING_FOR_RESOURCE);
 
-        mDatabase.child(Constants.CHILD_ORDER).child(orderKey).updateChildren(OrderUpdates, new DatabaseReference.CompletionListener() {
+        mDatabase.child(Constants.CHILD_ORDER).child(Utilities.getUid()).child(orderKey).updateChildren(OrderUpdates, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if(!(databaseError == null)){

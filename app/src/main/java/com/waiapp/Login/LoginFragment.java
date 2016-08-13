@@ -178,14 +178,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                         }else{
                             Toast.makeText(getActivity(), "Authentication Successful.",Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getActivity(),MainActivity.class));
-//                            WaiApplication app = (WaiApplication) getActivity().getApplication();
-//                            if(!app.getOrderPending() && !(app.getOrderPending()== null)) {
-//                                Toast.makeText(getActivity(), String.valueOf(app.getOrderPending()), Toast.LENGTH_SHORT).show();
-//                                startActivity(new Intent(getActivity(), MainActivity.class));
-//                            }else{
-//                                Toast.makeText(getActivity(), String.valueOf(app.getOrderPending()), Toast.LENGTH_SHORT).show();
-//                                startActivity(new Intent(getActivity(), AddressActivity.class));
-//                            }
                         }
                         mAuthProgressDialog.dismiss();
                     }
@@ -227,14 +219,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                                         Toast.LENGTH_SHORT).show();
                             }else{
                                 startActivity(new Intent(getActivity(),MainActivity.class));
-//                                WaiApplication app = (WaiApplication) getActivity().getApplication();
-//                                if(!app.getOrderPending() && !(app.getOrderPending()== null)) {
-//                                    Toast.makeText(getActivity(), String.valueOf(app.getOrderPending()), Toast.LENGTH_SHORT).show();
-//                                    startActivity(new Intent(getActivity(), MainActivity.class));
-//                                }else{
-//                                    Toast.makeText(getActivity(), String.valueOf(app.getOrderPending()), Toast.LENGTH_SHORT).show();
-//                                    startActivity(new Intent(getActivity(), AddressActivity.class));
-//                                }
                             }
                         }
                     });

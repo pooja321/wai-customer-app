@@ -14,12 +14,10 @@ import android.widget.Spinner;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.waiapp.Address.AddressActivity;
 import com.waiapp.MainActivity;
 import com.waiapp.Model.User;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
-import com.waiapp.WaiApplication;
 
 public class FillDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -81,12 +79,7 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
         User user = new User(_firstName,_lastName,_Email,_genderSelected,_mobile);
 
         mDatabase.child(Constants.CHILD_USERS).child(userId).setValue(user);
-        WaiApplication app = (WaiApplication) getApplication();
-        if(!app.getOrderPending() && !(app.getOrderPending()== null)) {
-            startActivity(new Intent(FillDetailsActivity.this, MainActivity.class));
-        }else{
-            startActivity(new Intent(FillDetailsActivity.this, AddressActivity.class));
-        }
+        startActivity(new Intent(FillDetailsActivity.this, MainActivity.class));
     }
 
     @Override

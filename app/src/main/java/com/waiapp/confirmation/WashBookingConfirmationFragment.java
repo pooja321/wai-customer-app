@@ -16,7 +16,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.waiapp.Order.OrderConfirmActivity;
 import com.waiapp.R;
-import com.waiapp.WaiApplication;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +28,6 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
     int bucketCount,bucketAmount;
     double totalAmount;
     private OnUserSignUpRequired listener;
-    WaiApplication app;
 
     // callback interface to implement on item list click listener
     public interface OnUserSignUpRequired{
@@ -48,7 +46,6 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
         bucketCount = 1;
         bucketAmount = 100;
         listener = (OnUserSignUpRequired) getActivity();
-        app = (WaiApplication) getActivity().getApplication();
         return view;
     }
 
@@ -99,7 +96,6 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
                 } else {
                     // User is signed out
                     Toast.makeText(getActivity(), "Please Login First", Toast.LENGTH_SHORT).show();
-                    app.setOrderPending(true);
                     listener.UserSignUpRequired();
                 }
                 break;

@@ -13,7 +13,6 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
 
     private TextView mTextViewName, mTextViewResourceRating;
     private ImageView mImageViewResourcePic, mImageViewGenderIcon;
-//    private int mIndex;
 
     public ResourceViewHolder(View itemView) {
         super(itemView);
@@ -26,7 +25,6 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
 
     //set what views will display
     public void bindView(Resource resource){
-//        mIndex = position;
         String _fullName = resource.getFirstName().concat(" ").concat(resource.getLastName());
         mTextViewName.setText(_fullName);
         mTextViewResourceRating.setText(String.valueOf(resource.getRating()));
