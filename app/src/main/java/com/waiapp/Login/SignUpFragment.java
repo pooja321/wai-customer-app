@@ -32,10 +32,10 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 //    private Firebase mFirebaseRef;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private EditText mEditTextUsernameCreate, mEditTextEmailCreate, mEditTextPasswordCreate;
+    private EditText mEditTextEmailCreate, mEditTextPasswordCreate;
     private Button mButtonSignUp;
     private TextView mTextViewSignInLink;
-    private String mUserName, mUserEmail, mPassword;
+    private String mUserEmail, mPassword;
     public interface OnSignInButtonClickedInterface {
         public void onSignInFragmentSelected(Fragment fragment);
     }
@@ -66,7 +66,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
     private void initializeScreen(View view) {
 
-        mEditTextUsernameCreate = (EditText) view.findViewById(R.id.edit_text_username_create);
         mEditTextEmailCreate = (EditText) view.findViewById(R.id.edit_text_email_create);
         mEditTextPasswordCreate = (EditText) view.findViewById(R.id.edit_text_password_create);
 
@@ -98,14 +97,12 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
     private void onCreateAccountPressed() {
 
-        mUserName = mEditTextUsernameCreate.getText().toString();
         mUserEmail = mEditTextEmailCreate.getText().toString().toLowerCase();
         mPassword = mEditTextPasswordCreate.getText().toString();
         boolean validEmail = isEmailValid(mUserEmail);
-        boolean validUserName = isUserNameValid(mUserName);
         boolean validPassword = isPasswordValid(mPassword);
 
-        if (!validEmail || !validUserName || !validPassword) return;
+        if (!validEmail || !validPassword) return;
         /**
          * If everything was valid show the progress dialog to indicate that
          * account creation has started
@@ -144,14 +141,6 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
             return false;
         }
         return isGoodEmail;
-    }
-
-    private boolean isUserNameValid(String userName) {
-        if (userName.equals("")) {
-            mEditTextUsernameCreate.setError(getResources().getString(R.string.error_cannot_be_empty));
-            return false;
-        }
-        return true;
     }
 
     private boolean isPasswordValid(String password) {

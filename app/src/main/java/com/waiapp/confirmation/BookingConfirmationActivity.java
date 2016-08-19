@@ -48,7 +48,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
 //            Log.v("wai","else ");
 //            callingFragment = getIntent().getStringExtra("fragment_name");
 //        }
-        callingFragment = Constants.CHILD_COOK;
+        callingFragment = Constants.CHILD_COOKING;
         Fragment fragment = null;
 //        Fragment savedFragment = (Fragment) getSupportFragmentManager().findFragmentByTag(SAVED_FRAGMENT);
 //
@@ -59,7 +59,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
 //            fragment = savedFragment;
 //        }
         switch(callingFragment){
-            case(Constants.CHILD_COOK):
+            case(Constants.CHILD_COOKING):
                 Toast.makeText(BookingConfirmationActivity.this, "cook fragment called", Toast.LENGTH_SHORT).show();
                 fragment = CookBookingConfirmationFragment.newInstance(key,resource);
                 break;
