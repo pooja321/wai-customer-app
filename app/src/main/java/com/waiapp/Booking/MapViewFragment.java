@@ -47,15 +47,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private static final int PERMISSION_REQUEST_CODE = 1;
-    private static int UPDATE_INTERVAL = 5000; // 5 sec
+    private static int UPDATE_INTERVAL = 10000; // 10 sec
     private static int FATEST_INTERVAL = 5000; // 5 sec
-    private static int DISPLACEMENT = 1; // 10 meters
+    private static int DISPLACEMENT = 10; // 10 meters
 
     EditText mAddressSearchEditText;
 
     // Google client to interact with Google API
     public LocationManager locationManager;
-    private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private GoogleMap mGoogleMap;
@@ -215,7 +214,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.v("wai", "onconnected");
-        mLocationRequest = new LocationRequest();
+        LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(FATEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);

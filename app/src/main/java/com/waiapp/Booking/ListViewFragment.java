@@ -17,7 +17,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.waiapp.Model.Resource;
+import com.waiapp.Model.ResourceOnline;
 import com.waiapp.R;
 
 public abstract class ListViewFragment extends Fragment {
@@ -25,7 +25,7 @@ public abstract class ListViewFragment extends Fragment {
     private DatabaseReference mDatabase;
     private RecyclerView recyclerView;
     private LinearLayoutManager mManager;
-    private FirebaseRecyclerAdapter<Resource, ResourceViewHolder> mAdapter;
+    private FirebaseRecyclerAdapter<ResourceOnline, ResourceViewHolder> mAdapter;
     Query resourceQuery;
     String callingFragment;
 
@@ -36,7 +36,7 @@ public abstract class ListViewFragment extends Fragment {
 
     // callback interface to implement on item list click listener
     public interface OnResourceSelectedInterface{
-        void onListResourceSelected(String key, Resource index, String callingFragment);
+        void onListResourceSelected(String key, ResourceOnline index, String callingFragment);
     }
     @Nullable
     @Override
@@ -81,10 +81,10 @@ public abstract class ListViewFragment extends Fragment {
         @Override
         protected Void doInBackground(Query... params) {
             Log.v("wai","doinbackground");
-            mAdapter = new FirebaseRecyclerAdapter<Resource, ResourceViewHolder>(Resource.class,R.layout.list_resource_item,
+            mAdapter = new FirebaseRecyclerAdapter<ResourceOnline, ResourceViewHolder>(ResourceOnline.class,R.layout.list_resource_item,
                     ResourceViewHolder.class,params[0]) {
                 @Override
-                protected void populateViewHolder(ResourceViewHolder viewHolder, final Resource model, final int position) {
+                protected void populateViewHolder(ResourceViewHolder viewHolder, final ResourceOnline model, final int position) {
                     final DatabaseReference resourceRef = getRef(position);
                     Log.v("wai", String.valueOf(position));
                     final OnResourceSelectedInterface listener = (OnResourceSelectedInterface) getActivity();

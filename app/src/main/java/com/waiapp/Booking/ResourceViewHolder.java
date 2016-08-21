@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.waiapp.Model.Resource;
+import com.waiapp.Model.ResourceOnline;
 import com.waiapp.R;
 
 public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -24,8 +24,8 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
     }
 
     //set what views will display
-    public void bindView(Resource resource){
-        String _fullName = resource.getFirstName().concat(" ").concat(resource.getLastName());
+    public void bindView(ResourceOnline resource){
+        String _fullName = resource.getName();
         mTextViewName.setText(_fullName);
         mTextViewResourceRating.setText(String.valueOf(resource.getRating()));
         switch (resource.getGender()){

@@ -3,6 +3,7 @@ package com.waiapp.Address;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -121,6 +122,12 @@ public class AddressActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add_address) {
             startActivity(new Intent(this, AddAddressActivity.class));
+            return true;
+        }
+        if (id== android.R.id.home) {
+            Intent intent = NavUtils.getParentActivityIntent(this);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            NavUtils.navigateUpTo(this, intent);
             return true;
         }
         return super.onOptionsItemSelected(item);

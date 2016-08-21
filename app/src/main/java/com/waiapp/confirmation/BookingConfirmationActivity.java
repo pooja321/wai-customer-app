@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.waiapp.Login.LoginFragment;
 import com.waiapp.Login.SignUpFragment;
-import com.waiapp.Model.Resource;
+import com.waiapp.Model.ResourceOnline;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
 
@@ -21,7 +21,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     private Toolbar mtoolbar;
-    Resource resource;
+    ResourceOnline resource;
     String callingFragment, key;
     public static final String LOGIN_FRAGMENT = "login_fragment";
     public static final String SIGNUP_FRAGMENT = "SignUp_fragment";
@@ -38,7 +38,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
         setSupportActionBar(mtoolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        resource = (Resource) getIntent().getSerializableExtra("resource");
+        resource = (ResourceOnline) getIntent().getSerializableExtra("resource");
         callingFragment = getIntent().getStringExtra("fragment_name");
         key = getIntent().getStringExtra("key");
 //        if(savedInstanceState != null && savedInstanceState.getString(KEY_CALLING_FRAGMENT) != null){

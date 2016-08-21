@@ -5,6 +5,7 @@ package com.waiapp.Utility;
  */
 public class Constants {
     //firebase constants
+    public static final String CHILD_ONLINE_RESOURCE = "Online-Resource";
     public static final String CHILD_RESOURCES = "Resources";
     public static final String CHILD_USERS = "Users";
     public static final String CHILD_COOKING = "Cooking";

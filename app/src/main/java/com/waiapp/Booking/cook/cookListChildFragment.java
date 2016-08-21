@@ -15,7 +15,7 @@ public class CookListChildFragment extends ListViewFragment {
     @Override
     public Query setQuery() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        return mDatabase.child(Constants.CHILD_RESOURCES).child(Constants.CHILD_COOKING).orderByChild("status").equalTo("Online");
+        return mDatabase.child(Constants.CHILD_ONLINE_RESOURCE).child(Constants.CHILD_COOKING);
     }
 
     @Override

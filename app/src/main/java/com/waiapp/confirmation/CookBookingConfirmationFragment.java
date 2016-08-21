@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.waiapp.Address.AddressActivity;
-import com.waiapp.Model.Resource;
+import com.waiapp.Model.ResourceOnline;
 import com.waiapp.R;
 
 public class CookBookingConfirmationFragment extends Fragment implements View.OnClickListener {
@@ -41,7 +41,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     private static final String ARG_RESOURCE = "resource";
 
     private String mParamResourceKey;
-    private Resource mParamResource;
+    private ResourceOnline mParamResource;
 
     // callback interface to implement on item list click listener
     public interface OnUserSignUpRequired{
@@ -52,7 +52,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         // Required empty public constructor
     }
 
-    public static CookBookingConfirmationFragment newInstance(String key, Resource resource) {
+    public static CookBookingConfirmationFragment newInstance(String key, ResourceOnline resource) {
         CookBookingConfirmationFragment fragment = new CookBookingConfirmationFragment();
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
@@ -64,9 +64,16 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.v("wai","onCreate");
         if (getArguments() != null) {
             mParamResourceKey = getArguments().getString(ARG_KEY);
-            mParamResource = (Resource) getArguments().getSerializable(ARG_RESOURCE);
+            mParamResource = (ResourceOnline) getArguments().getSerializable(ARG_RESOURCE);
+        }
+        if(savedInstanceState == null){
+            membersCount = 2;
+            mainCourseCount = 2;
+            membersAmount = 100;
+            mainCourseAmount = 50;
         }
     }
 
@@ -78,25 +85,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         View view =  inflater.inflate(R.layout.fragment_cook_booking_confirmation, container, false);
         listener = (OnUserSignUpRequired) getActivity();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        if(savedInstanceState != null){
-            Log.v("wai","if");
-            membersCount = savedInstanceState.getInt("membercount");
-            mainCourseCount = savedInstanceState.getInt("maincoursecount");
-            membersAmount = savedInstanceState.getInt("memberamount");
-            mainCourseAmount = savedInstanceState.getInt("maincourseamount");
-        }else{
-            Log.v("wai","else");
-            membersCount = 2;
-            mainCourseCount = 2;
-            membersAmount = 100;
-            mainCourseAmount = 50;
-        }
         return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
     }
 
     @Override
@@ -125,16 +114,12 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         mButtonDecrementMembers.setOnClickListener(this);
         mButtonConfirm.setOnClickListener(this);
 
-        String _firstName = "First Name";
+        String _Name = "First Name";
         if(!(mParamResource == null)){
-            _firstName = mParamResource.getFirstName();
-        }
-        String _lastName = "Last Name";
-        if(!(mParamResource== null)){
-            _lastName = mParamResource.getLastName();
+            _Name = mParamResource.getName();
         }
 
-        mTextViewResourceName.setText(String.format("%s %s", _firstName, _lastName));
+        mTextViewResourceName.setText(_Name);
         mTextViewMembersCount.setText(String.valueOf(membersCount));
         mTextViewMainCourseCount.setText(String.valueOf(mainCourseCount));
         mTextViewMembersAmount.setText(String.valueOf(membersAmount));
@@ -228,5 +213,50 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         outState.putInt("maincoursecount", mainCourseCount);
         outState.putInt("maincourseamount", mainCourseAmount);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onPause() {
+
+        super.onPause();
+        Log.v("wai","onPause");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.v("wai","onResume");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.v("wai","onStart");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.v("wai","onStop");
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        Log.v("wai","onViewStateRestored");
+        if(savedInstanceState != null){
+            Log.v("wai","if");
+            membersCount = savedInstanceState.getInt("membercount");
+            mainCourseCount = savedInstanceState.getInt("maincoursecount");
+            membersAmount = savedInstanceState.getInt("memberamount");
+            mainCourseAmount = savedInstanceState.getInt("maincourseamount");
+        }else{
+            Log.v("wai","else");
+            membersCount = 2;
+            mainCourseCount = 2;
+            membersAmount = 100;
+            mainCourseAmount = 50;
+        }
+
     }
 }
