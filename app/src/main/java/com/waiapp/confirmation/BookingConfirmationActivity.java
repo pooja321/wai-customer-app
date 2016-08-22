@@ -22,7 +22,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
     FragmentTransaction fragmentTransaction;
     private Toolbar mtoolbar;
     ResourceOnline resource;
-    String callingFragment, key;
+    String callingFragment, key, mResourceName;
     public static final String LOGIN_FRAGMENT = "login_fragment";
     public static final String SIGNUP_FRAGMENT = "SignUp_fragment";
     public static final String SAVED_FRAGMENT = "saved_fragment";
@@ -38,30 +38,17 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
         setSupportActionBar(mtoolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        resource = (ResourceOnline) getIntent().getSerializableExtra("resource");
+//        resource = (ResourceOnline) getIntent().getSerializableExtra("resource");
+        mResourceName = getIntent().getStringExtra("resource");
         callingFragment = getIntent().getStringExtra("fragment_name");
         key = getIntent().getStringExtra("key");
-//        if(savedInstanceState != null && savedInstanceState.getString(KEY_CALLING_FRAGMENT) != null){
-//            Log.v("wai","if");
-//            callingFragment = savedInstanceState.getString(KEY_CALLING_FRAGMENT);
-//        }else{
-//            Log.v("wai","else ");
-//            callingFragment = getIntent().getStringExtra("fragment_name");
-//        }
         callingFragment = Constants.CHILD_COOKING;
         Fragment fragment = null;
-//        Fragment savedFragment = (Fragment) getSupportFragmentManager().findFragmentByTag(SAVED_FRAGMENT);
-//
-//        if(savedFragment == null){
-//            Toast.makeText(BookingConfirmationActivity.this, "if", Toast.LENGTH_SHORT).show();
-//        }else{
-//            Toast.makeText(BookingConfirmationActivity.this, "else", Toast.LENGTH_SHORT).show();
-//            fragment = savedFragment;
-//        }
         switch(callingFragment){
             case(Constants.CHILD_COOKING):
                 Toast.makeText(BookingConfirmationActivity.this, "cook fragment called", Toast.LENGTH_SHORT).show();
-                fragment = CookBookingConfirmationFragment.newInstance(key,resource);
+//                fragment = CookBookingConfirmationFragment.newInstance(key,resource);
+                fragment = CookBookingConfirmationFragment.newInstance(key,mResourceName);
                 break;
             case(Constants.CHILD_CLEANING):
                 Toast.makeText(BookingConfirmationActivity.this, "Clean is the Calling Fragment ", Toast.LENGTH_SHORT).show();

@@ -1,32 +1,41 @@
 package com.waiapp.Model;
 
-import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by keviv on 21/08/2016.
  */
-public class ResourceOnline implements Serializable {
-    private String Name,Gender,picture;
+//public class ResourceOnline implements Serializable {
+//    private static final long serialVersionUID = 1L;
+public class ResourceOnline {
+    private String resourceId, Name,Gender,picture;
     private int rating;
     private double Lat, Long;
     private HashMap<String, Object> timestampLogin;
     private HashMap<String, Object> timestampLogout;
-    private static final long serialVersionUID = 1L;
 
     public ResourceOnline(){
 
     }
 
-    public ResourceOnline(String name, String gender, int rating, String picture, double lat, double Long, HashMap<String, Object> timestampLogin, HashMap<String, Object> timestampLogout) {
+    public ResourceOnline(String resourceId, String name, String gender, int rating, String picture, double lat, double Long, HashMap<String, Object> timestampLogin, HashMap<String, Object> timestampLogout) {
         Gender = gender;
         Lat = lat;
-        this.Long = Long;
         Name = name;
+        this.resourceId = resourceId;
+        this.Long = Long;
         this.picture = picture;
         this.rating = rating;
         this.timestampLogin = timestampLogin;
         this.timestampLogout = timestampLogout;
+    }
+
+    public String getResourceId() {
+        return resourceId;
+    }
+
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
     }
 
     public String getGender() {
@@ -93,4 +102,3 @@ public class ResourceOnline implements Serializable {
         this.timestampLogout = timestampLogout;
     }
 }
-

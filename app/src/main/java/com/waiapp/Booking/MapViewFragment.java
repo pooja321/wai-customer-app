@@ -33,14 +33,20 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.waiapp.Model.ResourceOnline;
 import com.waiapp.R;
 
 /**
  * Created by keviv on 27/06/2016.
  */
-public class MapViewFragment extends Fragment implements OnMapReadyCallback,
+public abstract class MapViewFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener{
+        LocationListener, ChildEventListener {
 
     public interface onAddressSearchClick {
         void startAddressSearchActivity();
@@ -60,6 +66,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     private GoogleMap mGoogleMap;
     private Marker mCurrLocationMarker;
 
+    //firebase
+    private DatabaseReference mDatabase;
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -74,6 +83,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_map_view, container, false);
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
@@ -91,8 +101,13 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 listener.startAddressSearchActivity();
             }
         });
+        mDatabase = getDatabaseReference();
+        mDatabase.addChildEventListener(this);
         return view;
+
     }
+
+    public abstract DatabaseReference getDatabaseReference();
 
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -111,6 +126,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         final AlertDialog alert = builder.create();
         alert.show();
     }
+
     private boolean checkPermission() {
         int result = ContextCompat.checkSelfPermission(getContext().getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
         if (result == PackageManager.PERMISSION_GRANTED) {
@@ -148,6 +164,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
                 break;
         }
     }
+
     /**
      * Builds a GoogleApiClient. Uses the {@code #addApi} method to request the
      * LocationServices API.
@@ -211,6 +228,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
 
         }
     }
+
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Log.v("wai", "onconnected");
@@ -258,5 +276,41 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback,
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
+    }
+
+    @Override
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        Log.v("wai","onChildAdded");
+        ResourceOnline ro = dataSnapshot.getValue(ResourceOnline.class);
+        addMarkertoMap(ro);
+    }
+
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        Log.v("wai","onChildChanged");
+        ResourceOnline ro = dataSnapshot.getValue(ResourceOnline.class);
+        addMarkertoMap(ro);
+    }
+
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+    }
+
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+    }
+
+    @Override
+    public void onCancelled(DatabaseError databaseError) {
+
+    }
+
+    private void addMarkertoMap(ResourceOnline ro) {
+        mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(ro.getLat(), ro.getLong()))
+                .title(ro.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_dining_black_24dp))
+                .snippet("Position: " + ro.getLat() + " " + ro.getLong()));
+
     }
 }

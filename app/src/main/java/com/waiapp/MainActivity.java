@@ -19,10 +19,7 @@ import com.waiapp.Booking.MapViewFragment;
 import com.waiapp.Booking.clean.CleaningFragment;
 import com.waiapp.Booking.cook.CookingFragment;
 import com.waiapp.Booking.wash.WashingFragment;
-import com.waiapp.Model.ResourceOnline;
 import com.waiapp.confirmation.BookingConfirmationActivity;
-
-import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity implements
         MapViewFragment.onAddressSearchClick, ListViewFragment.OnResourceSelectedInterface{
@@ -91,12 +88,13 @@ public class MainActivity extends BaseActivity implements
         startActivity(intent);
     }
 
-    public void onListResourceSelected(String key, ResourceOnline resource, String callingFragment) {
-        ArrayList<ResourceOnline> resourceList = new ArrayList<>();
-        resourceList.add(resource);
+//    public void onListResourceSelected(String key, ResourceOnline resource, String callingFragment) {
+    public void onListResourceSelected(String key, String Name, String callingFragment) {
+//        ArrayList<ResourceOnline> resourceList = new ArrayList<>();
+//        resourceList.add(resource);
         Intent intent = new Intent(MainActivity.this, BookingConfirmationActivity.class);
         intent.putExtra("key",key);
-        intent.putExtra("resource",resource);
+        intent.putExtra("resource",Name);
         intent.putExtra("fragment_name",callingFragment);
         startActivity(intent);
     }

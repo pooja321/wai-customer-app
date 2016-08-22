@@ -40,7 +40,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     private static final String ARG_KEY = "key";
     private static final String ARG_RESOURCE = "resource";
 
-    private String mParamResourceKey;
+    private String mParamResourceKey, mParamResourceName;
     private ResourceOnline mParamResource;
 
     // callback interface to implement on item list click listener
@@ -52,11 +52,13 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         // Required empty public constructor
     }
 
-    public static CookBookingConfirmationFragment newInstance(String key, ResourceOnline resource) {
+//    public static CookBookingConfirmationFragment newInstance(String key, ResourceOnline resource) {
+    public static CookBookingConfirmationFragment newInstance(String key, String resourceName) {
         CookBookingConfirmationFragment fragment = new CookBookingConfirmationFragment();
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
-        args.putSerializable(ARG_RESOURCE, resource);
+//        args.putSerializable(ARG_RESOURCE, resourceName);
+        args.putString(ARG_RESOURCE, resourceName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,7 +69,8 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         Log.v("wai","onCreate");
         if (getArguments() != null) {
             mParamResourceKey = getArguments().getString(ARG_KEY);
-            mParamResource = (ResourceOnline) getArguments().getSerializable(ARG_RESOURCE);
+//            mParamResource = (ResourceOnline) getArguments().getSerializable(ARG_RESOURCE);
+            mParamResourceName = getArguments().getString(ARG_RESOURCE);
         }
         if(savedInstanceState == null){
             membersCount = 2;
@@ -114,12 +117,13 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         mButtonDecrementMembers.setOnClickListener(this);
         mButtonConfirm.setOnClickListener(this);
 
-        String _Name = "First Name";
-        if(!(mParamResource == null)){
-            _Name = mParamResource.getName();
-        }
+//        String _Name = "First Name";
+//        if(!(mParamResource == null)){
+//            _Name = mParamResource.getName();
+//        }
 
-        mTextViewResourceName.setText(_Name);
+//        mTextViewResourceName.setText(_Name);
+        mTextViewResourceName.setText(mParamResourceName);
         mTextViewMembersCount.setText(String.valueOf(membersCount));
         mTextViewMainCourseCount.setText(String.valueOf(mainCourseCount));
         mTextViewMembersAmount.setText(String.valueOf(membersAmount));
