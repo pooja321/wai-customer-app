@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ public class CleaningFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.v("wai","CleaningFragment onCreateView");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cleaning, container, false);
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.cleaning_viewPager);
@@ -28,8 +30,10 @@ public class CleaningFragment extends Fragment {
             @Override
             public Fragment getItem(int position) {
                 if (position == 0){
+                    Log.v("wai","new cleanMapChildFragment");
                     return new cleanMapChildFragment();
                 }else{
+                    Log.v("wai","new cleanListChildFragment");
                     return new cleanListChildFragment();
 
                 }

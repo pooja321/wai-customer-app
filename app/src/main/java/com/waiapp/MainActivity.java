@@ -1,5 +1,6 @@
 package com.waiapp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -30,15 +32,22 @@ public class MainActivity extends BaseActivity implements
     private Toolbar mtoolbar;
     int _membersCount, _mainCourseCount;
     int membersAmount,mainCourseAmount;
+    ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.v("wai","MainActivity oncreate");
         setContentView(R.layout.activity_main);
 
         mtoolbar = (Toolbar) findViewById(R.id.main_toolbar);
         mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
         setSupportActionBar(mtoolbar);
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.show();
+        Log.v("wai","show progress dialog box");
 
         _membersCount = 2;
         _mainCourseCount = 2;
@@ -58,10 +67,13 @@ public class MainActivity extends BaseActivity implements
             @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 if (menuItemId == R.id.bottomBarItemCook){
+                    Log.v("wai","new CookingFragment");
                     fragment = new CookingFragment();
                 }else if (menuItemId == R.id.bottomBarItemWashing){
+                    Log.v("wai","new washingFragment");
                     fragment = new WashingFragment();
                 }else if(menuItemId == R.id.bottomBarItemCleaning){
+                    Log.v("wai","new cleaningFragment");
                     fragment = new CleaningFragment();
                 }
                 fragmentManager = getSupportFragmentManager();
@@ -97,6 +109,16 @@ public class MainActivity extends BaseActivity implements
         intent.putExtra("resource",Name);
         intent.putExtra("fragment_name",callingFragment);
         startActivity(intent);
+    }
+
+    @Override
+    public void onResourceListdownloadcomplete(Boolean iscomplete) {
+        if(iscomplete){
+            if(mProgressDialog.isShowing()){
+                Log.v("wai","dismiss progress dialog box");
+                mProgressDialog.dismiss();
+            }
+        }
     }
 
 

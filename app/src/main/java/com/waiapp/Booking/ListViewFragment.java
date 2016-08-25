@@ -1,6 +1,5 @@
 package com.waiapp.Booking;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -32,17 +31,19 @@ public abstract class ListViewFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.v("wai","ListViewFragment oncreate");
     }
 
     // callback interface to implement on item list click listener
     public interface OnResourceSelectedInterface{
 //        void onListResourceSelected(String key, ResourceOnline index, String callingFragment);
         void onListResourceSelected(String key, String Name, String callingFragment);
+        void onResourceListdownloadcomplete(Boolean iscomplete);
     }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        Log.v("wai","ListViewFragment onCreateView");
         View view = inflater.inflate(R.layout.fragment_main_listview, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         recyclerView = (RecyclerView) view.findViewById(R.id.main_rv_list_view);
@@ -52,7 +53,7 @@ public abstract class ListViewFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        Log.v("wai","ListViewFragment onActivityCreated");
         mManager = new LinearLayoutManager(getActivity());
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);
@@ -70,25 +71,24 @@ public abstract class ListViewFragment extends Fragment {
 
     class loadResourceListTask extends AsyncTask<Query, Void, Void>{
 
-        private ProgressDialog progress = new ProgressDialog(getActivity());
+        final OnResourceSelectedInterface listener = (OnResourceSelectedInterface) getActivity();
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            this.progress.setMessage("Fetching List of Resources for you");
-            this.progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            this.progress.show();
+            Log.v("wai", "ListViewFragment onPreExecute");
+
         }
 
         @Override
         protected Void doInBackground(Query... params) {
-            Log.v("wai","doinbackground");
+            Log.v("wai", "ListViewFragment doInBackground");
             mAdapter = new FirebaseRecyclerAdapter<ResourceOnline, ResourceViewHolder>(ResourceOnline.class,R.layout.list_resource_item,
                     ResourceViewHolder.class,params[0]) {
                 @Override
                 protected void populateViewHolder(ResourceViewHolder viewHolder, final ResourceOnline model, final int position) {
                     final DatabaseReference resourceRef = getRef(position);
                     Log.v("wai", String.valueOf(position));
-                    final OnResourceSelectedInterface listener = (OnResourceSelectedInterface) getActivity();
+
                     viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -106,10 +106,9 @@ public abstract class ListViewFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            Log.v("wai", "ListViewFragment onPostExecute");
             recyclerView.setAdapter(mAdapter);
-            if(progress.isShowing()){
-                progress.dismiss();
-            }
+            listener.onResourceListdownloadcomplete(true);
         }
     }
 }
