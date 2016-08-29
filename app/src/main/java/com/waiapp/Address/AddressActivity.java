@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.waiapp.Model.Address;
 import com.waiapp.Model.Order;
+import com.waiapp.Model.OrderAmount;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
 import com.waiapp.Utility.Utilities;
@@ -37,18 +38,21 @@ public class AddressActivity extends AppCompatActivity {
     private Toolbar mtoolbar;
     private RecyclerView recyclerView;
     private LinearLayoutManager mManager;
-    String mTotalAmount, mOrderType, mResourceKey;
+    String mOrderType, mResourceKey;
+    double mTotalAmount;
+    OrderAmount mOrderAmount = new OrderAmount();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
-        mTotalAmount = getIntent().getStringExtra("totalAmount");
+        mTotalAmount = getIntent().getDoubleExtra("totalAmount", 0);
         mOrderType = getIntent().getStringExtra("orderType");
         mResourceKey = getIntent().getStringExtra("resourceKey");
-
+        mOrderAmount = (OrderAmount) getIntent().getSerializableExtra("OrderAmount");
         mtoolbar = (Toolbar) findViewById(R.id.address_toolbar);
         mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
+
         setSupportActionBar(mtoolbar);
         setTitle("Select Service Address");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -98,11 +102,17 @@ public class AddressActivity extends AppCompatActivity {
                 if(!task.isSuccessful()){
                     Toast.makeText(AddressActivity.this, "Order saving failed", Toast.LENGTH_SHORT).show();
                 }else{
+                    addOrderAmount(_orderKey);
                     Toast.makeText(AddressActivity.this, "Order Saved successfully", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(AddressActivity.this, PaymentActivity.class).putExtra("orderKey",_orderKey));
                 }
             }
         });
+    }
+
+    private void addOrderAmount(String _orderKey) {
+        mOrderAmount.setOrderId(_orderKey);
+        mDatabase.child(Constants.CHILD_ORDER_AMOUNT).child(_orderKey).setValue(mOrderAmount);
     }
 
     @Override

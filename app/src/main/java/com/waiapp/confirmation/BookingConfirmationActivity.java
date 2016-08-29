@@ -22,7 +22,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
     FragmentTransaction fragmentTransaction;
     private Toolbar mtoolbar;
     ResourceOnline resource;
-    String callingFragment, key, mResourceName;
+    String callingFragment, mResourceKey, mResourceName;
     public static final String LOGIN_FRAGMENT = "login_fragment";
     public static final String SIGNUP_FRAGMENT = "SignUp_fragment";
     public static final String SAVED_FRAGMENT = "saved_fragment";
@@ -39,16 +39,16 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        resource = (ResourceOnline) getIntent().getSerializableExtra("resource");
-        mResourceName = getIntent().getStringExtra("resource");
+        mResourceName = getIntent().getStringExtra("resourceName");
         callingFragment = getIntent().getStringExtra("fragment_name");
-        key = getIntent().getStringExtra("key");
+        mResourceKey = getIntent().getStringExtra("resourceKey");
         callingFragment = Constants.CHILD_COOKING;
         Fragment fragment = null;
         switch(callingFragment){
             case(Constants.CHILD_COOKING):
                 Toast.makeText(BookingConfirmationActivity.this, "cook fragment called", Toast.LENGTH_SHORT).show();
-//                fragment = CookBookingConfirmationFragment.newInstance(key,resource);
-                fragment = CookBookingConfirmationFragment.newInstance(key,mResourceName);
+//                fragment = CookBookingConfirmationFragment.newInstance(mResourceKey,resource);
+                fragment = CookBookingConfirmationFragment.newInstance(mResourceKey,mResourceName);
                 break;
             case(Constants.CHILD_CLEANING):
                 Toast.makeText(BookingConfirmationActivity.this, "Clean is the Calling Fragment ", Toast.LENGTH_SHORT).show();

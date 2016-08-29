@@ -12,6 +12,7 @@ public class Constants {
     public static final String CHILD_WASHING = "Washing";
     public static final String CHILD_CLEANING = "Cleaning";
     public static final String CHILD_ORDER = "Orders";
+    public static final String CHILD_ORDER_AMOUNT = "OrderAmount";
     public static final String CHILD_ADDRESS = "Address";
 
     public static final String ORDER_STATUS_ADDRESS_NOT_SET = "Address Not Selected";

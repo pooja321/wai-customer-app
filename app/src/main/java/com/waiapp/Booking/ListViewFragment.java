@@ -94,7 +94,7 @@ public abstract class ListViewFragment extends Fragment {
                         public void onClick(View v) {
                             callingFragment = getCallingFragmentName();
 //                            listener.onListResourceSelected(resourceRef.getKey(),model,callingFragment);
-                            listener.onListResourceSelected(resourceRef.getKey(),model.getName(),callingFragment);
+                            listener.onListResourceSelected(model.getResourceId(),model.getName(),callingFragment);
                         }
                     });
                     viewHolder.bindView(model);

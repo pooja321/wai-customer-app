@@ -105,8 +105,8 @@ public class MainActivity extends BaseActivity implements
 //        ArrayList<ResourceOnline> resourceList = new ArrayList<>();
 //        resourceList.add(resource);
         Intent intent = new Intent(MainActivity.this, BookingConfirmationActivity.class);
-        intent.putExtra("key",key);
-        intent.putExtra("resource",Name);
+        intent.putExtra("resourceKey",key);
+        intent.putExtra("resourceName",Name);
         intent.putExtra("fragment_name",callingFragment);
         startActivity(intent);
     }

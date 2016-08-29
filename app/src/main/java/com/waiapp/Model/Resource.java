@@ -9,10 +9,12 @@ import java.util.Map;
 
 @IgnoreExtraProperties
 public class Resource implements Serializable {
+
     private String firstName, lastName, Email, gender,status;
     private long mobileNumber;
     private int rating;
     private static final long serialVersionUID = 1L;
+
     public Resource() {
     }
 

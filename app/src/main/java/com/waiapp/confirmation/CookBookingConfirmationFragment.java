@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.waiapp.Address.AddressActivity;
+import com.waiapp.Model.OrderAmount;
 import com.waiapp.Model.ResourceOnline;
 import com.waiapp.R;
 
@@ -29,21 +30,22 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     Button mButtonIncrementMembers,mButtonDecrementMembers, mButtonIncrementMainCourse,mButtonDecrementMainCourse,
             mButtonConfirm;
     CheckBox mCheckBoxTerms;
-    int baseAmount = 50;
-    int membersCount, mainCourseCount;
-    int membersAmount,mainCourseAmount;
-    double totalAmount;
+    int mBaseAmount = 50;
+    int mMembersCount, mMainCourseCount;
+    int mMembersAmount, mMainCourseAmount;
+    double mTotalAmount;
+    double mServiceTaxAmount = 0;
 
-    private OnUserSignUpRequired listener;
+    private OnUserSignUpRequired mListener;
     private DatabaseReference mDatabase;
 
-    private static final String ARG_KEY = "key";
-    private static final String ARG_RESOURCE = "resource";
+    private static final String ARG_KEY = "ResourceKey";
+    private static final String ARG_RESOURCE = "ResourceName";
 
     private String mParamResourceKey, mParamResourceName;
     private ResourceOnline mParamResource;
 
-    // callback interface to implement on item list click listener
+    // callback interface to implement on item list click mListener
     public interface OnUserSignUpRequired{
         void UserSignUpRequired();
     }
@@ -52,7 +54,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         // Required empty public constructor
     }
 
-//    public static CookBookingConfirmationFragment newInstance(String key, ResourceOnline resource) {
+//    public static CookBookingConfirmationFragment newInstance(String mResourceKey, ResourceOnline resource) {
     public static CookBookingConfirmationFragment newInstance(String key, String resourceName) {
         CookBookingConfirmationFragment fragment = new CookBookingConfirmationFragment();
         Bundle args = new Bundle();
@@ -73,10 +75,10 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
             mParamResourceName = getArguments().getString(ARG_RESOURCE);
         }
         if(savedInstanceState == null){
-            membersCount = 2;
-            mainCourseCount = 2;
-            membersAmount = 100;
-            mainCourseAmount = 50;
+            mMembersCount = 2;
+            mMainCourseCount = 2;
+            mMembersAmount = 100;
+            mMainCourseAmount = 50;
         }
     }
 
@@ -86,7 +88,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         // Inflate the layout for this fragment
         Log.v("wai","oncreateView");
         View view =  inflater.inflate(R.layout.fragment_cook_booking_confirmation, container, false);
-        listener = (OnUserSignUpRequired) getActivity();
+        mListener = (OnUserSignUpRequired) getActivity();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         return view;
     }
@@ -124,11 +126,11 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
 
 //        mTextViewResourceName.setText(_Name);
         mTextViewResourceName.setText(mParamResourceName);
-        mTextViewMembersCount.setText(String.valueOf(membersCount));
-        mTextViewMainCourseCount.setText(String.valueOf(mainCourseCount));
-        mTextViewMembersAmount.setText(String.valueOf(membersAmount));
-        mTextViewMainCourseAmount.setText(String.valueOf(mainCourseAmount));
-        mTextViewBaseAmount.setText(String.valueOf(baseAmount));
+        mTextViewMembersCount.setText(String.valueOf(mMembersCount));
+        mTextViewMainCourseCount.setText(String.valueOf(mMainCourseCount));
+        mTextViewMembersAmount.setText(String.valueOf(mMembersAmount));
+        mTextViewMainCourseAmount.setText(String.valueOf(mMainCourseAmount));
+        mTextViewBaseAmount.setText(String.valueOf(mBaseAmount));
         calculateAmount();
     }
 
@@ -142,15 +144,18 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if (user != null) {
                         // User is signed in
+                        OrderAmount orderAmount = new OrderAmount(null,mParamResourceKey,mBaseAmount,
+                                mMainCourseAmount,mMainCourseCount,mMembersAmount, mMembersCount,mServiceTaxAmount,mTotalAmount);
                         Intent intent = new Intent(getActivity(), AddressActivity.class);
                         intent.putExtra("resourceKey",mParamResourceKey);
-                        intent.putExtra("totalAmount",String.valueOf(totalAmount));
+                        intent.putExtra("totalAmount", mTotalAmount);
+                        intent.putExtra("OrderAmount", orderAmount);
                         intent.putExtra("orderType","Cooking");
                         startActivity(intent);
                     } else {
                         // User is signed out
                         Toast.makeText(getActivity(), "Please Login First", Toast.LENGTH_SHORT).show();
-                        listener.UserSignUpRequired();
+                        mListener.UserSignUpRequired();
                     }
                 } else{
                     Toast.makeText(getActivity(), "Please accept the terms and conditions", Toast.LENGTH_SHORT).show();
@@ -158,64 +163,64 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
 
                 break;
             case(R.id.cook_booking_bt_maincourse_count_decrement):
-                if(mainCourseCount > 2) {
-                    mainCourseCount = mainCourseCount - 1;
-                    if(!(mainCourseCount == 2)){
-                        mainCourseAmount = mainCourseCount * 50;
+                if(mMainCourseCount > 2) {
+                    mMainCourseCount = mMainCourseCount - 1;
+                    if(!(mMainCourseCount == 2)){
+                        mMainCourseAmount = mMainCourseCount * 50;
                     }
                 }
-                if(mainCourseCount <= 2){
-                    mainCourseAmount = 50;
+                if(mMainCourseCount <= 2){
+                    mMainCourseAmount = 50;
                 }
-                mTextViewMainCourseCount.setText(String.valueOf(mainCourseCount));
-                mTextViewMainCourseAmount.setText(String.valueOf(mainCourseAmount));
+                mTextViewMainCourseCount.setText(String.valueOf(mMainCourseCount));
+                mTextViewMainCourseAmount.setText(String.valueOf(mMainCourseAmount));
                 calculateAmount();
                 break;
             case(R.id.cook_booking_bt_maincourse_count_increment):
-                mainCourseCount = mainCourseCount + 1;
-                mTextViewMainCourseCount.setText(String.valueOf(mainCourseCount));
-                if(mainCourseCount > 2){
-                    mainCourseAmount = 50 + (mainCourseCount -2) * 50;
+                mMainCourseCount = mMainCourseCount + 1;
+                mTextViewMainCourseCount.setText(String.valueOf(mMainCourseCount));
+                if(mMainCourseCount > 2){
+                    mMainCourseAmount = 50 + (mMainCourseCount -2) * 50;
                 }
-                mTextViewMainCourseAmount.setText(String.valueOf(mainCourseAmount));
+                mTextViewMainCourseAmount.setText(String.valueOf(mMainCourseAmount));
                 calculateAmount();
                 break;
             case(R.id.cook_booking_bt_members_count_decrement):
-                if(membersCount > 2){
-                    membersCount = membersCount - 1;
-                    membersAmount = membersCount * 50;
+                if(mMembersCount > 2){
+                    mMembersCount = mMembersCount - 1;
+                    mMembersAmount = mMembersCount * 50;
                 }
-                mTextViewMembersCount.setText(String.valueOf(membersCount));
-                mTextViewMembersAmount.setText(String.valueOf(membersAmount));
+                mTextViewMembersCount.setText(String.valueOf(mMembersCount));
+                mTextViewMembersAmount.setText(String.valueOf(mMembersAmount));
                 calculateAmount();
                 break;
             case(R.id.cook_booking_bt_members_count_increment):
-                membersCount = membersCount + 1;
-                mTextViewMembersCount.setText(String.valueOf(membersCount));
-                if(membersCount >= 2){
-                    membersAmount = membersCount * 50;
+                mMembersCount = mMembersCount + 1;
+                mTextViewMembersCount.setText(String.valueOf(mMembersCount));
+                if(mMembersCount >= 2){
+                    mMembersAmount = mMembersCount * 50;
                 }
-                mTextViewMembersAmount.setText(String.valueOf(membersAmount));
+                mTextViewMembersAmount.setText(String.valueOf(mMembersAmount));
                 calculateAmount();
                 break;
         }
     }
 
     private void calculateAmount() {
-        int tempAmount = baseAmount + membersAmount + mainCourseAmount;
-        double serviceTaxAmount = tempAmount*.125;
-        mTextViewServiceTaxAmount.setText(String.valueOf(serviceTaxAmount));
-        totalAmount = (serviceTaxAmount+tempAmount);
-        mTextViewTotalAmount.setText(String.valueOf(totalAmount));
+        int tempAmount = mBaseAmount + mMembersAmount + mMainCourseAmount;
+        mServiceTaxAmount = tempAmount*.125;
+        mTextViewServiceTaxAmount.setText(String.valueOf(mServiceTaxAmount));
+        mTotalAmount = (mServiceTaxAmount +tempAmount);
+        mTextViewTotalAmount.setText(String.valueOf(mTotalAmount));
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         Log.v("wai","data saved");
-        outState.putInt("membercount", membersCount);
-        outState.putInt("memberamount", membersAmount);
-        outState.putInt("maincoursecount", mainCourseCount);
-        outState.putInt("maincourseamount", mainCourseAmount);
+        outState.putInt("membercount", mMembersCount);
+        outState.putInt("memberamount", mMembersAmount);
+        outState.putInt("maincoursecount", mMainCourseCount);
+        outState.putInt("maincourseamount", mMainCourseAmount);
         super.onSaveInstanceState(outState);
     }
 
@@ -250,16 +255,16 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         Log.v("wai","onViewStateRestored");
         if(savedInstanceState != null){
             Log.v("wai","if");
-            membersCount = savedInstanceState.getInt("membercount");
-            mainCourseCount = savedInstanceState.getInt("maincoursecount");
-            membersAmount = savedInstanceState.getInt("memberamount");
-            mainCourseAmount = savedInstanceState.getInt("maincourseamount");
+            mMembersCount = savedInstanceState.getInt("membercount");
+            mMainCourseCount = savedInstanceState.getInt("maincoursecount");
+            mMembersAmount = savedInstanceState.getInt("memberamount");
+            mMainCourseAmount = savedInstanceState.getInt("maincourseamount");
         }else{
             Log.v("wai","else");
-            membersCount = 2;
-            mainCourseCount = 2;
-            membersAmount = 100;
-            mainCourseAmount = 50;
+            mMembersCount = 2;
+            mMainCourseCount = 2;
+            mMembersAmount = 100;
+            mMainCourseAmount = 50;
         }
 
     }
