@@ -14,6 +14,6 @@ public class CookMapChildFragment extends MapViewFragment {
     @Override
     public DatabaseReference getDatabaseReference() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        return mDatabase.child(Constants.CHILD_ONLINE_RESOURCE).child(Constants.CHILD_COOKING);
+        return mDatabase.child(Constants.FIREBASE_CHILD_ONLINE_RESOURCE).child(Constants.FIREBASE_CHILD_COOKING);
     }
 }

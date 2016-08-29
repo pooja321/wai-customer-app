@@ -42,18 +42,18 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
         mResourceName = getIntent().getStringExtra("resourceName");
         callingFragment = getIntent().getStringExtra("fragment_name");
         mResourceKey = getIntent().getStringExtra("resourceKey");
-        callingFragment = Constants.CHILD_COOKING;
+        callingFragment = Constants.FIREBASE_CHILD_COOKING;
         Fragment fragment = null;
         switch(callingFragment){
-            case(Constants.CHILD_COOKING):
+            case(Constants.FIREBASE_CHILD_COOKING):
                 Toast.makeText(BookingConfirmationActivity.this, "cook fragment called", Toast.LENGTH_SHORT).show();
 //                fragment = CookBookingConfirmationFragment.newInstance(mResourceKey,resource);
                 fragment = CookBookingConfirmationFragment.newInstance(mResourceKey,mResourceName);
                 break;
-            case(Constants.CHILD_CLEANING):
+            case(Constants.FIREBASE_CHILD_CLEANING):
                 Toast.makeText(BookingConfirmationActivity.this, "Clean is the Calling Fragment ", Toast.LENGTH_SHORT).show();
                 break;
-            case(Constants.CHILD_WASHING):
+            case(Constants.FIREBASE_CHILD_WASHING):
                 fragment = new WashBookingConfirmationFragment();
                 break;
         }

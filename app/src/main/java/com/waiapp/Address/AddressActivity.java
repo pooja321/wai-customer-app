@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ServerValue;
 import com.waiapp.Model.Address;
 import com.waiapp.Model.Order;
 import com.waiapp.Model.OrderAmount;
@@ -28,6 +29,8 @@ import com.waiapp.R;
 import com.waiapp.Utility.Constants;
 import com.waiapp.Utility.Utilities;
 import com.waiapp.payment.PaymentActivity;
+
+import java.util.HashMap;
 
 public class AddressActivity extends AppCompatActivity {
 
@@ -69,7 +72,7 @@ public class AddressActivity extends AppCompatActivity {
             UID = Utilities.getUid();
         }
 
-        resourceQuery = mDatabase.child(Constants.CHILD_ADDRESS).child(UID);
+        resourceQuery = mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID);
         initFirebaseUI(resourceQuery);
     }
 
@@ -93,10 +96,12 @@ public class AddressActivity extends AppCompatActivity {
 
     private void createOrder(String addressKey) {
         String _UID = Utilities.getUid();
-        final String _orderKey = mDatabase.child(Constants.CHILD_ORDER).child(_UID).push().getKey();
+        HashMap<String, Object> orderCreationTime = new HashMap<>();
+        orderCreationTime.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+        final String _orderKey = mDatabase.child(Constants.FIREBASE_CHILD_ORDER).child(_UID).push().getKey();
         Order order = new Order("11011", mOrderType, _UID, mResourceKey,addressKey,Constants.ORDER_STATUS_INCOMPLETE,
-                Constants.ORDER_STATUS_PAYMENT_PENDING,null,mTotalAmount,null,null,null,null,null);
-        mDatabase.child(Constants.CHILD_ORDER).child(_UID).child(_orderKey).setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
+                Constants.ORDER_STATUS_PAYMENT_PENDING,null,mTotalAmount,orderCreationTime,null,null,null,false);
+        mDatabase.child(Constants.FIREBASE_CHILD_ORDER).child(_UID).child(_orderKey).setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(!task.isSuccessful()){
@@ -112,7 +117,7 @@ public class AddressActivity extends AppCompatActivity {
 
     private void addOrderAmount(String _orderKey) {
         mOrderAmount.setOrderId(_orderKey);
-        mDatabase.child(Constants.CHILD_ORDER_AMOUNT).child(_orderKey).setValue(mOrderAmount);
+        mDatabase.child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).child(_orderKey).setValue(mOrderAmount);
     }
 
     @Override

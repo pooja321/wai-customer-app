@@ -16,11 +16,11 @@ public class cleanListChildFragment extends ListViewFragment {
     @Override
     public Query setQuery() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        return mDatabase.child(Constants.CHILD_ONLINE_RESOURCE).child(Constants.CHILD_CLEANING);
+        return mDatabase.child(Constants.FIREBASE_CHILD_ONLINE_RESOURCE).child(Constants.FIREBASE_CHILD_CLEANING);
     }
 
     @Override
     public String getCallingFragmentName() {
-        return Constants.CHILD_CLEANING;
+        return Constants.FIREBASE_CHILD_CLEANING;
     }
 }

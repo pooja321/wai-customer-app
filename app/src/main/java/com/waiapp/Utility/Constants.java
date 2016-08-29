@@ -4,16 +4,19 @@ package com.waiapp.Utility;
  * Created by keviv on 16/06/2016.
  */
 public class Constants {
-    //firebase constants
-    public static final String CHILD_ONLINE_RESOURCE = "Online-Resource";
-    public static final String CHILD_RESOURCES = "Resources";
-    public static final String CHILD_USERS = "Users";
-    public static final String CHILD_COOKING = "Cooking";
-    public static final String CHILD_WASHING = "Washing";
-    public static final String CHILD_CLEANING = "Cleaning";
-    public static final String CHILD_ORDER = "Orders";
-    public static final String CHILD_ORDER_AMOUNT = "OrderAmount";
-    public static final String CHILD_ADDRESS = "Address";
+    //firebase nodes
+    public static final String FIREBASE_CHILD_ONLINE_RESOURCE = "Online-Resource";
+    public static final String FIREBASE_CHILD_RESOURCES = "Resources";
+    public static final String FIREBASE_CHILD_USERS = "Users";
+    public static final String FIREBASE_CHILD_COOKING = "Cooking";
+    public static final String FIREBASE_CHILD_WASHING = "Washing";
+    public static final String FIREBASE_CHILD_CLEANING = "Cleaning";
+    public static final String FIREBASE_CHILD_ORDER = "Orders";
+    public static final String FIREBASE_CHILD_ORDER_AMOUNT = "OrderAmount";
+    public static final String FIREBASE_CHILD_ADDRESS = "Address";
+
+    //firebase properties
+    public static final String FIREBASE_PROPERTY_TIMESTAMP = "timestamp";
 
     public static final String ORDER_STATUS_ADDRESS_NOT_SET = "Address Not Selected";
     public static final String ORDER_STATUS_COMPLETED = "Completed";

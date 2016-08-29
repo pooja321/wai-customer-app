@@ -1,5 +1,7 @@
 package com.waiapp.Model;
 
+import java.util.HashMap;
+
 /**
  * Created by keviv on 21/07/2016.
  */
@@ -13,19 +15,19 @@ public class Order  {
     private String orderProgressStatus;
     private String paymentMode;
     private double OrderAmount;
-    private String orderCreationTime;
-    private String orderbookingTime;
-    private String serviceStartTime;
-    private String serviceEndTime;
-    private String feedbackProvided;
+    private HashMap<String, Object> orderCreationTime;
+    private HashMap<String, Object> orderbookingTime;
+    private HashMap<String, Object> serviceStartTime;
+    private HashMap<String, Object> serviceEndTime;
+    private Boolean feedbackProvided;
 
     public Order(){
 
     }
 
     public Order(String orderId, String orderType, String customerId, String resourceId, String customerAddressId, String orderStatus,
-                 String orderProgressStatus, String paymentMode, double orderAmount, String orderCreationTime, String orderbookingTime,
-                 String serviceStartTime, String serviceEndTime, String feedbackProvided) {
+                 String orderProgressStatus, String paymentMode, double orderAmount, HashMap<String, Object> orderCreationTime, HashMap<String, Object> orderbookingTime,
+                 HashMap<String, Object> serviceStartTime, HashMap<String, Object> serviceEndTime, Boolean feedbackProvided) {
         this.customerAddressId = customerAddressId;
         this.customerId = customerId;
         this.feedbackProvided = feedbackProvided;
@@ -74,11 +76,11 @@ public class Order  {
         this.customerId = customerId;
     }
 
-    public String getFeedbackProvided() {
+    public Boolean getFeedbackProvided() {
         return feedbackProvided;
     }
 
-    public void setFeedbackProvided(String feedbackProvided) {
+    public void setFeedbackProvided(Boolean feedbackProvided) {
         this.feedbackProvided = feedbackProvided;
     }
 
@@ -88,22 +90,6 @@ public class Order  {
 
     public void setOrderAmount(double orderAmount) {
         OrderAmount = orderAmount;
-    }
-
-    public String getOrderbookingTime() {
-        return orderbookingTime;
-    }
-
-    public void setOrderbookingTime(String orderbookingTime) {
-        this.orderbookingTime = orderbookingTime;
-    }
-
-    public String getOrderCreationTime() {
-        return orderCreationTime;
-    }
-
-    public void setOrderCreationTime(String orderCreationTime) {
-        this.orderCreationTime = orderCreationTime;
     }
 
     public String getOrderId() {
@@ -138,19 +124,35 @@ public class Order  {
         this.resourceId = resourceId;
     }
 
-    public String getServiceEndTime() {
+    public HashMap<String, Object> getOrderbookingTime() {
+        return orderbookingTime;
+    }
+
+    public void setOrderbookingTime(HashMap<String, Object> orderbookingTime) {
+        this.orderbookingTime = orderbookingTime;
+    }
+
+    public HashMap<String, Object> getOrderCreationTime() {
+        return orderCreationTime;
+    }
+
+    public void setOrderCreationTime(HashMap<String, Object> orderCreationTime) {
+        this.orderCreationTime = orderCreationTime;
+    }
+
+    public HashMap<String, Object> getServiceEndTime() {
         return serviceEndTime;
     }
 
-    public void setServiceEndTime(String serviceEndTime) {
+    public void setServiceEndTime(HashMap<String, Object> serviceEndTime) {
         this.serviceEndTime = serviceEndTime;
     }
 
-    public String getServiceStartTime() {
+    public HashMap<String, Object> getServiceStartTime() {
         return serviceStartTime;
     }
 
-    public void setServiceStartTime(String serviceStartTime) {
+    public void setServiceStartTime(HashMap<String, Object> serviceStartTime) {
         this.serviceStartTime = serviceStartTime;
     }
 }

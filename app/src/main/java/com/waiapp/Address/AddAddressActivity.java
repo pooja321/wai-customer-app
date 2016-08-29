@@ -103,7 +103,7 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
 
         Address address = new Address(addressName, addressType, houseNo, areaName, landmark, city, state, country, pincode);
 
-        mDatabase.child(Constants.CHILD_ADDRESS).child(UID).push().setValue(address).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID).push().setValue(address).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 mSaveProgressDialog.dismiss();

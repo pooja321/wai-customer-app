@@ -52,7 +52,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
         mManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(mManager);
 
-        resourceQuery = mDatabase.child(Constants.CHILD_ORDER).child(Utilities.getUid()).orderByChild("orderStatus").equalTo(Constants.ORDER_STATUS_ORDERED);
+        resourceQuery = mDatabase.child(Constants.FIREBASE_CHILD_ORDER).child(Utilities.getUid()).orderByChild("orderStatus").equalTo(Constants.ORDER_STATUS_ORDERED);
         initFirebaseUI(resourceQuery);
     }
 

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.waiapp.Order.OrderConfirmActivity;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
@@ -83,8 +84,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         OrderUpdates.put("paymentMode",_paymentMode);
         OrderUpdates.put("orderStatus",Constants.ORDER_STATUS_ORDERED);
         OrderUpdates.put("orderProgressStatus",Constants.ORDER_STATUS_WAITING_FOR_RESOURCE);
+        HashMap<String, Object> orderbookingTime = new HashMap<>();
+        orderbookingTime.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+        OrderUpdates.put("orderbookingTime",orderbookingTime);
 
-        mDatabase.child(Constants.CHILD_ORDER).child(Utilities.getUid()).child(orderKey)
+        mDatabase.child(Constants.FIREBASE_CHILD_ORDER).child(Utilities.getUid()).child(orderKey)
                 .updateChildren(OrderUpdates, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {

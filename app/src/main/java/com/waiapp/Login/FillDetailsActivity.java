@@ -78,7 +78,7 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
         String userId = values[0];
         User user = new User(_firstName,_lastName,_Email,_genderSelected,_mobile);
 
-        mDatabase.child(Constants.CHILD_USERS).child(userId).setValue(user);
+        mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(userId).setValue(user);
         startActivity(new Intent(FillDetailsActivity.this, MainActivity.class));
     }
 
