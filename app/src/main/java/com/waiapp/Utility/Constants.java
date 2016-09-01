@@ -6,6 +6,9 @@ package com.waiapp.Utility;
 public class Constants {
     //firebase nodes
     public static final String FIREBASE_CHILD_ONLINE_RESOURCE = "Online-Resource";
+    public static final String FIREBASE_CHILD_ONLINE_COOK_GEO = "Online-Cook-Geo";
+    public static final String FIREBASE_CHILD_ONLINE_WASH_GEO = "Online-Wash-Geo";
+    public static final String FIREBASE_CHILD_ONLINE_CLEAN_GEO = "Online-Clean-Geo";
     public static final String FIREBASE_CHILD_RESOURCES = "Resources";
     public static final String FIREBASE_CHILD_USERS = "Users";
     public static final String FIREBASE_CHILD_COOKING = "Cooking";

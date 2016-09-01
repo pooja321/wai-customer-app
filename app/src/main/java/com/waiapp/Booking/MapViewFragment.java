@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -17,9 +19,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -30,23 +38,23 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.waiapp.Model.ResourceOnline;
 import com.waiapp.R;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by keviv on 27/06/2016.
  */
 public abstract class MapViewFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, ChildEventListener {
+        LocationListener, GeoQueryEventListener {
 
     public interface onAddressSearchClick {
         void startAddressSearchActivity();
@@ -65,9 +73,15 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     private Location mLastLocation;
     private GoogleMap mGoogleMap;
     private Marker mCurrLocationMarker;
+    private Map<String,Marker> markers;
+    private GeoLocation geoLocation;
 
     //firebase
     private DatabaseReference mDatabase;
+    private Circle searchCircle;
+    private GeoFire geoFire;
+    private GeoQuery geoQuery;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,7 +99,9 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_map_view, container, false);
         Log.v("wai","MapViewFragment onCreateView");
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = getDatabaseReference();
+        geoFire = new GeoFire(mDatabase);
+        markers = new HashMap<String, Marker>();
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
@@ -103,8 +119,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
                 listener.startAddressSearchActivity();
             }
         });
-        mDatabase = getDatabaseReference();
-        mDatabase.addChildEventListener(this);
         return view;
 
     }
@@ -216,6 +230,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
+        geoQuery.removeAllListeners();
     }
 
     @Override
@@ -284,42 +299,78 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
+        if(mLastLocation != null) {
+            geoLocation = new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+        }
+        geoQuery = geoFire.queryAtLocation(geoLocation, 10);
+        geoQuery.addGeoQueryEventListener(this);
+        geoQuery.setCenter(new GeoLocation(location.getLatitude(),location.getLongitude()));
+        geoQuery.setRadius(10);
     }
 
     @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        Log.v("wai","MapViewFragment onChildAdded");
-        ResourceOnline ro = dataSnapshot.getValue(ResourceOnline.class);
-        addMarkertoMap(ro);
+    public void onGeoQueryError(DatabaseError error) {
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Error")
+                .setMessage("There was an unexpected error querying GeoFire: " + error.getMessage())
+                .setPositiveButton(android.R.string.ok, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     @Override
-    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        Log.v("wai","MapViewFragment onChildChanged");
-        ResourceOnline ro = dataSnapshot.getValue(ResourceOnline.class);
-        addMarkertoMap(ro);
-    }
-
-    @Override
-    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-    }
-
-    @Override
-    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+    public void onGeoQueryReady() {
 
     }
 
     @Override
-    public void onCancelled(DatabaseError databaseError) {
-
+    public void onKeyEntered(String key, GeoLocation location) {
+        Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_dining_black_24dp)));
+        this.markers.put(key, marker);
     }
 
-    private void addMarkertoMap(ResourceOnline ro) {
-        Log.v("wai","MapViewFragment addMarkertoMap");
-        mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(ro.getLat(), ro.getLong()))
-                .title(ro.getName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_dining_black_24dp))
-                .snippet("Position: " + ro.getLat() + " " + ro.getLong()));
+    @Override
+    public void onKeyExited(String key) {
+        // Remove any old marker
+        Marker marker = this.markers.get(key);
+        if (marker != null) {
+            marker.remove();
+            this.markers.remove(key);
+        }
+    }
 
+    @Override
+    public void onKeyMoved(String key, GeoLocation location) {
+        // Move the marker
+        Marker marker = markers.get(key);
+        if (marker != null) {
+            this.animateMarkerTo(marker, location.latitude, location.longitude);
+        }
+    }
+    // Animation handler for old APIs without animation support
+    private void animateMarkerTo(final Marker marker, final double lat, final double lng) {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        final long DURATION_MS = 3000;
+        final Interpolator interpolator = new AccelerateDecelerateInterpolator();
+        final LatLng startPosition = marker.getPosition();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                float elapsed = SystemClock.uptimeMillis() - start;
+                float t = elapsed/DURATION_MS;
+                float v = interpolator.getInterpolation(t);
+
+                double currentLat = (lat - startPosition.latitude) * v + startPosition.latitude;
+                double currentLng = (lng - startPosition.longitude) * v + startPosition.longitude;
+                marker.setPosition(new LatLng(currentLat, currentLng));
+
+                // if animation is not finished yet, repeat
+                if (t < 1) {
+                    handler.postDelayed(this, 16);
+                }
+            }
+        });
     }
 }
