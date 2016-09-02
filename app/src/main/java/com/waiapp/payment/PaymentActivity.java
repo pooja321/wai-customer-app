@@ -2,6 +2,7 @@ package com.waiapp.payment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -10,10 +11,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
+import com.waiapp.MainActivity;
 import com.waiapp.Order.OrderConfirmActivity;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
@@ -22,7 +26,7 @@ import com.waiapp.Utility.Utilities;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PaymentActivity extends AppCompatActivity implements View.OnClickListener {
+public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, ExitAlertDialogFragment.ExitOrderListener {
 
     private DatabaseReference mDatabase;
 
@@ -31,7 +35,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     RadioButton mRadioButtonCOD, mRadioButtonPaytm, mRadioButtonPayu;
     Button mButtonSubmit;
     Map<String, Object> OrderUpdates = new HashMap<>();
-
+    public static final String DIALOG_ALERT = "My Alert";
     String orderKey;
 
     @Override
@@ -45,7 +49,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
         setSupportActionBar(mtoolbar);
         setTitle("Select payment Method");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mRadioGroupPayment = (RadioGroup) findViewById(R.id.payment_radiogroup);
         mRadioButtonCOD = (RadioButton) findViewById(R.id.payment_rb_mode_COD);
@@ -100,5 +103,24 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        ExitAlertDialogFragment exitAlertDialogFragment = new ExitAlertDialogFragment();
+        exitAlertDialogFragment.show(getSupportFragmentManager(),DIALOG_ALERT);
+    }
+
+    @Override
+    public void ExitOrder(Boolean exit) {
+        if(exit){
+            mDatabase.child(Constants.FIREBASE_CHILD_ORDER).child(Utilities.getUid()).child(orderKey).removeValue()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            startActivity(new Intent(PaymentActivity.this, MainActivity.class));
+                        }
+                    });
+        }
     }
 }

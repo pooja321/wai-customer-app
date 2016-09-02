@@ -75,11 +75,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".payment.PaymentActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Address.AddressActivity" />
-        </activity>
+        <activity android:name=".payment.PaymentActivity"/>
         <activity android:name=".Order.OrderHistoryActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
