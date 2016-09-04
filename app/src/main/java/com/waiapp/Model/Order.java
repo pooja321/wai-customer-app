@@ -1,11 +1,15 @@
 package com.waiapp.Model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by keviv on 21/07/2016.
  */
-public class Order  {
+public class Order implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private String orderId;
     private String orderType;
     private String customerId;

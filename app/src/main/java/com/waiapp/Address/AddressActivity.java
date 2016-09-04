@@ -44,6 +44,7 @@ public class AddressActivity extends AppCompatActivity {
     String mOrderType, mResourceKey;
     double mTotalAmount;
     OrderAmount mOrderAmount = new OrderAmount();
+    Address mAddress = new Address();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,11 +82,12 @@ public class AddressActivity extends AppCompatActivity {
                 AddressViewHolder.class,resourceQuery) {
             @Override
             protected void populateViewHolder(AddressViewHolder viewHolder, final Address model, final int position) {
-                final DatabaseReference resourceRef = getRef(position);
+                final DatabaseReference addressRef = getRef(position);
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        createOrder(resourceRef.getKey());
+                        createOrder(addressRef.getKey());
+                        mAddress = model;
                     }
                 });
                 viewHolder.bindView(model);
@@ -99,8 +101,8 @@ public class AddressActivity extends AppCompatActivity {
         HashMap<String, Object> orderCreationTime = new HashMap<>();
         orderCreationTime.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
         final String _orderKey = mDatabase.child(Constants.FIREBASE_CHILD_ORDER).child(_UID).push().getKey();
-        Order order = new Order("11011", mOrderType, _UID, mResourceKey,addressKey,Constants.ORDER_STATUS_INCOMPLETE,
-                Constants.ORDER_STATUS_PAYMENT_PENDING,null,mTotalAmount,orderCreationTime,null,null,null,false);
+        final Order order = new Order("11011", mOrderType, _UID, mResourceKey,addressKey,Constants.ORDER_STATUS_INCOMPLETE,
+                Constants.ORDER_PROGRESS_STATUS_PAYMENT_PENDING,null,mTotalAmount,orderCreationTime,null,null,null,false);
         mDatabase.child(Constants.FIREBASE_CHILD_ORDER).child(_UID).child(_orderKey).setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -109,7 +111,9 @@ public class AddressActivity extends AppCompatActivity {
                 }else{
                     addOrderAmount(_orderKey);
                     Toast.makeText(AddressActivity.this, "Order Saved successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(AddressActivity.this, PaymentActivity.class).putExtra("orderKey",_orderKey));
+                    startActivity(new Intent(AddressActivity.this, PaymentActivity.class)
+                            .putExtra("orderKey",_orderKey).putExtra("order",order)
+                            .putExtra("OrderAmount",mOrderAmount).putExtra("Address",mAddress));
                 }
             }
         });

@@ -18,6 +18,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.waiapp.MainActivity;
+import com.waiapp.Model.Address;
+import com.waiapp.Model.Order;
+import com.waiapp.Model.OrderAmount;
 import com.waiapp.Order.OrderConfirmActivity;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
@@ -36,13 +39,20 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     Button mButtonSubmit;
     Map<String, Object> OrderUpdates = new HashMap<>();
     public static final String DIALOG_ALERT = "My Alert";
-    String orderKey;
+    String mOrderKey, mresourceKey;
+    Order mOrder = new Order();
+    OrderAmount mOrderAmount = new OrderAmount();
+    Address mAddress = new Address();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
-        orderKey = getIntent().getStringExtra("orderKey");
+        mOrderKey = getIntent().getStringExtra("orderKey");
+        mOrder = (Order) getIntent().getSerializableExtra("order");
+        mOrderAmount = (OrderAmount) getIntent().getSerializableExtra("OrderAmount");
+        mAddress = (Address) getIntent().getSerializableExtra("Address");
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mtoolbar = (Toolbar) findViewById(R.id.payment_toolbar);
@@ -86,12 +96,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         }
         OrderUpdates.put("paymentMode",_paymentMode);
         OrderUpdates.put("orderStatus",Constants.ORDER_STATUS_ORDERED);
-        OrderUpdates.put("orderProgressStatus",Constants.ORDER_STATUS_WAITING_FOR_RESOURCE);
+        OrderUpdates.put("orderProgressStatus",Constants.ORDER_PROGRESS_STATUS_RESOURCE_CONFIRMATION_AWAITED);
         HashMap<String, Object> orderbookingTime = new HashMap<>();
         orderbookingTime.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
         OrderUpdates.put("orderbookingTime",orderbookingTime);
 
-        mDatabase.child(Constants.FIREBASE_CHILD_ORDER).child(Utilities.getUid()).child(orderKey)
+        mDatabase.child(Constants.FIREBASE_CHILD_ORDER).child(Utilities.getUid()).child(mOrderKey)
                 .updateChildren(OrderUpdates, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -99,10 +109,35 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     Toast.makeText(PaymentActivity.this, "payment method updated failed", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(PaymentActivity.this, "payment method updated successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(PaymentActivity.this, OrderConfirmActivity.class).putExtra("orderKey",orderKey));
+                    updateResourceOrderHistory();
+                    updateUserOrderHistory();
+                    startActivity(new Intent(PaymentActivity.this, OrderConfirmActivity.class).putExtra("orderKey", mOrderKey));
                 }
             }
         });
+    }
+
+    private void updateUserOrderHistory() {
+        String UID = Utilities.getUid();
+        Map<String, Object> userOrderUpdates = new HashMap<>();
+        userOrderUpdates.put("Order",mOrder);
+        userOrderUpdates.put("OrderAmount",mOrderAmount);
+        userOrderUpdates.put("Address",mAddress);
+        mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDER_HISTORY).child(UID).child(mOrderKey).child("Order").setValue(mOrder);
+        mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDER_HISTORY).child(UID).child(mOrderKey).child("OrderAmount").setValue(mOrderAmount);
+        mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDER_HISTORY).child(UID).child(mOrderKey).child("Address").setValue(mAddress);
+
+    }
+
+    private void updateResourceOrderHistory() {
+        mresourceKey = mOrder.getResourceId();
+        Map<String, Object> resourceOrderUpdates = new HashMap<>();
+        resourceOrderUpdates.put("Order",mOrder);
+        resourceOrderUpdates.put("OrderAmount",mOrderAmount);
+        resourceOrderUpdates.put("Address",mAddress);
+        mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDER_HISTORY).child(mresourceKey).child(mOrderKey).child("Order").setValue(mOrder);
+        mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDER_HISTORY).child(mresourceKey).child(mOrderKey).child("OrderAmount").setValue(mOrderAmount);
+        mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDER_HISTORY).child(mresourceKey).child(mOrderKey).child("Address").setValue(mAddress);
     }
 
     @Override
@@ -114,7 +149,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void ExitOrder(Boolean exit) {
         if(exit){
-            mDatabase.child(Constants.FIREBASE_CHILD_ORDER).child(Utilities.getUid()).child(orderKey).removeValue()
+            mDatabase.child(Constants.FIREBASE_CHILD_ORDER).child(Utilities.getUid()).child(mOrderKey).removeValue()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

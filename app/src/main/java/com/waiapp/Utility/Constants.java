@@ -17,18 +17,24 @@ public class Constants {
     public static final String FIREBASE_CHILD_ORDER = "Orders";
     public static final String FIREBASE_CHILD_ORDER_AMOUNT = "OrderAmount";
     public static final String FIREBASE_CHILD_ADDRESS = "Address";
+    public static final String FIREBASE_CHILD_RESOURCE_ORDER_HISTORY = "Resource-Order-History";
+    public static final String FIREBASE_CHILD_USER_ORDER_HISTORY = "User-Order-History";
 
     //firebase properties
     public static final String FIREBASE_PROPERTY_TIMESTAMP = "timestamp";
 
     public static final String ORDER_STATUS_ADDRESS_NOT_SET = "Address Not Selected";
-    public static final String ORDER_STATUS_COMPLETED = "Completed";
-    public static final String ORDER_STATUS_CANCELLED = "Cancelled";
-    public static final String ORDER_STATUS_STARTED = "Started";
-    public static final String ORDER_STATUS_PAYMENT_PENDING = "Payment Pending";
-    public static final String ORDER_STATUS_WAITING_FOR_RESOURCE = "Waiting For Resource";
+
+    public static final String ORDER_PROGRESS_STATUS_STARTED = "Started";
+    public static final String ORDER_PROGRESS_STATUS_REACHED = "Reached";
+    public static final String ORDER_PROGRESS_STATUS_PAYMENT_PENDING = "Payment Pending";
+    public static final String ORDER_PROGRESS_STATUS_RESOURCE_CONFIRMATION_AWAITED = "Resource Confirmation Awaited";
+    public static final String ORDER_PROGRESS_STATUS_RESOURCE_CONFIRMED_ORDER = "Resource Confirmed Order";
+
     public static final String ORDER_STATUS_ORDERED = "Ordered";
     public static final String ORDER_STATUS_INCOMPLETE = "Incomplete";
+    public static final String ORDER_STATUS_CANCELLED = "Cancelled";
+    public static final String ORDER_STATUS_COMPLETED = "Completed";
 
     public static final String RESOURCE_STATUS_LOGGED_IN = "LoggedIn";
     public static final String RESOURCE_STATUS_ONLINE = "Online";
