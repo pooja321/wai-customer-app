@@ -54,7 +54,7 @@ import java.util.Map;
  */
 public abstract class MapViewFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, GeoQueryEventListener, GoogleMap.OnMarkerDragListener {
+        LocationListener, GeoQueryEventListener, GoogleMap.OnCameraMoveListener {
 
     public interface onAddressSearchClick {
         void startAddressSearchActivity();
@@ -72,7 +72,8 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private GoogleMap mGoogleMap;
-    private Marker mUserPlacedMarker;
+    private Marker mCenterMarker;
+    private MarkerOptions mCenterMarkerOptions;
     private Map<String,Marker> markers;
     private GeoLocation geoLocation;
 
@@ -116,6 +117,8 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 //                listener.startAddressSearchActivity();
 //            }
 //        });
+        mCenterMarkerOptions = new MarkerOptions();
+        mCenterMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         return view;
 
     }
@@ -245,7 +248,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         Log.v("wai","MapViewFragment onMapReady");
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        mGoogleMap.setOnMarkerDragListener(this);
+        mGoogleMap.setOnCameraMoveListener(this);
         if (!checkPermission()) {
             Log.v("wai", "no location permission");
             requestPermission();
@@ -254,6 +257,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
             buildGoogleApiClient();
             mGoogleMap.setMyLocationEnabled(true);
         }
+
     }
 
     @Override
@@ -269,6 +273,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
                 == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
         }
+
     }
 
     @Override
@@ -285,20 +290,15 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     public void onLocationChanged(Location location) {
         Log.v("wai","MapViewFragment onLocationChanged");
         mLastLocation = location;
-        if (mUserPlacedMarker != null) {
-            mUserPlacedMarker.remove();
-        }
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions currentLocationMarkerOptions = new MarkerOptions();
-        currentLocationMarkerOptions.position(latLng);
-        currentLocationMarkerOptions.title("Current Position");
-        currentLocationMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        currentLocationMarkerOptions.draggable(true);
-        mUserPlacedMarker = mGoogleMap.addMarker(currentLocationMarkerOptions);
 
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+
+        LatLng centerOfMap = mGoogleMap.getCameraPosition().target;
+        mCenterMarkerOptions.position(centerOfMap);
+        mCenterMarker = mGoogleMap.addMarker(mCenterMarkerOptions);
 
         //stop location updates
         if (mGoogleApiClient != null) {
@@ -312,20 +312,10 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         geoQuery.setCenter(new GeoLocation(location.getLatitude(),location.getLongitude()));
         geoQuery.setRadius(100);
     }
-
     @Override
-    public void onMarkerDragStart(Marker marker) {
-
-    }
-
-    @Override
-    public void onMarkerDrag(Marker marker) {
-
-    }
-
-    @Override
-    public void onMarkerDragEnd(Marker marker) {
-
+    public void onCameraMove() {
+        LatLng centerOfMap = mGoogleMap.getCameraPosition().target;
+        mCenterMarker.setPosition(centerOfMap);
     }
 
 

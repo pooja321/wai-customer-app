@@ -8,6 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <!--<ImageView-->
+        <!--android:id="@+id/marker_icon_view"-->
+        <!--android:layout_width="60dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:layout_marginTop="162dp"-->
+        <!--android:contentDescription="@string/app_name"-->
+        <!--android:src="@drawable/mapmarker" />-->
     <!--<EditText-->
         <!--android:id="@+id/main_ed_search_address_id"-->
         <!--android:layout_width="match_parent"-->
