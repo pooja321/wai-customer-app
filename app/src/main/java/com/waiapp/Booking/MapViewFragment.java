@@ -106,19 +106,19 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
         }
-        if (!checkPermission()) {
-            requestPermission();
-        }
+//        if (!checkPermission()) {
+//            requestPermission();
+//        }
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.main_map);
         mapFragment.getMapAsync(this);
         final onAddressSearchClick listener = (onAddressSearchClick) getActivity();
-        mAddressSearchEditText = (EditText) view.findViewById(R.id.main_ed_search_address_id);
-        mAddressSearchEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.startAddressSearchActivity();
-            }
-        });
+//        mAddressSearchEditText = (EditText) view.findViewById(R.id.main_ed_search_address_id);
+//        mAddressSearchEditText.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                listener.startAddressSearchActivity();
+//            }
+//        });
         return view;
 
     }
@@ -159,7 +159,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)) {
             Toast.makeText(getActivity().getApplicationContext(), "GPS permission allows us to access location data. Please allow in App Settings for additional functionality.", Toast.LENGTH_LONG).show();
         }
-        ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
+        requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
     }
 
     @Override
@@ -206,12 +206,18 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     public void onPause() {
         super.onPause();
         Log.v("wai","MapViewFragment onPause");
+//        if (mGoogleApiClient.isConnected()) {
+//            mGoogleApiClient.disconnect();
+//        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         Log.v("wai","MapViewFragment onResume");
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
     }
 
     @Override
@@ -230,7 +236,9 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         if (mGoogleApiClient.isConnected()) {
             mGoogleApiClient.disconnect();
         }
-        geoQuery.removeAllListeners();
+        if(geoQuery != null) {
+            geoQuery.removeAllListeners();
+        }
     }
 
     @Override
@@ -244,11 +252,12 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         if (!checkPermission()) {
+            Log.v("wai", "no location permission");
             requestPermission();
         } else {
+            Log.v("wai", "location permission granted");
             buildGoogleApiClient();
             mGoogleMap.setMyLocationEnabled(true);
-
         }
     }
 
@@ -286,11 +295,11 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         }
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Position");
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);//move map camera
+//        MarkerOptions currentLocationMarkerOptions = new MarkerOptions();
+//        currentLocationMarkerOptions.position(latLng);
+//        currentLocationMarkerOptions.title("Current Position");
+//        currentLocationMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+//        mCurrLocationMarker = mGoogleMap.addMarker(currentLocationMarkerOptions);//move map camera
 
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(11));
@@ -305,7 +314,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         geoQuery = geoFire.queryAtLocation(geoLocation, 10);
         geoQuery.addGeoQueryEventListener(this);
         geoQuery.setCenter(new GeoLocation(location.getLatitude(),location.getLongitude()));
-        geoQuery.setRadius(10);
+        geoQuery.setRadius(100);
     }
 
     @Override

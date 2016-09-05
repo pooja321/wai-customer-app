@@ -8,29 +8,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-    <EditText
-        android:id="@+id/main_ed_search_address_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:padding="10dp"
-        android:layout_alignParentRight="true"
-        android:background="@color/colorwhite"
-        android:hint="Search Your Address"
-        android:drawableLeft="@drawable/ic_search_black_24dp"
-        android:drawablePadding="8dp"
-        android:focusableInTouchMode="false"
-        android:inputType="none"/>
+    <!--<EditText-->
+        <!--android:id="@+id/main_ed_search_address_id"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="8dp"-->
+        <!--android:padding="10dp"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:background="@color/colorwhite"-->
+        <!--android:hint="Search Your Address"-->
+        <!--android:drawableLeft="@drawable/ic_search_black_24dp"-->
+        <!--android:drawablePadding="8dp"-->
+        <!--android:focusableInTouchMode="false"-->
+        <!--android:inputType="none"/>-->
 
-    <Button
-        android:id="@+id/map_bt_quick_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="55dp"
-        android:text="QUICK BOOK"
-        android:background="@color/colorAccent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"/>
+    <!--<Button-->
+        <!--android:id="@+id/map_bt_quick_button"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="55dp"-->
+        <!--android:text="QUICK BOOK"-->
+        <!--android:background="@color/colorAccent"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"/>-->
 
 
 </RelativeLayout>
