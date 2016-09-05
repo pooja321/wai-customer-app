@@ -54,7 +54,7 @@ import java.util.Map;
  */
 public abstract class MapViewFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, GeoQueryEventListener {
+        LocationListener, GeoQueryEventListener, GoogleMap.OnMarkerDragListener {
 
     public interface onAddressSearchClick {
         void startAddressSearchActivity();
@@ -72,7 +72,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
     private GoogleMap mGoogleMap;
-    private Marker mCurrLocationMarker;
+    private Marker mUserPlacedMarker;
     private Map<String,Marker> markers;
     private GeoLocation geoLocation;
 
@@ -106,9 +106,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
         }
-//        if (!checkPermission()) {
-//            requestPermission();
-//        }
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.main_map);
         mapFragment.getMapAsync(this);
         final onAddressSearchClick listener = (onAddressSearchClick) getActivity();
@@ -206,9 +203,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     public void onPause() {
         super.onPause();
         Log.v("wai","MapViewFragment onPause");
-//        if (mGoogleApiClient.isConnected()) {
-//            mGoogleApiClient.disconnect();
-//        }
     }
 
     @Override
@@ -251,6 +245,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         Log.v("wai","MapViewFragment onMapReady");
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mGoogleMap.setOnMarkerDragListener(this);
         if (!checkPermission()) {
             Log.v("wai", "no location permission");
             requestPermission();
@@ -290,16 +285,17 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     public void onLocationChanged(Location location) {
         Log.v("wai","MapViewFragment onLocationChanged");
         mLastLocation = location;
-        if (mCurrLocationMarker != null) {
-            mCurrLocationMarker.remove();
+        if (mUserPlacedMarker != null) {
+            mUserPlacedMarker.remove();
         }
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-//        MarkerOptions currentLocationMarkerOptions = new MarkerOptions();
-//        currentLocationMarkerOptions.position(latLng);
-//        currentLocationMarkerOptions.title("Current Position");
-//        currentLocationMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-//        mCurrLocationMarker = mGoogleMap.addMarker(currentLocationMarkerOptions);//move map camera
+        MarkerOptions currentLocationMarkerOptions = new MarkerOptions();
+        currentLocationMarkerOptions.position(latLng);
+        currentLocationMarkerOptions.title("Current Position");
+        currentLocationMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+        currentLocationMarkerOptions.draggable(true);
+        mUserPlacedMarker = mGoogleMap.addMarker(currentLocationMarkerOptions);
 
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(11));
@@ -316,6 +312,22 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         geoQuery.setCenter(new GeoLocation(location.getLatitude(),location.getLongitude()));
         geoQuery.setRadius(100);
     }
+
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+
+    }
+
 
     @Override
     public void onGeoQueryError(DatabaseError error) {
