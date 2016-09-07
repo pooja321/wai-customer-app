@@ -311,7 +311,6 @@
             android:text="I have read and understood terms and conditions" />
     </LinearLayout>
 
-
     <Button
         android:id="@+id/cook_booking_bt_confirm"
         android:layout_width="match_parent"
@@ -319,6 +318,7 @@
         android:layout_alignParentBottom="true"
         android:background="@color/colorAccent"
         android:text="CONFIRM BOOKING"
+        android:textSize="@dimen/text_size_medium"
         android:textColor="@color/white" />
 
 </RelativeLayout>
