@@ -22,8 +22,7 @@ public class Constants {
 
     //firebase properties
     public static final String FIREBASE_PROPERTY_TIMESTAMP = "timestamp";
-
-    public static final String ORDER_STATUS_ADDRESS_NOT_SET = "Address Not Selected";
+    public static final String FIREBASE_PROPERTY_EMAIL = "email";
 
     public static final String ORDER_PROGRESS_STATUS_STARTED = "Started";
     public static final String ORDER_PROGRESS_STATUS_REACHED = "Reached";
@@ -35,6 +34,7 @@ public class Constants {
     public static final String ORDER_STATUS_INCOMPLETE = "Incomplete";
     public static final String ORDER_STATUS_CANCELLED = "Cancelled";
     public static final String ORDER_STATUS_COMPLETED = "Completed";
+    public static final String ORDER_STATUS_ADDRESS_NOT_SET = "Address Not Selected";
 
     public static final String RESOURCE_STATUS_LOGGED_IN = "LoggedIn";
     public static final String RESOURCE_STATUS_ONLINE = "Online";

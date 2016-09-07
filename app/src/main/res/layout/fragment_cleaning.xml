@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".Booking.clean.CleaningFragment">
 
@@ -9,6 +10,8 @@
         android:id="@+id/cleaning_tabLayout"
         android:layout_width="match_parent"
         android:background="@color/colorPrimaryDark"
+        app:tabTextColor="@color/colorwhite"
+        app:tabSelectedTextColor="@color/colorAccent"
         android:layout_height="wrap_content"/>
 
     <android.support.v4.view.ViewPager

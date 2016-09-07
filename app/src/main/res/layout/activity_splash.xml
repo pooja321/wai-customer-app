@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context="com.waiapp.SplashActivity">
 
     <TextView
@@ -12,7 +13,6 @@
         android:padding="16dp"
         android:background="@drawable/bg_resource_list_item_corner"
         android:text="WAI"
-        android:textColor="@color/light_black"
         android:textSize="40sp"
         android:textStyle="bold"/>
 

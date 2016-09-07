@@ -294,7 +294,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+        mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
         LatLng centerOfMap = mGoogleMap.getCameraPosition().target;
         mCenterMarkerOptions.position(centerOfMap);

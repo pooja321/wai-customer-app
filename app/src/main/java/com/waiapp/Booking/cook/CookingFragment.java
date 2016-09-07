@@ -50,6 +50,8 @@ public class CookingFragment extends Fragment {
         });
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.cook_tabLayout);
         tabLayout.setupWithViewPager(viewPager);
+//        tabLayout.getTabAt(0).setIcon(Utilities.tabIcons[0]);
+//        tabLayout.getTabAt(1).setIcon(Utilities.tabIcons[1]);
         return view;
     }
 }

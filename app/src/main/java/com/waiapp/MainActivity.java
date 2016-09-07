@@ -87,8 +87,8 @@ public class MainActivity extends BaseActivity implements
         });
 
         mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
-        mBottomBar.mapColorForTab(1, 0xFF5D4037);
-        mBottomBar.mapColorForTab(2, "#7B1FA2");
+        mBottomBar.mapColorForTab(1, ContextCompat.getColor(this, R.color.colorAccent));
+        mBottomBar.mapColorForTab(2, ContextCompat.getColor(this, R.color.colorAccent));
 
     }
 

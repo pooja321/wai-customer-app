@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#90CAF9"
+    android:background="@color/colorPrimary"
     android:orientation="vertical"
     tools:context=".Login.LoginActivity">
 
@@ -25,7 +25,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="8dp"
         android:text="WAI"
-        android:textColor="@color/light_black"
         android:textSize="40sp"
         android:gravity="center"
         android:background="@drawable/bg_resource_list_item_corner"   />
