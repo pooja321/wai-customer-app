@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
@@ -55,7 +54,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_payment);
 
         UID = Utilities.getUid();
-        mOrderKey = getIntent().getStringExtra("orderKey");
+//        mOrderKey = getIntent().getStringExtra("orderKey");
         mOrder = (Order) getIntent().getSerializableExtra("order");
         mOrderAmount = (OrderAmount) getIntent().getSerializableExtra("OrderAmount");
         mAddress = (Address) getIntent().getSerializableExtra("Address");
@@ -63,7 +62,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mresourceKey = mOrder.getResourceId();
         this.realm = RealmController.with(this).getRealm();
         mtoolbar = (Toolbar) findViewById(R.id.payment_toolbar);
-        mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
+        mtoolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(mtoolbar);
         setTitle("Select payment Method");
 
@@ -78,90 +77,70 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch(id){
+        switch (id) {
             case R.id.payment_bt_submit:
-                savePaymentDetails();
+                saveOrder();
         }
     }
 
-    private void savePaymentDetails() {
+    private void saveOrder() {
         int id = mRadioGroupPayment.getCheckedRadioButtonId();
         String _paymentMode = null;
-        switch (id){
+        switch (id) {
             case R.id.payment_rb_mode_COD:
-                    Toast.makeText(PaymentActivity.this, "You selected Cash on delivery", Toast.LENGTH_SHORT).show();
-                    _paymentMode = "COD";
+                Toast.makeText(PaymentActivity.this, "You selected Cash on delivery", Toast.LENGTH_SHORT).show();
+                _paymentMode = "COD";
                 break;
             case R.id.payment_rb_mode_paytm:
-                    Toast.makeText(PaymentActivity.this, "You selected paytm", Toast.LENGTH_SHORT).show();
-                    _paymentMode = "PAYTM";
+                Toast.makeText(PaymentActivity.this, "You selected paytm", Toast.LENGTH_SHORT).show();
+                _paymentMode = "PAYTM";
                 break;
             case R.id.payment_rb_mode_payu:
-                    Toast.makeText(PaymentActivity.this, "You selected paytu", Toast.LENGTH_SHORT).show();
-                    _paymentMode = "PAYU";
+                Toast.makeText(PaymentActivity.this, "You selected paytu", Toast.LENGTH_SHORT).show();
+                _paymentMode = "PAYU";
                 break;
         }
-        OrderUpdates.put("paymentMode",_paymentMode);
-        OrderUpdates.put("orderStatus",Constants.ORDER_STATUS_ORDERED);
-        OrderUpdates.put("orderProgressStatus",Constants.ORDER_PROGRESS_STATUS_RESOURCE_CONFIRMATION_AWAITED);
-        HashMap<String, Object> orderbookingTime = new HashMap<>();
-        orderbookingTime.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
-        OrderUpdates.put("orderbookingTime",orderbookingTime);
-
         mOrder.setPaymentMode(_paymentMode);
         mOrder.setOrderStatus(Constants.ORDER_STATUS_ORDERED);
         mOrder.setOrderProgressStatus(Constants.ORDER_PROGRESS_STATUS_RESOURCE_CONFIRMATION_AWAITED);
+        HashMap<String, Object> orderbookingTime = new HashMap<>();
+        orderbookingTime.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
         mOrder.setOrderbookingTime(orderbookingTime);
 
-        mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).child(mresourceKey).child(mOrderKey)
-                .updateChildren(OrderUpdates, new DatabaseReference.CompletionListener() {
+        mOrderKey = mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).push().getKey();
+
+        mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).child(mOrderKey).setValue(mOrder).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if(!(databaseError == null)){
-                    Toast.makeText(PaymentActivity.this, "payment method updated failed", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(PaymentActivity.this, "payment method updated successfully", Toast.LENGTH_SHORT).show();
+            public void onComplete(@NonNull Task<Void> task) {
+                if (!task.isSuccessful()) {
+                    Toast.makeText(PaymentActivity.this, "Order saving failed", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(PaymentActivity.this, "Order Saved successfully", Toast.LENGTH_SHORT).show();
+                    addOrderAmount(mOrderKey);
                     updateResourceOrderHistory();
                     updateUserOrderHistory();
-//                    update();
+                    final OrderKey orderKey = new OrderKey();
+                    orderKey.setId(UID);
+                    orderKey.setOrderkey(mOrderKey);
                     realm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            OrderKey orderKey = realm.createObject(OrderKey.class);
-                            orderKey.setOrderkey(mOrderKey);
+                            realm.copyToRealmOrUpdate(orderKey);
                         }
                     });
                     startActivity(new Intent(PaymentActivity.this, OrderConfirmActivity.class).putExtra("orderKey", mOrderKey));
                 }
             }
         });
+
     }
 
-//    private void update() {
-//        Log.v("wai", "update");
-//        String UserOrderlocation = Constants.FIREBASE_CHILD_USER_ORDER_HISTORY.concat("/").concat(UID).concat("/").concat(mOrderKey).concat("/");
-//        String ResourceOrderlocation = Constants.FIREBASE_CHILD_RESOURCE_ORDER_HISTORY.concat("/").concat(mresourceKey).concat("/").concat(mOrderKey).concat("/");
-//        Map<String, Object> OrderUpdates = new HashMap<>();
-//        OrderUpdates.put(UserOrderlocation.concat("Order"),mOrder);
-//        OrderUpdates.put(UserOrderlocation.concat("OrderAmount"),mOrderAmount);
-//        OrderUpdates.put(UserOrderlocation.concat("Address"),mAddress);
-//        OrderUpdates.put(ResourceOrderlocation.concat("Order"),mOrder);
-//        OrderUpdates.put(ResourceOrderlocation.concat("OrderAmount"),mOrderAmount);
-//        OrderUpdates.put(ResourceOrderlocation.concat("Address"),mAddress);
-//
-//        mDatabase.updateChildren(OrderUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                    Toast.makeText(PaymentActivity.this, "Order Update Successful", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
+    private void addOrderAmount(String _orderKey) {
+        mOrderAmount.setOrderId(_orderKey);
+        mDatabase.child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).child(_orderKey).setValue(mOrderAmount);
+    }
 
     private void updateUserOrderHistory() {
-        Map<String, Object> userOrderUpdates = new HashMap<>();
-        userOrderUpdates.put("Order",mOrder);
-        userOrderUpdates.put("OrderAmount",mOrderAmount);
-        userOrderUpdates.put("Address",mAddress);
         mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDER_HISTORY).child(UID).child(mOrderKey).child("Order").setValue(mOrder);
         mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDER_HISTORY).child(UID).child(mOrderKey).child("OrderAmount").setValue(mOrderAmount);
         mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDER_HISTORY).child(UID).child(mOrderKey).child("Address").setValue(mAddress);
@@ -169,10 +148,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void updateResourceOrderHistory() {
-        Map<String, Object> resourceOrderUpdates = new HashMap<>();
-        resourceOrderUpdates.put("Order",mOrder);
-        resourceOrderUpdates.put("OrderAmount",mOrderAmount);
-        resourceOrderUpdates.put("Address",mAddress);
         mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDER_HISTORY).child(mresourceKey).child(mOrderKey).child("Order").setValue(mOrder);
         mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDER_HISTORY).child(mresourceKey).child(mOrderKey).child("OrderAmount").setValue(mOrderAmount);
         mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDER_HISTORY).child(mresourceKey).child(mOrderKey).child("Address").setValue(mAddress);
@@ -181,12 +156,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onBackPressed() {
         ExitAlertDialogFragment exitAlertDialogFragment = new ExitAlertDialogFragment();
-        exitAlertDialogFragment.show(getSupportFragmentManager(),DIALOG_ALERT);
+        exitAlertDialogFragment.show(getSupportFragmentManager(), DIALOG_ALERT);
     }
 
     @Override
     public void ExitOrder(Boolean exit) {
-        if(exit){
+        if (exit) {
             mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).child(mresourceKey).child(mOrderKey).removeValue()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -197,11 +172,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
             mDatabase.child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).child(mOrderKey).removeValue()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
 
-                }
-            });
+                        }
+                    });
 
         }
     }

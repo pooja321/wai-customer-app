@@ -2,7 +2,6 @@ package com.waiapp.Address;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,11 +10,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -86,8 +82,8 @@ public class AddressActivity extends AppCompatActivity {
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        createOrder(addressRef.getKey());
                         mAddress = model;
+                        createOrder(addressRef.getKey());
                     }
                 });
                 viewHolder.bindView(model);
@@ -100,28 +96,11 @@ public class AddressActivity extends AppCompatActivity {
         String _UID = Utilities.getUid();
         HashMap<String, Object> orderCreationTime = new HashMap<>();
         orderCreationTime.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
-        final String _orderKey = mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).child(_UID).push().getKey();
         final Order order = new Order("11011", mOrderType, _UID, mResourceKey,addressKey,Constants.ORDER_STATUS_INCOMPLETE,
                 Constants.ORDER_PROGRESS_STATUS_PAYMENT_PENDING,null,mTotalAmount,orderCreationTime,null,null,null,false);
-        mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).child(mResourceKey).child(_orderKey).setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(!task.isSuccessful()){
-                    Toast.makeText(AddressActivity.this, "Order saving failed", Toast.LENGTH_SHORT).show();
-                }else{
-                    addOrderAmount(_orderKey);
-                    Toast.makeText(AddressActivity.this, "Order Saved successfully", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(AddressActivity.this, PaymentActivity.class)
-                            .putExtra("orderKey",_orderKey).putExtra("order",order)
-                            .putExtra("OrderAmount",mOrderAmount).putExtra("Address",mAddress));
-                }
-            }
-        });
-    }
+        startActivity(new Intent(AddressActivity.this, PaymentActivity.class)
+                .putExtra("order",order).putExtra("OrderAmount",mOrderAmount).putExtra("Address",mAddress));
 
-    private void addOrderAmount(String _orderKey) {
-        mOrderAmount.setOrderId(_orderKey);
-        mDatabase.child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).child(_orderKey).setValue(mOrderAmount);
     }
 
     @Override

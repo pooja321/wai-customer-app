@@ -85,27 +85,15 @@ public class OrderHistoryActivity extends AppCompatActivity {
 
     private void initCurrentOrderUI() {
         Log.v("wai", "initCurrentOrderUI");
-//        mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).orderByKey().equalTo(currentOrderKey).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Log.v("wai", "ondataChange: " +  dataSnapshot.getValue().toString());
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-        mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).orderByChild(Constants.FIREBASE_PROPERTY_CUSTOMER_ID).equalTo(UID)
-                .limitToFirst(1).addValueEventListener(new ValueEventListener() {
+
+        mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).child(currentOrderKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot != null){
-                    Log.v("wai", "ondataChange: " +  dataSnapshot.toString());
-                } else{
-                    Log.v("wai", "datasnapshot is null");
-                }
-
+                String orderid = dataSnapshot.getKey();
+                Order order = dataSnapshot.getValue(Order.class);
+                mTextViewCurrentOrderId.setText(orderid);
+                mTextViewCurrentOrderType.setText(order.getOrderType());
+                mTextViewCurrentOrderStatus.setText(order.getOrderStatus());
             }
 
             @Override
