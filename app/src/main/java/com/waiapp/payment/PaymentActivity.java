@@ -21,13 +21,17 @@ import com.waiapp.MainActivity;
 import com.waiapp.Model.Address;
 import com.waiapp.Model.Order;
 import com.waiapp.Model.OrderAmount;
+import com.waiapp.Model.OrderKey;
 import com.waiapp.Order.OrderConfirmActivity;
 import com.waiapp.R;
+import com.waiapp.Realm.RealmController;
 import com.waiapp.Utility.Constants;
 import com.waiapp.Utility.Utilities;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import io.realm.Realm;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, ExitAlertDialogFragment.ExitOrderListener {
 
@@ -43,7 +47,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     Order mOrder = new Order();
     OrderAmount mOrderAmount = new OrderAmount();
     Address mAddress = new Address();
-
+    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +61,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mAddress = (Address) getIntent().getSerializableExtra("Address");
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mresourceKey = mOrder.getResourceId();
-
+        this.realm = RealmController.with(this).getRealm();
         mtoolbar = (Toolbar) findViewById(R.id.payment_toolbar);
         mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
         setSupportActionBar(mtoolbar);
@@ -109,7 +113,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mOrder.setOrderProgressStatus(Constants.ORDER_PROGRESS_STATUS_RESOURCE_CONFIRMATION_AWAITED);
         mOrder.setOrderbookingTime(orderbookingTime);
 
-        mDatabase.child(Constants.FIREBASE_CHILD_ORDER).child(mresourceKey).child(mOrderKey)
+        mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).child(mresourceKey).child(mOrderKey)
                 .updateChildren(OrderUpdates, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
@@ -119,11 +123,39 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     Toast.makeText(PaymentActivity.this, "payment method updated successfully", Toast.LENGTH_SHORT).show();
                     updateResourceOrderHistory();
                     updateUserOrderHistory();
+//                    update();
+                    realm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            OrderKey orderKey = realm.createObject(OrderKey.class);
+                            orderKey.setOrderkey(mOrderKey);
+                        }
+                    });
                     startActivity(new Intent(PaymentActivity.this, OrderConfirmActivity.class).putExtra("orderKey", mOrderKey));
                 }
             }
         });
     }
+
+//    private void update() {
+//        Log.v("wai", "update");
+//        String UserOrderlocation = Constants.FIREBASE_CHILD_USER_ORDER_HISTORY.concat("/").concat(UID).concat("/").concat(mOrderKey).concat("/");
+//        String ResourceOrderlocation = Constants.FIREBASE_CHILD_RESOURCE_ORDER_HISTORY.concat("/").concat(mresourceKey).concat("/").concat(mOrderKey).concat("/");
+//        Map<String, Object> OrderUpdates = new HashMap<>();
+//        OrderUpdates.put(UserOrderlocation.concat("Order"),mOrder);
+//        OrderUpdates.put(UserOrderlocation.concat("OrderAmount"),mOrderAmount);
+//        OrderUpdates.put(UserOrderlocation.concat("Address"),mAddress);
+//        OrderUpdates.put(ResourceOrderlocation.concat("Order"),mOrder);
+//        OrderUpdates.put(ResourceOrderlocation.concat("OrderAmount"),mOrderAmount);
+//        OrderUpdates.put(ResourceOrderlocation.concat("Address"),mAddress);
+//
+//        mDatabase.updateChildren(OrderUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+//            @Override
+//            public void onComplete(@NonNull Task<Void> task) {
+//                    Toast.makeText(PaymentActivity.this, "Order Update Successful", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
     private void updateUserOrderHistory() {
         Map<String, Object> userOrderUpdates = new HashMap<>();
@@ -155,7 +187,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void ExitOrder(Boolean exit) {
         if(exit){
-            mDatabase.child(Constants.FIREBASE_CHILD_ORDER).child(mresourceKey).child(mOrderKey).removeValue()
+            mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).child(mresourceKey).child(mOrderKey).removeValue()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

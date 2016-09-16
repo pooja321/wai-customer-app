@@ -3,13 +3,17 @@ package com.waiapp.Model;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by keviv on 21/07/2016.
  */
-public class Order implements Serializable {
+public class Order extends RealmObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    @PrimaryKey
     private String orderId;
     private String orderType;
     private String customerId;
@@ -19,9 +23,13 @@ public class Order implements Serializable {
     private String orderProgressStatus;
     private String paymentMode;
     private double OrderAmount;
+    @Ignore
     private HashMap<String, Object> orderCreationTime;
+    @Ignore
     private HashMap<String, Object> orderbookingTime;
+    @Ignore
     private HashMap<String, Object> serviceStartTime;
+    @Ignore
     private HashMap<String, Object> serviceEndTime;
     private Boolean feedbackProvided;
 

@@ -100,10 +100,10 @@ public class AddressActivity extends AppCompatActivity {
         String _UID = Utilities.getUid();
         HashMap<String, Object> orderCreationTime = new HashMap<>();
         orderCreationTime.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
-        final String _orderKey = mDatabase.child(Constants.FIREBASE_CHILD_ORDER).child(_UID).push().getKey();
+        final String _orderKey = mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).child(_UID).push().getKey();
         final Order order = new Order("11011", mOrderType, _UID, mResourceKey,addressKey,Constants.ORDER_STATUS_INCOMPLETE,
                 Constants.ORDER_PROGRESS_STATUS_PAYMENT_PENDING,null,mTotalAmount,orderCreationTime,null,null,null,false);
-        mDatabase.child(Constants.FIREBASE_CHILD_ORDER).child(mResourceKey).child(_orderKey).setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).child(mResourceKey).child(_orderKey).setValue(order).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(!task.isSuccessful()){

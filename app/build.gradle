@@ -25,10 +25,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-
     //firebase dependencies
-    //play services libraries
-    //third party libraries
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
@@ -39,9 +36,12 @@ dependencies {
     compile 'com.google.firebase:firebase-database:9.4.0'
     compile 'com.google.firebase:firebase-crash:9.4.0'
     compile 'com.firebase:geofire-android:2.0.0'
+    //play services libraries
     compile 'com.google.android.gms:play-services:9.4.0'
     compile 'com.google.android.gms:play-services-auth:9.4.0'
+    //third party libraries
     compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.roughike:bottom-bar:1.4.0'
 }
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'realm-android'

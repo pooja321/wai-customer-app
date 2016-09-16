@@ -14,7 +14,7 @@ public class Constants {
     public static final String FIREBASE_CHILD_COOKING = "Cooking";
     public static final String FIREBASE_CHILD_WASHING = "Washing";
     public static final String FIREBASE_CHILD_CLEANING = "Cleaning";
-    public static final String FIREBASE_CHILD_ORDER = "Orders";
+    public static final String FIREBASE_CHILD_ORDERS = "Orders";
     public static final String FIREBASE_CHILD_ORDER_AMOUNT = "OrderAmount";
     public static final String FIREBASE_CHILD_ADDRESS = "Address";
     public static final String FIREBASE_CHILD_RESOURCE_ORDER_HISTORY = "Resource-Order-History";
@@ -23,6 +23,7 @@ public class Constants {
     //firebase properties
     public static final String FIREBASE_PROPERTY_TIMESTAMP = "timestamp";
     public static final String FIREBASE_PROPERTY_EMAIL = "email";
+    public static final String FIREBASE_PROPERTY_CUSTOMER_ID = "customerId";
 
     public static final String ORDER_PROGRESS_STATUS_STARTED = "Started";
     public static final String ORDER_PROGRESS_STATUS_REACHED = "Reached";
