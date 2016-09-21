@@ -14,11 +14,13 @@ public class Constants {
     public static final String FIREBASE_CHILD_COOKING = "Cooking";
     public static final String FIREBASE_CHILD_WASHING = "Washing";
     public static final String FIREBASE_CHILD_CLEANING = "Cleaning";
-    public static final String FIREBASE_CHILD_ORDERS = "Orders";
+    public static final String FIREBASE_CHILD_USER_ORDERS = "User-Orders";
+    public static final String FIREBASE_CHILD_RESOURCE_ORDERS = "Resource-Orders";
+    public static final String FIREBASE_CHILD_ORDER = "Order";
     public static final String FIREBASE_CHILD_ORDER_AMOUNT = "OrderAmount";
     public static final String FIREBASE_CHILD_ADDRESS = "Address";
-    public static final String FIREBASE_CHILD_RESOURCE_ORDER_HISTORY = "Resource-Order-History";
-    public static final String FIREBASE_CHILD_USER_ORDER_HISTORY = "User-Order-History";
+    public static final String FIREBASE_CHILD_RESOURCE_ORDER_DETAIL = "Resource-Order-Detail";
+    public static final String FIREBASE_CHILD_USER_ORDER_DETAIL = "User-Order-Detail";
 
     //firebase properties
     public static final String FIREBASE_PROPERTY_TIMESTAMP = "timestamp";
@@ -32,6 +34,7 @@ public class Constants {
     public static final String ORDER_PROGRESS_STATUS_RESOURCE_CONFIRMED_ORDER = "Resource Confirmed Order";
 
     public static final String ORDER_STATUS_ORDERED = "Ordered";
+    public static final String ORDER_STATUS_INPROGRESS = "Inprogress";
     public static final String ORDER_STATUS_INCOMPLETE = "Incomplete";
     public static final String ORDER_STATUS_CANCELLED = "Cancelled";
     public static final String ORDER_STATUS_COMPLETED = "Completed";
@@ -46,4 +49,5 @@ public class Constants {
     public static final String SORTBY_DISTANCE = "distance";
     public static final String FILTERBY_GENDER_MALE = "Male";
     public static final String FILTERBY_GENDER_FEMALE = "Female";
+    public static final String ORDER_ID_PREFIX = "O";
 }

@@ -2,10 +2,12 @@ package com.waiapp.Model;
 
 import java.io.Serializable;
 
+import io.realm.RealmObject;
+
 /**
  * Created by keviv on 29/08/2016.
  */
-public class OrderAmount implements Serializable {
+public class OrderAmount extends RealmObject implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

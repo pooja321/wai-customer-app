@@ -107,17 +107,15 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         orderbookingTime.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
         mOrder.setOrderbookingTime(orderbookingTime);
 
-        mOrderKey = mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).push().getKey();
+        mOrderKey = mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDERS).push().getKey();
 
-        mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).child(mOrderKey).setValue(mOrder).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDERS).child(UID).child(mOrderKey).setValue(mOrder).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (!task.isSuccessful()) {
                     Toast.makeText(PaymentActivity.this, "Order saving failed", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(PaymentActivity.this, "Order Saved successfully", Toast.LENGTH_SHORT).show();
-                    addOrderAmount(mOrderKey);
-                    updateResourceOrderHistory();
                     updateUserOrderHistory();
                     final OrderKey orderKey = new OrderKey();
                     orderKey.setId(UID);
@@ -132,25 +130,27 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
             }
         });
-
-    }
-
-    private void addOrderAmount(String _orderKey) {
-        mOrderAmount.setOrderId(_orderKey);
-        mDatabase.child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).child(_orderKey).setValue(mOrderAmount);
+        mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDERS).child(mresourceKey).child(mOrderKey).setValue(mOrder).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    updateResourceOrderHistory();
+                }
+            }
+        });
     }
 
     private void updateUserOrderHistory() {
-        mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDER_HISTORY).child(UID).child(mOrderKey).child("Order").setValue(mOrder);
-        mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDER_HISTORY).child(UID).child(mOrderKey).child("OrderAmount").setValue(mOrderAmount);
-        mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDER_HISTORY).child(UID).child(mOrderKey).child("Address").setValue(mAddress);
+        mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDER_DETAIL).child(UID).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER).setValue(mOrder);
+        mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDER_DETAIL).child(UID).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(mOrderAmount);
+        mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDER_DETAIL).child(UID).child(mOrderKey).child(Constants.FIREBASE_CHILD_ADDRESS).setValue(mAddress);
 
     }
 
     private void updateResourceOrderHistory() {
-        mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDER_HISTORY).child(mresourceKey).child(mOrderKey).child("Order").setValue(mOrder);
-        mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDER_HISTORY).child(mresourceKey).child(mOrderKey).child("OrderAmount").setValue(mOrderAmount);
-        mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDER_HISTORY).child(mresourceKey).child(mOrderKey).child("Address").setValue(mAddress);
+        mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDER_DETAIL).child(mresourceKey).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER).setValue(mOrder);
+        mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDER_DETAIL).child(mresourceKey).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(mOrderAmount);
+        mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDER_DETAIL).child(mresourceKey).child(mOrderKey).child(Constants.FIREBASE_CHILD_ADDRESS).setValue(mAddress);
     }
 
     @Override
@@ -162,7 +162,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void ExitOrder(Boolean exit) {
         if (exit) {
-            mDatabase.child(Constants.FIREBASE_CHILD_ORDERS).child(mresourceKey).child(mOrderKey).removeValue()
+            mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDERS).child(mresourceKey).child(mOrderKey).removeValue()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {

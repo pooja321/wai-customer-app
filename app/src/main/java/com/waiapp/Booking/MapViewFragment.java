@@ -230,8 +230,10 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     public void onStop() {
         super.onStop();
         Log.v("wai","MapViewFragment onStop");
-        if (mGoogleApiClient.isConnected() && mGoogleApiClient != null) {
-            mGoogleApiClient.disconnect();
+        if(mGoogleApiClient != null) {
+            if (mGoogleApiClient.isConnected()) {
+                mGoogleApiClient.disconnect();
+            }
         }
         if(geoQuery != null) {
             geoQuery.removeAllListeners();

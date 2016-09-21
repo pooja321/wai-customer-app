@@ -2,10 +2,12 @@ package com.waiapp.Model;
 
 import java.io.Serializable;
 
+import io.realm.RealmObject;
+
 /**
  * Created by keviv on 03/08/2016.
  */
-public class Address implements Serializable {
+public class Address extends RealmObject implements Serializable {
 
     private String addressName;
     private String addressType;
