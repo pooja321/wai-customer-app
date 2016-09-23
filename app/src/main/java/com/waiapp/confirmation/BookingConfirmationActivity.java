@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.waiapp.Login.LoginFragment;
 import com.waiapp.Login.SignUpFragment;
-import com.waiapp.Model.ResourceOnline;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
 
@@ -21,12 +20,10 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     private Toolbar mtoolbar;
-    ResourceOnline resource;
     String callingFragment, mResourceKey, mResourceName;
     public static final String LOGIN_FRAGMENT = "login_fragment";
     public static final String SIGNUP_FRAGMENT = "SignUp_fragment";
     public static final String SAVED_FRAGMENT = "saved_fragment";
-    private static final String KEY_CALLING_FRAGMENT = "calling_fragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +49,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
                 break;
             case(Constants.FIREBASE_CHILD_CLEANING):
                 Toast.makeText(BookingConfirmationActivity.this, "Clean is the Calling Fragment ", Toast.LENGTH_SHORT).show();
+                fragment = new CleanBookingConfirmation();
                 break;
             case(Constants.FIREBASE_CHILD_WASHING):
                 fragment = new WashBookingConfirmationFragment();

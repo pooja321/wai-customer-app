@@ -69,7 +69,10 @@ public class OrderHistoryActivity extends AppCompatActivity {
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(OrderHistoryActivity.this, OrderDetailActivity.class).putExtra(OrderDetailActivity.ORDER_KEY,resourceRef.getKey()));
+                        String orderType = model.getOrderType();
+                        startActivity(new Intent(OrderHistoryActivity.this, OrderDetailActivity.class)
+                                .putExtra(OrderDetailActivity.ORDER_KEY,resourceRef.getKey())
+                        .putExtra(OrderDetailActivity.ORDER_TYPE, orderType));
                     }
                 });
                 viewHolder.bindView(model);
