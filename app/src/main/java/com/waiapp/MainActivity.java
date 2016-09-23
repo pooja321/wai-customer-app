@@ -141,7 +141,7 @@ public class MainActivity extends BaseActivity implements
 //
 //        //noinspection SimplifiableIfStatement
 //        if (id == R.id.action_settings) {
-//            startActivity(new Intent(this, SettingsActivity.class));
+//            startActivity(new Intent(this, SortFilterActivity.class));
 //            return true;
 //        }
 //        return super.onOptionsItemSelected(item);

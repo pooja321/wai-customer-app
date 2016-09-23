@@ -37,6 +37,15 @@
                 android:padding="8dp"
                 android:text="1234567"
                 android:textSize="@dimen/text_size_medium" />
+            <TextView
+                android:id="@+id/order_item_current_order_ind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/distance_bg_stroke"
+                android:text="CURRENT ORDER"
+                android:padding="8dp"
+                android:textSize="@dimen/text_size_medium"
+                android:visibility="gone"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

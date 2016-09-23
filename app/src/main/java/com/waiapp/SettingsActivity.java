@@ -1,85 +1,78 @@
 package com.waiapp;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
-import com.waiapp.Utility.Constants;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-public class SettingsActivity extends BaseActivity {
+public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button mOkButton;
-    RadioGroup mRadioGroupSort;
-    RadioButton mRadioButtonRating, mRadioButtonDistance;
-    CheckBox mCheckBoxMale, mCheckBoxFemale, mCheckBoxStarFive, mCheckBoxStarFour,
-            mCheckBoxStarThree, mCheckBoxStarTwo, mCheckBoxStarOne;
+    private EditText mEditTextNewPassword;
+    private Button mButtonChangePassword;
+    private ProgressDialog mAuthProgressDialog;
 
-    String sortBy;
-    SharedPreferences mPrefSortFilter;
-    SharedPreferences.Editor mEditor;
-    Context mContext;
-    int PRIVATE_MODE = 0;
-
-    private static final String PREF_RESOURCE_FILTER_SORT = "sortFilterPreferences";
-    private static final String KEY_SORT = "sortPreferences";
-    private static final String PREF_FILTER = "filterPreferences";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        sortBy = Constants.SORTBY_RATING;
-        mContext = getApplicationContext();
-        mPrefSortFilter = mContext.getSharedPreferences(PREF_RESOURCE_FILTER_SORT, PRIVATE_MODE);
-        mEditor = mPrefSortFilter.edit();
+        mEditTextNewPassword = (EditText) findViewById(R.id.settings_new_password);
+        mButtonChangePassword = (Button) findViewById(R.id.settings_bt_changePassword);
+        mButtonChangePassword.setOnClickListener(this);
 
-        mOkButton = (Button) findViewById(R.id.settings_bt_ok);
-        mOkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveSettings();
-                startActivity(new Intent(SettingsActivity.this,MainActivity.class));
-            }
-        });
-        mRadioGroupSort = (RadioGroup) findViewById(R.id.settings_sort_rg);
-        mRadioButtonRating = (RadioButton) findViewById(R.id.settings_rb_rating);
-        mRadioButtonDistance = (RadioButton) findViewById(R.id.settings_rb_distance);
-
-        mCheckBoxMale = (CheckBox) findViewById(R.id.settings_filter_cb_male);
-        mCheckBoxFemale = (CheckBox) findViewById(R.id.settings_filter_cb_female);
-        mCheckBoxStarFive = (CheckBox) findViewById(R.id.settings_filter_cb_5star);
-        mCheckBoxStarFour = (CheckBox) findViewById(R.id.settings_filter_cb_4star);
-        mCheckBoxStarThree = (CheckBox) findViewById(R.id.settings_filter_cb_3star);
-        mCheckBoxStarTwo = (CheckBox) findViewById(R.id.settings_filter_cb_2star);
-        mCheckBoxStarOne = (CheckBox) findViewById(R.id.settings_filter_cb_1star);
+        mAuthProgressDialog = new ProgressDialog(this);
+        mAuthProgressDialog.setTitle(getString(R.string.progress_dialog_loading));
+        mAuthProgressDialog.setMessage(getString(R.string.progress_dialog_authenticating_with_firebase));
+        mAuthProgressDialog.setCancelable(false);
     }
 
-    private void saveSettings() {
-        int id = mRadioGroupSort.getCheckedRadioButtonId();
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
         switch (id){
-            case R.id.settings_rb_rating:
-                Toast.makeText(SettingsActivity.this, "You selected rating", Toast.LENGTH_SHORT).show();
-                sortBy = Constants.SORTBY_RATING;
+            case R.id.settings_bt_changePassword:
+                String password = mEditTextNewPassword.getText().toString();
+                mAuthProgressDialog.show();
+                if (password.equals("")) {
+                    mEditTextNewPassword.setError(getString(R.string.error_cannot_be_empty));
+                    mAuthProgressDialog.dismiss();
+                }else{
+                    changePassword(password);
+                }
                 break;
-            case R.id.settings_rb_distance:
-                Toast.makeText(SettingsActivity.this, "You selected distance", Toast.LENGTH_SHORT).show();
-                sortBy = Constants.SORTBY_DISTANCE;
-                break;
+
         }
-        Log.v("wai settings activity",sortBy);
-        mEditor.putString(KEY_SORT, sortBy);
-        mEditor.commit();
     }
-    public String getSortPreferences(){
-        return mPrefSortFilter.getString(KEY_SORT, sortBy);
+
+    private void changePassword(String password) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            user.updatePassword(password)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(SettingsActivity.this, "Password is updated!", Toast.LENGTH_SHORT).show();
+                                mEditTextNewPassword.setText("");
+                                mEditTextNewPassword.clearFocus();
+                            } else {
+                                mEditTextNewPassword.setError(task.getException().getMessage());
+                                Toast.makeText(SettingsActivity.this, "Failed to update password!", Toast.LENGTH_SHORT).show();
+                            }
+                            mAuthProgressDialog.dismiss();
+                        }
+                    });
+        }
     }
 }

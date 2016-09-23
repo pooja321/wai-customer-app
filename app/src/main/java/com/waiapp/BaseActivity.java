@@ -91,6 +91,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_invite_and_earn) {
 
         } else if (id == R.id.nav_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
 
         } else if (id == R.id.nav_about) {
 
