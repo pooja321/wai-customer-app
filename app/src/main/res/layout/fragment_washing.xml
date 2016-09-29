@@ -9,7 +9,7 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/washing_tabLayout"
         android:layout_width="match_parent"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/colorPrimary"
         app:tabTextColor="@color/colorwhite"
         app:tabSelectedTextColor="@color/colorAccent"
         android:layout_height="wrap_content"/>

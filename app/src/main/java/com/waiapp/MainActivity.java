@@ -38,9 +38,10 @@ public class MainActivity extends BaseActivity implements
         Log.v("wai","MainActivity oncreate");
         setContentView(R.layout.activity_main);
 
-        mtoolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
-        setSupportActionBar(mtoolbar);
+//        mtoolbar = (Toolbar) findViewById(R.id.main_toolbar);
+//        mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
+//        setSupportActionBar(mtoolbar);
+//        setToolbarTitle(getResources().getString(R.string.app_name));
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage("Loading...");
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -91,7 +92,6 @@ public class MainActivity extends BaseActivity implements
         mBottomBar.mapColorForTab(2, ContextCompat.getColor(this, R.color.colorAccent));
 
     }
-
 
     public void startAddressSearchActivity() {
         Intent intent = new Intent(MainActivity.this, SearchAddressActivity.class);

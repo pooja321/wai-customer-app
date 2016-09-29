@@ -3,17 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
     tools:context="com.waiapp.SplashActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:layout_width="400dp"
+        android:layout_height="400dp"
         android:layout_centerInParent="true"
-        android:padding="16dp"
-        android:background="@drawable/bg_resource_list_item_corner"
-        android:text="WAI"
-        android:textSize="40sp"
-        android:textStyle="bold"/>
+        android:src="@drawable/wailogo"/>
 
 </RelativeLayout>

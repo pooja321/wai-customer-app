@@ -8,10 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/feed_item_margin"
-        android:layout_marginLeft="@dimen/feed_item_margin"
-        android:layout_marginRight="@dimen/feed_item_margin"
-        android:layout_marginTop="@dimen/feed_item_margin"
+        android:layout_margin="@dimen/feed_item_margin"
         android:background="@drawable/bg_resource_list_item_corner"
         android:orientation="vertical"
         android:paddingBottom="@dimen/feed_item_padding_top_bottom"
@@ -28,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="ORDER ID: "
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_normal" />
 
             <TextView
                 android:id="@+id/order_item_orderid"
@@ -36,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="1234567"
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_normal" />
             <TextView
                 android:id="@+id/order_item_current_order_ind"
                 android:layout_width="wrap_content"
@@ -44,7 +41,7 @@
                 android:background="@drawable/distance_bg_stroke"
                 android:text="CURRENT ORDER"
                 android:padding="8dp"
-                android:textSize="@dimen/text_size_medium"
+                android:textSize="@dimen/text_size_normal"
                 android:visibility="gone"/>
         </LinearLayout>
         <LinearLayout
@@ -57,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="ORDER TYPE: "
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_normal" />
 
             <TextView
                 android:id="@+id/order_item_ordertype"
@@ -65,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="1234567"
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_normal" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -77,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="STATUS: "
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_normal" />
 
             <TextView
                 android:id="@+id/order_item_orderstatus"
@@ -85,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="1234567"
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_normal" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -97,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="AMOUNT: "
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_normal" />
 
             <TextView
                 android:id="@+id/order_item_orderamount"
@@ -105,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="1234567"
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_normal" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -117,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="RESOURCE: "
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_normal" />
 
             <TextView
                 android:id="@+id/order_item_orderresource"
@@ -125,7 +122,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="1234567"
-                android:textSize="@dimen/text_size_medium" />
+                android:textSize="@dimen/text_size_normal" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

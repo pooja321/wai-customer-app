@@ -3,7 +3,6 @@ package com.waiapp;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +13,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
+public class SettingsActivity extends BaseActivity implements View.OnClickListener {
 
     private EditText mEditTextNewPassword;
     private Button mButtonChangePassword;
@@ -25,7 +24,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
+        setTitle("Settings");
         mEditTextNewPassword = (EditText) findViewById(R.id.settings_new_password);
         mButtonChangePassword = (Button) findViewById(R.id.settings_bt_changePassword);
         mButtonChangePassword.setOnClickListener(this);

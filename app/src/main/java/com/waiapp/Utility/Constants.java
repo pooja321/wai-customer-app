@@ -21,6 +21,7 @@ public class Constants {
     public static final String FIREBASE_CHILD_ADDRESS = "Address";
     public static final String FIREBASE_CHILD_RESOURCE_ORDER_DETAIL = "Resource-Order-Detail";
     public static final String FIREBASE_CHILD_USER_ORDER_DETAIL = "User-Order-Detail";
+    public static final String FIREBASE_CHILD_ORDER_DETAILS = "Order-Details";
 
     //firebase properties
     public static final String FIREBASE_PROPERTY_TIMESTAMP = "timestamp";
@@ -29,6 +30,7 @@ public class Constants {
 
     public static final String ORDER_PROGRESS_STATUS_STARTED = "Started";
     public static final String ORDER_PROGRESS_STATUS_REACHED = "Reached";
+    public static final String ORDER_PROGRESS_STATUS_COMPLETED = "Completed";
     public static final String ORDER_PROGRESS_STATUS_PAYMENT_PENDING = "Payment Pending";
     public static final String ORDER_PROGRESS_STATUS_RESOURCE_CONFIRMATION_AWAITED = "Resource Confirmation Awaited";
     public static final String ORDER_PROGRESS_STATUS_RESOURCE_CONFIRMED_ORDER = "Resource Confirmed Order";
@@ -38,7 +40,6 @@ public class Constants {
     public static final String ORDER_STATUS_INCOMPLETE = "Incomplete";
     public static final String ORDER_STATUS_CANCELLED = "Cancelled";
     public static final String ORDER_STATUS_COMPLETED = "Completed";
-    public static final String ORDER_STATUS_ADDRESS_NOT_SET = "Address Not Selected";
 
     public static final String RESOURCE_STATUS_LOGGED_IN = "LoggedIn";
     public static final String RESOURCE_STATUS_ONLINE = "Online";

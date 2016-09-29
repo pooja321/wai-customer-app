@@ -54,7 +54,6 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_payment);
 
         UID = Utilities.getUid();
-//        mOrderKey = getIntent().getStringExtra("orderKey");
         mOrder = (Order) getIntent().getSerializableExtra("order");
         mOrderAmount = (OrderAmount) getIntent().getSerializableExtra("OrderAmount");
         mAddress = (Address) getIntent().getSerializableExtra("Address");
@@ -117,6 +116,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 } else {
                     Toast.makeText(PaymentActivity.this, "Order Saved successfully", Toast.LENGTH_SHORT).show();
                     updateUserOrderHistory();
+                    updateResourceOrderHistory();
                     final OrderKey orderKey = new OrderKey();
                     orderKey.setId(UID);
                     orderKey.setOrderkey(mOrderKey);
@@ -130,27 +130,18 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 }
             }
         });
-        mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDERS).child(mresourceKey).child(mOrderKey).setValue(mOrder).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    updateResourceOrderHistory();
-                }
-            }
-        });
-    }
-
-    private void updateUserOrderHistory() {
-        mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDER_DETAIL).child(UID).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER).setValue(mOrder);
-        mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDER_DETAIL).child(UID).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(mOrderAmount);
-        mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDER_DETAIL).child(UID).child(mOrderKey).child(Constants.FIREBASE_CHILD_ADDRESS).setValue(mAddress);
 
     }
 
     private void updateResourceOrderHistory() {
-        mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDER_DETAIL).child(mresourceKey).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER).setValue(mOrder);
-        mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDER_DETAIL).child(mresourceKey).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(mOrderAmount);
-        mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDER_DETAIL).child(mresourceKey).child(mOrderKey).child(Constants.FIREBASE_CHILD_ADDRESS).setValue(mAddress);
+        mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDERS).child(mresourceKey).child(mOrderKey).setValue(mOrder);
+    }
+
+    private void updateUserOrderHistory() {
+        mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER).setValue(mOrder);
+        mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(mOrderAmount);
+        mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ADDRESS).setValue(mAddress);
+
     }
 
     @Override
@@ -162,22 +153,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void ExitOrder(Boolean exit) {
         if (exit) {
-            mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDERS).child(mresourceKey).child(mOrderKey).removeValue()
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            startActivity(new Intent(PaymentActivity.this, MainActivity.class));
-                        }
-                    });
-
-            mDatabase.child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).child(mOrderKey).removeValue()
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-
-                        }
-                    });
-
+            startActivity(new Intent(PaymentActivity.this, MainActivity.class));
         }
     }
 }

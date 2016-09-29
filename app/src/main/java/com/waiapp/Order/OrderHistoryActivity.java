@@ -2,7 +2,6 @@ package com.waiapp.Order;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -16,12 +15,13 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.waiapp.BaseActivity;
 import com.waiapp.Model.Order;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
 import com.waiapp.Utility.Utilities;
 
-public class OrderHistoryActivity extends AppCompatActivity {
+public class OrderHistoryActivity extends BaseActivity {
 
     private DatabaseReference mDatabase;
     ChildEventListener childEventListener;
@@ -37,18 +37,12 @@ public class OrderHistoryActivity extends AppCompatActivity {
         Log.v("wai", "OrderHistoryActivity onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_history);
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             UID = Utilities.getUid();
         }
-
-        mtoolbar = (Toolbar) findViewById(R.id.order_history_toolbar);
-        mtoolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        setSupportActionBar(mtoolbar);
         setTitle("Order History");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         recyclerView = (RecyclerView) findViewById(R.id.order_history_recyclerview);
 
         mManager = new LinearLayoutManager(this);

@@ -1,5 +1,6 @@
 package com.waiapp.Order;
 
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -7,6 +8,8 @@ import android.widget.TextView;
 import com.waiapp.Model.Order;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
+
+import java.util.Objects;
 
 public class OrderViewHolder extends RecyclerView.ViewHolder {
 
@@ -26,8 +29,12 @@ public class OrderViewHolder extends RecyclerView.ViewHolder {
 
     public void bindView(Order order){
         Orderstatus = order.getOrderStatus();
-        if (Orderstatus == Constants.ORDER_STATUS_INPROGRESS || Orderstatus == Constants.ORDER_STATUS_ORDERED){
-            mTextViewCurrentOrder.setVisibility(View.VISIBLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (Objects.equals(Orderstatus, Constants.ORDER_STATUS_INPROGRESS) || Objects.equals(Orderstatus, Constants.ORDER_STATUS_ORDERED)){
+                mTextViewCurrentOrder.setVisibility(View.VISIBLE);
+            }else{
+                mTextViewCurrentOrder.setVisibility(View.GONE);
+            }
         }
         mTextViewOrderId.setText(String.valueOf(order.getOrderId()));
         mTextViewOrderType.setText(String.valueOf(order.getOrderType()));
