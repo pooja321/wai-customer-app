@@ -11,6 +11,7 @@ import io.realm.RealmConfiguration;
 public class WaiApplication extends Application {
 
     private Boolean orderPending;
+
     @Override
     public void onCreate() {
         super.onCreate();

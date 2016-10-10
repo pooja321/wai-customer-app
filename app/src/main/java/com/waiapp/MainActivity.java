@@ -119,12 +119,12 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         this.finishAffinity();
     }
+
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        // Inflate the menu; this adds items to the action bar if it is present.
