@@ -1,45 +1,68 @@
 package com.waiapp.Order;
 
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.waiapp.Model.Order;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
 
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
 
 public class OrderViewHolder extends RecyclerView.ViewHolder {
 
     String Orderstatus;
 
-    private TextView mTextViewOrderId, mTextViewOrderType, mTextViewOrderStatus, mTextViewOrderAmount, mTextViewOrderResource, mTextViewCurrentOrder;
+    private TextView mTextViewOrderId, mTextViewOrderDate, mTextViewOrderStatus, mTextViewOrderAmount, mTextViewCurrentOrder;
+    private ImageView mImageViewOrderType;
 
     public OrderViewHolder(View itemView) {
         super(itemView);
-        mTextViewOrderId = (TextView) itemView.findViewById(R.id.order_item_orderid);
-        mTextViewOrderType = (TextView) itemView.findViewById(R.id.order_item_ordertype);
-        mTextViewOrderStatus = (TextView) itemView.findViewById(R.id.order_item_orderstatus);
-        mTextViewOrderAmount = (TextView) itemView.findViewById(R.id.order_item_orderamount);
-        mTextViewOrderResource = (TextView) itemView.findViewById(R.id.order_item_orderresource);
-        mTextViewCurrentOrder = (TextView) itemView.findViewById(R.id.order_item_current_order_ind);
+        mTextViewOrderId = (TextView) itemView.findViewById(R.id.order_item_tv_orderid);
+        mTextViewOrderDate = (TextView) itemView.findViewById(R.id.order_item_tv_date);
+        mTextViewOrderAmount = (TextView) itemView.findViewById(R.id.order_item_tv_orderamount);
+        mTextViewOrderStatus = (TextView) itemView.findViewById(R.id.order_item_tv_orderstatus);
+//        mTextViewCurrentOrder = (TextView) itemView.findViewById(R.id.order_item_tv_current_order_ind);
+        mImageViewOrderType = (ImageView) itemView.findViewById(R.id.order_item_iv_ordertype);
     }
 
     public void bindView(Order order){
+        HashMap<String, Object> orderBookingTime;
         Orderstatus = order.getOrderStatus();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (Objects.equals(Orderstatus, Constants.ORDER_STATUS_INPROGRESS) || Objects.equals(Orderstatus, Constants.ORDER_STATUS_ORDERED)){
-                mTextViewCurrentOrder.setVisibility(View.VISIBLE);
-            }else{
-                mTextViewCurrentOrder.setVisibility(View.GONE);
-            }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            if (Objects.equals(Orderstatus, Constants.ORDER_STATUS_INPROGRESS) || Objects.equals(Orderstatus, Constants.ORDER_STATUS_ORDERED)){
+//                mTextViewCurrentOrder.setVisibility(View.VISIBLE);
+//            }else{
+//                mTextViewCurrentOrder.setVisibility(View.GONE);
+//            }
+//        }
+        String orderType = order.getOrderType();
+        switch (orderType){
+            case Constants.ORDER_TYPE_COOKING:
+                mImageViewOrderType.setImageResource(R.drawable.ic_local_dining_black_24dp);
+                break;
+            case Constants.ORDER_TYPE_CLEANING:
+                mImageViewOrderType.setImageResource(R.drawable.ic_hanger_black_24dp);
+                break;
+            case Constants.ORDER_TYPE_WASHING:
+                mImageViewOrderType.setImageResource(R.drawable.ic_person_black_24dp);
+                break;
         }
         mTextViewOrderId.setText(String.valueOf(order.getOrderId()));
-        mTextViewOrderType.setText(String.valueOf(order.getOrderType()));
         mTextViewOrderStatus.setText(String.valueOf(order.getOrderStatus()));
         mTextViewOrderAmount.setText(String.valueOf(order.getOrderAmount()));
-        mTextViewOrderResource.setText(String.valueOf(order.getResourceId()));
+        orderBookingTime = order.getOrderbookingTime();
+        Long timestamp = (Long) orderBookingTime.get(Constants.FIREBASE_PROPERTY_TIMESTAMP);
+        Date date = new Date(timestamp);
+        Log.v("wai", String.valueOf(timestamp));
+        Log.v("wai", String.valueOf(date));
+        SimpleDateFormat sfd = new SimpleDateFormat("EEE MMM D", Locale.US);
+        mTextViewOrderDate.setText(sfd.format(date));
     }
 }

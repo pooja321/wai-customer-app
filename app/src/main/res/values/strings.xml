@@ -94,4 +94,6 @@
     <string name="hint_enter_landmark">Landmark</string>
     <string name="hint_enter_cityname">City</string>
     <string name="hint_enter_pincode">pincode</string>
+    <string name="submit_text">SUBMIT</string>
+    <string name="current_order">CURRENT ORDER</string>
 </resources>

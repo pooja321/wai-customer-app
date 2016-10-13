@@ -29,17 +29,15 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
 
     public static final String selectGenderLabel = "Select Gender";
     private String[] _gender = new String[]{selectGenderLabel,"Male", "Female"};
-    private String _genderSelected, _firstName, _lastName, _Email;
-    private int _rating;
-    private long _mobile;
+    private String _genderSelected;
     private String[] values;
-    private Toolbar mtoolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fill_details);
-        mtoolbar = (Toolbar) findViewById(R.id.fill_detail_toolbar);
+
+        Toolbar mtoolbar = (Toolbar) findViewById(R.id.fill_detail_toolbar);
         mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
         setSupportActionBar(mtoolbar);
 
@@ -69,14 +67,13 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
     }
     private void submitDetails() {
 
-        _firstName = mEditTextFirstName.getText().toString();
-        _lastName = mEditTextLastName.getText().toString();
-        _mobile = Long.parseLong(mEditTextMobile.getText().toString());
-        _rating = 5;
-        _Email = values[1];
+        String _firstName = mEditTextFirstName.getText().toString();
+        String _lastName = mEditTextLastName.getText().toString();
+        long _mobile = Long.parseLong(mEditTextMobile.getText().toString());
+        String _Email = values[1];
 
         String userId = values[0];
-        User user = new User(_firstName,_lastName,_Email,_genderSelected,_mobile);
+        User user = new User(_firstName, _lastName, _Email,_genderSelected, _mobile);
 
         mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(userId).setValue(user);
         startActivity(new Intent(FillDetailsActivity.this, MainActivity.class));

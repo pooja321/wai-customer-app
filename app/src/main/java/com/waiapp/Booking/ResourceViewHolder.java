@@ -1,11 +1,13 @@
 package com.waiapp.Booking;
 
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.waiapp.Model.ResourceOnline;
 import com.waiapp.R;
 
@@ -26,16 +28,18 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
     //set what views will display
     public void bindView(ResourceOnline resource){
         String _fullName = resource.getName();
+        Uri profilePicUri = Uri.parse(resource.getPicture());
         mTextViewName.setText(_fullName);
         mTextViewResourceRating.setText(String.valueOf(resource.getRating()));
+        Glide.with(itemView.getContext()).load(profilePicUri).into(mImageViewResourcePic);
         switch (resource.getGender()){
             case ("Male"):{
-                mImageViewResourcePic.setImageResource(R.drawable.malechef);
+//                mImageViewResourcePic.setImageResource(R.drawable.malechef);
                 mImageViewGenderIcon.setImageResource(R.drawable.human_male);
                 mImageViewGenderIcon.setColorFilter(Color.rgb(33,150,243));
                 break; }
             case ("Female"):{
-                mImageViewResourcePic.setImageResource(R.drawable.femalechef);
+//                mImageViewResourcePic.setImageResource(R.drawable.femalechef);
                 mImageViewGenderIcon.setImageResource(R.drawable.human_female);
                 mImageViewGenderIcon.setColorFilter(Color.rgb(233,30,99));
                 break;

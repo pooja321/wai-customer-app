@@ -47,15 +47,11 @@
 
     <Button
         android:id="@+id/login_with_password"
+        style="@style/buttonStyle"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/input_field_height"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:background="@color/colorAccent"
-        android:elevation="2dp"
-        android:text="@string/button_signin_with_password"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/text_size_medium"
-        android:translationZ="5dp" />
+        android:text="@string/button_signin_with_password"/>
 
     <!--<com.google.android.gms.Utilities.SignInButton-->
     <!--android:id="@+id/login_with_google"-->

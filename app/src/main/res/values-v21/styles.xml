@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="buttonStyle">
+        <item name="android:elevation">2dp</item>
+        <item name="android:translationZ">5dp</item>
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorwhite</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+    </style>
+</resources>

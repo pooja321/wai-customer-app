@@ -5,7 +5,6 @@
     android:id="@+id/main_coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="com.waiapp.MainActivity">
 
     <LinearLayout
@@ -16,6 +15,15 @@
         <FrameLayout
             android:id="@+id/main_placeholder"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.roughike.bottombar.BottomBar
+            android:id="@+id/main_bottombar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            app:bb_tabXmlResource="@xml/main_bottombar_tabs" />
+
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -4,16 +4,14 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.roughike.bottombar.BottomBar;
-import com.roughike.bottombar.OnMenuTabClickListener;
+import com.roughike.bottombar.OnTabSelectListener;
 import com.waiapp.Booking.ListViewFragment;
 import com.waiapp.Booking.MapViewFragment;
 import com.waiapp.Booking.clean.CleaningFragment;
@@ -26,7 +24,6 @@ public class MainActivity extends BaseActivity implements
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
-    private BottomBar mBottomBar;
     private Toolbar mtoolbar;
     int _membersCount, _mainCourseCount;
     int membersAmount,mainCourseAmount;
@@ -52,27 +49,17 @@ public class MainActivity extends BaseActivity implements
         _mainCourseCount = 2;
         membersAmount = 50;
         mainCourseAmount = 50;
-
-//        mBottomBar = BottomBar.attach(findViewById(R.id.main_placeholder), savedInstanceState);
-        mBottomBar = BottomBar.attachShy((CoordinatorLayout) findViewById(R.id.main_coordinatorLayout),findViewById(R.id.main_placeholder), savedInstanceState);
-        mBottomBar.noTopOffset();
-        mBottomBar.setMaxFixedTabs(2);
-        mBottomBar.noNavBarGoodness();
-        mBottomBar.useFixedMode();
-        mBottomBar.setItems(R.menu.mainactivity_bottombar);
-        mBottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
+        BottomBar bottomBar = (BottomBar) findViewById(R.id.main_bottombar);
+        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
 
             Fragment fragment;
             @Override
-            public void onMenuTabSelected(@IdRes int menuItemId) {
-                if (menuItemId == R.id.bottomBarItemCook){
-                    Log.v("wai","new CookingFragment");
+            public void onTabSelected(@IdRes int tabId) {
+                if(tabId == R.id.tab_bottomBarItemCook){
                     fragment = new CookingFragment();
-                }else if (menuItemId == R.id.bottomBarItemWashing){
-                    Log.v("wai","new washingFragment");
+                }else if (tabId == R.id.tab_bottomBarItemWashing){
                     fragment = new WashingFragment();
-                }else if(menuItemId == R.id.bottomBarItemCleaning){
-                    Log.v("wai","new cleaningFragment");
+                }else if (tabId == R.id.tab_bottomBarItemCleaning){
                     fragment = new CleaningFragment();
                 }
                 fragmentManager = getSupportFragmentManager();
@@ -80,17 +67,7 @@ public class MainActivity extends BaseActivity implements
                 fragmentTransaction.replace(R.id.main_placeholder, fragment);
                 fragmentTransaction.commit();
             }
-
-            @Override
-            public void onMenuTabReSelected(@IdRes int menuItemId) {
-
-            }
         });
-
-        mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
-        mBottomBar.mapColorForTab(1, ContextCompat.getColor(this, R.color.colorAccent));
-        mBottomBar.mapColorForTab(2, ContextCompat.getColor(this, R.color.colorAccent));
-
     }
 
     public void startAddressSearchActivity() {
@@ -149,9 +126,5 @@ public class MainActivity extends BaseActivity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        // Necessary to restore the BottomBar's state, otherwise we would
-        // lose the current tab on orientation change.
-        mBottomBar.onSaveInstanceState(outState);
     }
 }

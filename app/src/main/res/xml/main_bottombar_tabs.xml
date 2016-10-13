@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/tab_bottomBarItemCook"
+        icon="@drawable/ic_local_dining_black_24dp"
+        title="Cooking" />
+    <tab
+        id="@+id/tab_bottomBarItemWashing"
+        icon="@drawable/ic_hanger_black_24dp"
+        title="Washing" />
+    <tab
+        id="@+id/tab_bottomBarItemCleaning"
+        icon="@drawable/ic_person_black_24dp"
+        title="Cleaning" />
+</tabs>

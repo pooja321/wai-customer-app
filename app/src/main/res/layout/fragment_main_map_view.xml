@@ -34,7 +34,6 @@
         <!--android:id="@+id/map_bt_quick_button"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="55dp"-->
         <!--android:text="QUICK BOOK"-->
         <!--android:background="@color/colorAccent"-->
         <!--android:layout_alignParentBottom="true"-->

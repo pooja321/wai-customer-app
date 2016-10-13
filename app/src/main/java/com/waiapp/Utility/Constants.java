@@ -41,6 +41,10 @@ public class Constants {
     public static final String ORDER_STATUS_CANCELLED = "Cancelled";
     public static final String ORDER_STATUS_COMPLETED = "Completed";
 
+    public static final String ORDER_TYPE_COOKING = "Cooking";
+    public static final String ORDER_TYPE_WASHING = "Washing";
+    public static final String ORDER_TYPE_CLEANING = "Cleaning";
+
     public static final String RESOURCE_STATUS_LOGGED_IN = "LoggedIn";
     public static final String RESOURCE_STATUS_ONLINE = "Online";
     public static final String RESOURCE_STATUS_OFFLINE = "Offline";

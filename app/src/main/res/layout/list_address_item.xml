@@ -12,7 +12,7 @@
         android:layout_marginRight="@dimen/feed_item_margin"
         android:layout_marginTop="@dimen/feed_item_margin"
         android:layout_marginBottom="@dimen/feed_item_margin"
-        android:background="@drawable/bg_resource_list_item_corner"
+        android:background="@drawable/bg_rectangle_solid_white_corner"
         android:orientation="vertical"
         android:paddingBottom="@dimen/feed_item_padding_top_bottom"
         android:paddingLeft="@dimen/feed_item_padding_left_right"
