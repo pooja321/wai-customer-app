@@ -45,6 +45,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.waiapp.R;
+import com.waiapp.Utility.Constants;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +61,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         void startAddressSearchActivity();
     }
 
+    private String mJobType;
     private static final int PERMISSION_REQUEST_CODE = 1;
     private static int UPDATE_INTERVAL = 10000; // 10 sec
     private static int FATEST_INTERVAL = 5000; // 5 sec
@@ -94,6 +96,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.v("wai","MapViewFragment onActivityCreated");
+
     }
 
     @Override
@@ -101,6 +104,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         View view = inflater.inflate(R.layout.fragment_main_map_view, container, false);
         Log.v("wai","MapViewFragment onCreateView");
         mDatabase = getDatabaseReference();
+        mJobType = getJobtype();
         geoFire = new GeoFire(mDatabase);
         markers = new HashMap<String, Marker>();
         locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
@@ -124,7 +128,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     }
 
     public abstract DatabaseReference getDatabaseReference();
-
+    public abstract String getJobtype();
     private void buildAlertMessageNoGps() {
         Log.v("wai","MapViewFragment buildAlertMessageNoGps");
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -338,8 +342,21 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onKeyEntered(String key, GeoLocation location) {
+        int resId = 0;
+        switch (mJobType){
+            case Constants.FIREBASE_CHILD_CLEANING:
+                resId = getResources().getIdentifier("ic_person_black_24dp", "drawable", "com.waiapp");
+                break;
+            case Constants.FIREBASE_CHILD_WASHING:
+                resId = getResources().getIdentifier("ic_hanger_black_24dp", "drawable", "com.waiapp");
+                break;
+            case Constants.FIREBASE_CHILD_COOKING:
+                resId = getResources().getIdentifier("ic_local_dining_black_24dp", "drawable", "com.waiapp");
+                break;
+
+        }
         Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_local_dining_black_24dp)));
+                .icon(BitmapDescriptorFactory.fromResource(resId)));
         this.markers.put(key, marker);
     }
 

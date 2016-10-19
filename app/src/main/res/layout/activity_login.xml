@@ -7,15 +7,15 @@
     android:orientation="vertical"
     tools:context=".Login.LoginActivity">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_margin="8dp"
-        android:text="SKIP LOGIN"
-        android:textStyle="bold"
-        android:background="@null"
-        android:onClick="onSkipLoginButtonClick"/>
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="right"-->
+        <!--android:layout_margin="8dp"-->
+        <!--android:text="SKIP LOGIN"-->
+        <!--android:textStyle="bold"-->
+        <!--android:background="@null"-->
+        <!--android:onClick="onSkipLoginButtonClick"/>-->
 
     <ImageView
         android:id="@+id/loginActivity_logoImage_id"

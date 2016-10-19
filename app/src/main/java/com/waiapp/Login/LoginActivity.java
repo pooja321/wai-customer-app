@@ -1,14 +1,11 @@
 package com.waiapp.Login;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
-import com.waiapp.MainActivity;
 import com.waiapp.R;
 
 public class LoginActivity extends AppCompatActivity implements LoginFragment.OnSignUpButtonClickedInterface,
@@ -35,10 +32,10 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
     }
 
 
-    public void onSkipLoginButtonClick(View view){
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-    }
+//    public void onSkipLoginButtonClick(View view){
+//        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//        startActivity(intent);
+//    }
 
     @Override
     public void onBackPressed() {

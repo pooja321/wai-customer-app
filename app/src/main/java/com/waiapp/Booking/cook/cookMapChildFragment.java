@@ -16,4 +16,8 @@ public class CookMapChildFragment extends MapViewFragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         return mDatabase.child(Constants.FIREBASE_CHILD_ONLINE_COOK_GEO);
     }
+    @Override
+    public String getJobtype() {
+        return Constants.FIREBASE_CHILD_COOKING;
+    }
 }

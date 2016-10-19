@@ -18,9 +18,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.waiapp.MainActivity;
 import com.waiapp.Model.Address;
+import com.waiapp.Model.CleaningOrderAmountValues;
+import com.waiapp.Model.CookingOrderAmountValues;
 import com.waiapp.Model.Order;
-import com.waiapp.Model.OrderAmount;
 import com.waiapp.Model.OrderKey;
+import com.waiapp.Model.WashingOrderAmountValues;
 import com.waiapp.Order.OrderConfirmActivity;
 import com.waiapp.R;
 import com.waiapp.Realm.RealmController;
@@ -34,19 +36,19 @@ import io.realm.Realm;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, ExitAlertDialogFragment.ExitOrderListener {
 
-    private DatabaseReference mDatabase;
+    Map<String, Object> OrderUpdates = new HashMap<>();
+    public static final String DIALOG_ALERT = "My Alert";
+    String mOrderKey, mresourceKey, UID, mOrderType, mOrderId;
+    Order mOrder = new Order();
+//    OrderAmount mOrderAmount = new OrderAmount();
+    Address mAddress = new Address();
 
+    private Realm realm;
+    private DatabaseReference mDatabase;
     private Toolbar mtoolbar;
     RadioGroup mRadioGroupPayment;
     RadioButton mRadioButtonCOD, mRadioButtonPaytm, mRadioButtonPayu;
     Button mButtonSubmit;
-    Map<String, Object> OrderUpdates = new HashMap<>();
-    public static final String DIALOG_ALERT = "My Alert";
-    String mOrderKey, mresourceKey, UID;
-    Order mOrder = new Order();
-    OrderAmount mOrderAmount = new OrderAmount();
-    Address mAddress = new Address();
-    private Realm realm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +57,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
         UID = Utilities.getUid();
         mOrder = (Order) getIntent().getSerializableExtra("order");
-        mOrderAmount = (OrderAmount) getIntent().getSerializableExtra("OrderAmount");
         mAddress = (Address) getIntent().getSerializableExtra("Address");
+        mOrderType = mOrder.getOrderType();
+        mOrderId = mOrder.getOrderId();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mresourceKey = mOrder.getResourceId();
         this.realm = RealmController.with(this).getRealm();
@@ -139,8 +142,22 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     private void updateUserOrderHistory() {
         mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER).setValue(mOrder);
-        mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(mOrderAmount);
+//        mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(mOrderAmount);
         mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ADDRESS).setValue(mAddress);
+        switch (mOrderType){
+            case Constants.ORDER_TYPE_CLEANING:
+                CleaningOrderAmountValues cleaningOrderAmountValues = realm.where(CleaningOrderAmountValues.class).equalTo("OrderId",mOrderId).findFirst();
+                mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(cleaningOrderAmountValues);
+                break;
+            case  Constants.ORDER_TYPE_COOKING:
+                CookingOrderAmountValues cookingOrderAmountValues = realm.where(CookingOrderAmountValues.class).equalTo("OrderId",mOrderId).findFirst();
+                mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(cookingOrderAmountValues);
+                break;
+            case Constants.ORDER_TYPE_WASHING:
+                WashingOrderAmountValues washingOrderAmountValues = realm.where(WashingOrderAmountValues.class).equalTo("OrderId",mOrderId).findFirst();
+                mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(washingOrderAmountValues);
+                break;
+        }
 
     }
 

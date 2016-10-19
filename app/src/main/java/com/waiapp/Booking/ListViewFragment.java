@@ -93,6 +93,7 @@ public abstract class ListViewFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             callingFragment = getCallingFragmentName();
+                            Log.v("wai", callingFragment);
 //                            listener.onListResourceSelected(resourceRef.getKey(),model,callingFragment);
                             listener.onListResourceSelected(model.getResourceId(),model.getName(),callingFragment);
                         }

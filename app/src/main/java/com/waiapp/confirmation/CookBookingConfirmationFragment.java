@@ -19,31 +19,36 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.waiapp.Address.AddressActivity;
-import com.waiapp.Model.OrderAmount;
+import com.waiapp.Model.CookingOrderAmountValues;
 import com.waiapp.Model.ResourceOnline;
 import com.waiapp.R;
+import com.waiapp.Realm.RealmController;
+import com.waiapp.Utility.Constants;
+
+import io.realm.Realm;
+
+import static com.waiapp.Utility.Utilities.generateOrderId;
 
 public class CookBookingConfirmationFragment extends Fragment implements View.OnClickListener {
+
+    private static final String ARG_KEY = "ResourceKey";
+    private static final String ARG_RESOURCE = "ResourceName";
+    int mBaseAmount = 50;
+    int mMembersCount, mMainCourseCount;
+    int mMembersAmount, mMainCourseAmount;
+    double mTotalAmount;
+    double mServiceTaxAmount = 0;
+    private String mParamResourceKey, mParamResourceName, mOrderId;
 
     TextView mTextViewMembersCount,mTextViewMainCourseCount,mTextViewMembersAmount, mTextViewMainCourseAmount,
             mTextViewBaseAmount, mTextViewServiceTaxAmount, mTextViewTotalAmount, mTextViewResourceName;
     Button mButtonIncrementMembers,mButtonDecrementMembers, mButtonIncrementMainCourse,mButtonDecrementMainCourse,
             mButtonConfirm;
     CheckBox mCheckBoxTerms;
-    int mBaseAmount = 50;
-    int mMembersCount, mMainCourseCount;
-    int mMembersAmount, mMainCourseAmount;
-    double mTotalAmount;
-    double mServiceTaxAmount = 0;
-
     private OnUserSignUpRequired mListener;
     private DatabaseReference mDatabase;
-
-    private static final String ARG_KEY = "ResourceKey";
-    private static final String ARG_RESOURCE = "ResourceName";
-
-    private String mParamResourceKey, mParamResourceName;
     private ResourceOnline mParamResource;
+    Realm realm;
 
     // callback interface to implement on item list click mListener
     public interface OnUserSignUpRequired{
@@ -80,6 +85,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
             mMembersAmount = 100;
             mMainCourseAmount = 50;
         }
+        this.realm = RealmController.with(this).getRealm();
     }
 
 
@@ -119,12 +125,6 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         mButtonDecrementMembers.setOnClickListener(this);
         mButtonConfirm.setOnClickListener(this);
 
-//        String _Name = "First Name";
-//        if(!(mParamResource == null)){
-//            _Name = mParamResource.getName();
-//        }
-
-//        mTextViewResourceName.setText(_Name);
         mTextViewResourceName.setText(mParamResourceName);
         mTextViewMembersCount.setText(String.valueOf(mMembersCount));
         mTextViewMainCourseCount.setText(String.valueOf(mMainCourseCount));
@@ -139,28 +139,30 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         int id = v.getId();
         switch(id){
             case(R.id.cook_booking_bt_confirm):
-
                 if (mCheckBoxTerms.isChecked()){
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if (user != null) {
                         // User is signed in
-                        OrderAmount orderAmount = new OrderAmount(null,mParamResourceKey,mBaseAmount,
-                                mMainCourseAmount,mMainCourseCount,mMembersAmount, mMembersCount,mServiceTaxAmount,mTotalAmount);
+                        mOrderId = generateOrderId();
+                        final CookingOrderAmountValues cookingOrderAmountValues = new CookingOrderAmountValues(mOrderId, mBaseAmount, mMainCourseAmount, mMainCourseCount, mMembersAmount, mMembersCount, mServiceTaxAmount, mTotalAmount);
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                realm.copyToRealm(cookingOrderAmountValues);
+                            }
+                        });
                         Intent intent = new Intent(getActivity(), AddressActivity.class);
                         intent.putExtra("resourceKey",mParamResourceKey);
                         intent.putExtra("totalAmount", mTotalAmount);
-                        intent.putExtra("OrderAmount", orderAmount);
-                        intent.putExtra("orderType","Cooking");
+                        intent.putExtra("orderType", Constants.ORDER_TYPE_COOKING);
+                        intent.putExtra("orderId", mOrderId);
                         startActivity(intent);
                     } else {
                         // User is signed out
                         Toast.makeText(getActivity(), "Please Login First", Toast.LENGTH_SHORT).show();
                         mListener.UserSignUpRequired();
                     }
-                } else{
-                    Toast.makeText(getActivity(), "Please accept the terms and conditions", Toast.LENGTH_SHORT).show();
                 }
-
                 break;
             case(R.id.cook_booking_bt_maincourse_count_decrement):
                 if(mMainCourseCount > 2) {
@@ -215,16 +217,6 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Log.v("wai","data saved");
-        outState.putInt("membercount", mMembersCount);
-        outState.putInt("memberamount", mMembersAmount);
-        outState.putInt("maincoursecount", mMainCourseCount);
-        outState.putInt("maincourseamount", mMainCourseAmount);
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
     public void onPause() {
 
         super.onPause();
@@ -247,6 +239,16 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     public void onStop() {
         super.onStop();
         Log.v("wai","onStop");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        Log.v("wai","onSaveInstanceState data saved");
+        outState.putInt("membercount", mMembersCount);
+        outState.putInt("memberamount", mMembersAmount);
+        outState.putInt("maincoursecount", mMainCourseCount);
+        outState.putInt("maincourseamount", mMainCourseAmount);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

@@ -20,14 +20,12 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.waiapp.Model.Address;
 import com.waiapp.Model.Order;
-import com.waiapp.Model.OrderAmount;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
 import com.waiapp.Utility.Utilities;
 import com.waiapp.payment.PaymentActivity;
 
 import java.util.HashMap;
-import java.util.Random;
 
 public class AddressActivity extends AppCompatActivity {
 
@@ -38,9 +36,8 @@ public class AddressActivity extends AppCompatActivity {
     private Toolbar mtoolbar;
     private RecyclerView recyclerView;
     private LinearLayoutManager mManager;
-    String mOrderType, mResourceKey;
+    String mOrderType, mResourceKey, mOrderId;
     double mTotalAmount;
-    OrderAmount mOrderAmount = new OrderAmount();
     Address mAddress = new Address();
 
     @Override
@@ -49,8 +46,8 @@ public class AddressActivity extends AppCompatActivity {
         setContentView(R.layout.activity_address);
         mTotalAmount = getIntent().getDoubleExtra("totalAmount", 0);
         mOrderType = getIntent().getStringExtra("orderType");
+        mOrderId = getIntent().getStringExtra("orderId");
         mResourceKey = getIntent().getStringExtra("resourceKey");
-        mOrderAmount = (OrderAmount) getIntent().getSerializableExtra("OrderAmount");
         mtoolbar = (Toolbar) findViewById(R.id.address_toolbar);
         mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
 
@@ -97,10 +94,10 @@ public class AddressActivity extends AppCompatActivity {
         String _UID = Utilities.getUid();
         HashMap<String, Object> orderCreationTime = new HashMap<>();
         orderCreationTime.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
-        final Order order = new Order(generateOrderId(), mOrderType, _UID, mResourceKey,addressKey,Constants.ORDER_STATUS_INCOMPLETE,
+        final Order order = new Order(mOrderId, mOrderType, _UID, mResourceKey,addressKey,Constants.ORDER_STATUS_INCOMPLETE,
                 Constants.ORDER_PROGRESS_STATUS_PAYMENT_PENDING,null,mTotalAmount,orderCreationTime,null,null,null,false);
         startActivity(new Intent(AddressActivity.this, PaymentActivity.class)
-                .putExtra("order",order).putExtra("OrderAmount",mOrderAmount).putExtra("Address",mAddress));
+                .putExtra("order",order).putExtra("Address",mAddress));
 
     }
 
@@ -130,11 +127,5 @@ public class AddressActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-    public  String generateOrderId()
-    {
-        Random random = new Random();
-        int randomNumber = random.nextInt(999999999 - 111111111) + 111111111;
-        return (Constants.ORDER_ID_PREFIX).concat(String.valueOf(randomNumber));
     }
 }

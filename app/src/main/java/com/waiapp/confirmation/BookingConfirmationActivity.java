@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.waiapp.Login.LoginFragment;
@@ -29,7 +30,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_confirmation);
-
+        Log.v("wai", "confirmation oncreate");
         mtoolbar = (Toolbar) findViewById(R.id.booking_toolbar);
         mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
         setSupportActionBar(mtoolbar);
@@ -39,7 +40,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
         mResourceName = getIntent().getStringExtra("resourceName");
         callingFragment = getIntent().getStringExtra("fragment_name");
         mResourceKey = getIntent().getStringExtra("resourceKey");
-        callingFragment = Constants.FIREBASE_CHILD_COOKING;
+//        callingFragment = Constants.FIREBASE_CHILD_COOKING;
         Fragment fragment = null;
         switch(callingFragment){
             case(Constants.FIREBASE_CHILD_COOKING):
@@ -49,10 +50,10 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
                 break;
             case(Constants.FIREBASE_CHILD_CLEANING):
                 Toast.makeText(BookingConfirmationActivity.this, "Clean is the Calling Fragment ", Toast.LENGTH_SHORT).show();
-                fragment = new CleanBookingConfirmation();
+                fragment = CleanBookingConfirmationFragment.newInstance(mResourceKey, mResourceName);
                 break;
             case(Constants.FIREBASE_CHILD_WASHING):
-                fragment = new WashBookingConfirmationFragment();
+                fragment = WashBookingConfirmationFragment.newInstance(mResourceKey, mResourceName);
                 break;
         }
 

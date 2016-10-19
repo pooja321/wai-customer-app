@@ -14,6 +14,11 @@ public class cleanMapChildFragment extends MapViewFragment {
     @Override
     public DatabaseReference getDatabaseReference() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        return mDatabase.child(Constants.FIREBASE_CHILD_ONLINE_RESOURCE).child(Constants.FIREBASE_CHILD_CLEANING);
+        return mDatabase.child(Constants.FIREBASE_CHILD_ONLINE_CLEAN_GEO);
+    }
+
+    @Override
+    public String getJobtype() {
+        return Constants.FIREBASE_CHILD_CLEANING;
     }
 }

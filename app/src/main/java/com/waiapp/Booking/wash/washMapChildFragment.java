@@ -14,6 +14,11 @@ public class washMapChildFragment extends MapViewFragment {
     @Override
     public DatabaseReference getDatabaseReference() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        return mDatabase.child(Constants.FIREBASE_CHILD_ONLINE_RESOURCE).child(Constants.FIREBASE_CHILD_WASHING);
+        return mDatabase.child(Constants.FIREBASE_CHILD_ONLINE_WASH_GEO);
+    }
+
+    @Override
+    public String getJobtype() {
+        return Constants.FIREBASE_CHILD_WASHING;
     }
 }
