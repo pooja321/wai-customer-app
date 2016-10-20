@@ -14,6 +14,7 @@ public class AddressViewHolder extends RecyclerView.ViewHolder implements View.O
 
     private TextView mTextViewAddressName, mTextViewHouseNo, mTextViewAreaName, mTextViewLandMark, mTextViewCity, mTextViewState,
             mTextViewPincode;
+
     public AddressViewHolder(View itemView) {
         super(itemView);
         mTextViewAddressName = (TextView) itemView.findViewById(R.id.address_item_addressname);
@@ -29,7 +30,8 @@ public class AddressViewHolder extends RecyclerView.ViewHolder implements View.O
     public void onClick(View v) {
 
     }
-    public void bindView(Address address){
+
+    public void bindView(Address address) {
         mTextViewAddressName.setText(String.valueOf(address.getAddressName()));
         mTextViewHouseNo.setText(String.valueOf(address.getHouseNo()));
         mTextViewAreaName.setText(String.valueOf(address.getAreaName()));

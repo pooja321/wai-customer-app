@@ -18,7 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.waiapp.Model.Address;
-import com.waiapp.Model.CookingOrderAmountValues;
+import com.waiapp.Model.CleaningOrderAmountValues;
 import com.waiapp.Model.Order;
 import com.waiapp.Model.OrderAmount;
 import com.waiapp.R;
@@ -30,27 +30,27 @@ import java.util.Objects;
 
 import static com.waiapp.Utility.Utilities.getUid;
 
-public class CookingOrderDetailFragment extends Fragment implements View.OnClickListener {
+public class CleaningOrderDetailFragment extends Fragment implements View.OnClickListener {
+    private static final String ARG_ORDERKEY = "param1";
 
-    private static final String ARG_ORDERKEY = "OrderKey";
     private String mParamOrderKey, mStatus;
 
     private DatabaseReference mDatabase;
     private Order mOrder;
     private OrderAmount mOrderAmount;
-    private CookingOrderAmountValues mCookingOrderAmountValues;
+    private CleaningOrderAmountValues mCleaningOrderAmountValues;
     private Address mAddress;
-    private TextView mTextViewOrderId, mTextViewOrderStatus, mTextViewOrderDate, mTextViewMembersAmount, mTextViewMainCourseAmount,mTextViewBaseAmount, mTextViewServiceTaxAmount, mTextViewTotalAmount, mTextViewPaymentMode;
+    private TextView mTextViewOrderId, mTextViewOrderStatus, mTextViewOrderDate, mTextViewRoomsAmount, mTextViewWashroomsAmount, mTextViewUtensilBucketAmount, mTextViewServiceTaxAmount, mTextViewTotalAmount, mTextViewPaymentMode;
     private TextView mTextViewAddressName, mTextViewHouseNo, mTextViewAreaName, mTextViewLandMark, mTextViewCity, mTextViewState,
             mTextViewPincode;
     private Button mButtonCancel;
 
-    public CookingOrderDetailFragment() {
+    public CleaningOrderDetailFragment() {
         // Required empty public constructor
     }
 
-    public static CookingOrderDetailFragment newInstance(String param1) {
-        CookingOrderDetailFragment fragment = new CookingOrderDetailFragment();
+    public static CleaningOrderDetailFragment newInstance(String param1) {
+        CleaningOrderDetailFragment fragment = new CleaningOrderDetailFragment();
         Bundle args = new Bundle();
         args.putString(ARG_ORDERKEY, param1);
         fragment.setArguments(args);
@@ -69,68 +69,67 @@ public class CookingOrderDetailFragment extends Fragment implements View.OnClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_cooking_order_detail, container, false);
+        final View view = inflater.inflate(R.layout.fragment_cleaning_order_detail, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mParamOrderKey)
                 .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.v("wai", dataSnapshot.getValue().toString());
-
-                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                            switch (ds.getKey()) {
-                                case "Order":
-                                    mOrder = ds.getValue(Order.class);
-                                    mStatus = mOrder.getOrderStatus();
-                                    break;
-                                case "OrderAmount":
-                                    mCookingOrderAmountValues = ds.getValue(CookingOrderAmountValues.class);
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.v("wai", dataSnapshot.getValue().toString());
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    switch (ds.getKey()) {
+                        case "Order":
+                            mOrder = ds.getValue(Order.class);
+                            mStatus = mOrder.getOrderStatus();
+                            break;
+                        case "OrderAmount":
+                            mCleaningOrderAmountValues = ds.getValue(CleaningOrderAmountValues.class);
 //                                    mOrderAmount = ds.getValue(OrderAmount.class);
-                                    break;
-                                case "Address":
-                                    mAddress = ds.getValue(Address.class);
-                                    break;
-                            }
-                        }
-                        initializeUi(view);
+                            break;
+                        case "Address":
+                            mAddress = ds.getValue(Address.class);
+                            break;
                     }
+                }
+                initializeUI(view);
+            }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
+            }
+        });
         return view;
     }
 
-    private void initializeUi(View view) {
+    private void initializeUI(View view) {
         Log.v("wai", "initializeUI");
-        mTextViewOrderId = (TextView) view.findViewById(R.id.cookorderdetail_orderid);
-        mTextViewOrderStatus = (TextView) view.findViewById(R.id.cookorderdetail_orderstatus);
-        mTextViewOrderDate = (TextView) view.findViewById(R.id.cookorderdetail_orderdate);
-        mTextViewMembersAmount = (TextView) view.findViewById(R.id.cookorderdetail_membersamount);
-        mTextViewMainCourseAmount = (TextView) view.findViewById(R.id.cookorderdetail_maincourse);
-        mTextViewBaseAmount = (TextView) view.findViewById(R.id.cookorderdetail_tv_baseamount);
-        mTextViewServiceTaxAmount = (TextView) view.findViewById(R.id.cookorderdetail_servicetaxamount);
-        mTextViewTotalAmount = (TextView) view.findViewById(R.id.cookorderdetail_totalamount);
-        mTextViewPaymentMode = (TextView) view.findViewById(R.id.cookorderdetail_paymentmode);
+        mTextViewOrderId = (TextView) view.findViewById(R.id.cleanorderdetail_orderid);
+        mTextViewOrderStatus = (TextView) view.findViewById(R.id.cleanorderdetail_orderstatus);
+        mTextViewOrderDate = (TextView) view.findViewById(R.id.cleanorderdetail_orderdate);
+        mTextViewRoomsAmount = (TextView) view.findViewById(R.id.cleanorderdetail_roomsamount);
+        mTextViewWashroomsAmount = (TextView) view.findViewById(R.id.cleanorderdetail_washroomamount);
+        mTextViewUtensilBucketAmount = (TextView) view.findViewById(R.id.cleanorderdetail_utensilbucket);
+        mTextViewServiceTaxAmount = (TextView) view.findViewById(R.id.cleanorderdetail_servicetaxamount);
+        mTextViewTotalAmount = (TextView) view.findViewById(R.id.cleanorderdetail_finalamount);
+        mTextViewPaymentMode = (TextView) view.findViewById(R.id.cleanorderdetail_paymentmode);
 
-        mTextViewAddressName = (TextView) view.findViewById(R.id.cookorderdetail_addressname);
-        mTextViewHouseNo = (TextView) view.findViewById(R.id.cookorderdetail_houseno);
-        mTextViewAreaName = (TextView) view.findViewById(R.id.cookorderdetail_areaname);
-        mTextViewLandMark = (TextView) view.findViewById(R.id.cookorderdetail_landmark);
-        mTextViewCity = (TextView) view.findViewById(R.id.cookorderdetail_cityname);
-        mTextViewState = (TextView) view.findViewById(R.id.cookorderdetail_statename);
-        mTextViewPincode = (TextView) view.findViewById(R.id.cookorderdetail_pincode);
+        mTextViewAddressName = (TextView) view.findViewById(R.id.cleanorderdetail_addressname);
+        mTextViewHouseNo = (TextView) view.findViewById(R.id.cleanorderdetail_houseno);
+        mTextViewAreaName = (TextView) view.findViewById(R.id.cleanorderdetail_areaname);
+        mTextViewLandMark = (TextView) view.findViewById(R.id.cleanorderdetail_landmark);
+        mTextViewCity = (TextView) view.findViewById(R.id.cleanorderdetail_cityname);
+        mTextViewState = (TextView) view.findViewById(R.id.cleanorderdetail_statename);
+        mTextViewPincode = (TextView) view.findViewById(R.id.cleanorderdetail_pincode);
 
         mTextViewOrderId.setText(mOrder.getOrderId());
         mTextViewOrderStatus.setText(mStatus);
         mTextViewPaymentMode.setText(mOrder.getPaymentMode());
-        mTextViewMembersAmount.setText(String.valueOf(mCookingOrderAmountValues.getMembersAmount()));
-        mTextViewMainCourseAmount.setText(String.valueOf(mCookingOrderAmountValues.getMainCourseAmount()));
-        mTextViewBaseAmount.setText(String.valueOf(mCookingOrderAmountValues.getBaseAmount()));
-        mTextViewServiceTaxAmount.setText(String.valueOf(mCookingOrderAmountValues.getServiceTaxAmount()));
-        mTextViewTotalAmount.setText(String.valueOf(mCookingOrderAmountValues.getTotalAmount()));
+        mTextViewRoomsAmount.setText(String.valueOf(mCleaningOrderAmountValues.getRoomsAmount()));
+        mTextViewWashroomsAmount.setText(String.valueOf(mCleaningOrderAmountValues.getWashroomsAmount()));
+        mTextViewUtensilBucketAmount.setText(String.valueOf(mCleaningOrderAmountValues.getBaseAmount()));
+        mTextViewServiceTaxAmount.setText(String.valueOf(mCleaningOrderAmountValues.getServiceTaxAmount()));
+        mTextViewTotalAmount.setText(String.valueOf(mCleaningOrderAmountValues.getTotalAmount()));
 
         mTextViewAddressName.setText(String.valueOf(mAddress.getAddressName()));
         mTextViewHouseNo.setText(String.valueOf(mAddress.getHouseNo()));
@@ -140,7 +139,7 @@ public class CookingOrderDetailFragment extends Fragment implements View.OnClick
         mTextViewState.setText(String.valueOf(mAddress.getState()));
         mTextViewPincode.setText(String.valueOf(mAddress.getPincode()));
 
-        mButtonCancel = (Button) view.findViewById(R.id.cookorderdetail_bt_cancel);
+        mButtonCancel = (Button) view.findViewById(R.id.cleanorderdetail_bt_cancel);
         mButtonCancel.setOnClickListener(this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             if (Objects.equals(mStatus, Constants.ORDER_STATUS_INPROGRESS) || Objects.equals(mStatus, Constants.ORDER_STATUS_ORDERED)) {
@@ -155,7 +154,7 @@ public class CookingOrderDetailFragment extends Fragment implements View.OnClick
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.cookorderdetail_bt_cancel:
+            case R.id.cleanorderdetail_bt_cancel:
                 cancelOrder();
         }
     }

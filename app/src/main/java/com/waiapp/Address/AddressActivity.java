@@ -44,6 +44,7 @@ public class AddressActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
+
         mTotalAmount = getIntent().getDoubleExtra("totalAmount", 0);
         mOrderType = getIntent().getStringExtra("orderType");
         mOrderId = getIntent().getStringExtra("orderId");
