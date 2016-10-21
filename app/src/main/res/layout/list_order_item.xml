@@ -72,7 +72,7 @@
             <TextView
                 android:id="@+id/order_item_tv_orderamount"
                 android:layout_width="0dp"
-                android:layout_weight="1"
+                android:layout_weight=".5"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="8dp"

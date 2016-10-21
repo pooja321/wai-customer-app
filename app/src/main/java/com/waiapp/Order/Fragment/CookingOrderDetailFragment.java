@@ -24,7 +24,10 @@ import com.waiapp.Model.OrderAmount;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -44,6 +47,7 @@ public class CookingOrderDetailFragment extends Fragment implements View.OnClick
     private TextView mTextViewAddressName, mTextViewHouseNo, mTextViewAreaName, mTextViewLandMark, mTextViewCity, mTextViewState,
             mTextViewPincode;
     private Button mButtonCancel;
+    HashMap<String, Object> orderBookingTime;
 
     public CookingOrderDetailFragment() {
         // Required empty public constructor
@@ -125,12 +129,21 @@ public class CookingOrderDetailFragment extends Fragment implements View.OnClick
 
         mTextViewOrderId.setText(mOrder.getOrderId());
         mTextViewOrderStatus.setText(mStatus);
-        mTextViewPaymentMode.setText(mOrder.getPaymentMode());
+        orderBookingTime = mOrder.getOrderbookingTime();
+        Long timestamp = (Long) orderBookingTime.get(Constants.FIREBASE_PROPERTY_TIMESTAMP);
+        Date date = new Date(timestamp);
+        Log.v("wai", String.valueOf(timestamp));
+        Log.v("wai", String.valueOf(date));
+        SimpleDateFormat sfd = new SimpleDateFormat("EEE MMM dd yyyy", Locale.US);
+        mTextViewOrderDate.setText(sfd.format(date));
+
+
         mTextViewMembersAmount.setText(String.valueOf(mCookingOrderAmountValues.getMembersAmount()));
         mTextViewMainCourseAmount.setText(String.valueOf(mCookingOrderAmountValues.getMainCourseAmount()));
         mTextViewBaseAmount.setText(String.valueOf(mCookingOrderAmountValues.getBaseAmount()));
         mTextViewServiceTaxAmount.setText(String.valueOf(mCookingOrderAmountValues.getServiceTaxAmount()));
         mTextViewTotalAmount.setText(String.valueOf(mCookingOrderAmountValues.getTotalAmount()));
+        mTextViewPaymentMode.setText(mOrder.getPaymentMode());
 
         mTextViewAddressName.setText(String.valueOf(mAddress.getAddressName()));
         mTextViewHouseNo.setText(String.valueOf(mAddress.getHouseNo()));

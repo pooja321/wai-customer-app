@@ -62,7 +62,7 @@ public class OrderViewHolder extends RecyclerView.ViewHolder {
         Date date = new Date(timestamp);
         Log.v("wai", String.valueOf(timestamp));
         Log.v("wai", String.valueOf(date));
-        SimpleDateFormat sfd = new SimpleDateFormat("EEE MMM D", Locale.US);
+        SimpleDateFormat sfd = new SimpleDateFormat("EEE MMM dd yyyy", Locale.US);
         mTextViewOrderDate.setText(sfd.format(date));
     }
 }
