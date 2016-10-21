@@ -16,16 +16,18 @@ public class OrderConfirmActivity extends AppCompatActivity {
     TextView mTextViewOrderKey;
     private Toolbar mtoolbar;
     private Address address;
-    String orderKey;
+    String mOrderKey, mOrderId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_confirm);
-        orderKey = getIntent().getStringExtra("orderKey");
+        mOrderKey = getIntent().getStringExtra("orderKey");
+        mOrderId = getIntent().getStringExtra("orderId");
 
         address = (Address) getIntent().getSerializableExtra("address");
         mtoolbar = (Toolbar) findViewById(R.id.order_confirm_toolbar);
-        mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
+        mtoolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(mtoolbar);
         setTitle("Your Order");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -34,7 +36,7 @@ public class OrderConfirmActivity extends AppCompatActivity {
         new CountDownTimer(2700000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                int durationSeconds = (int) (millisUntilFinished/1000);
+                int durationSeconds = (int) (millisUntilFinished / 1000);
                 String time = String.format("%02d:%02d:%02d", durationSeconds / 3600,
                         (durationSeconds % 3600) / 60, (durationSeconds % 60));
                 mTextViewTimer.setText(time);
@@ -44,9 +46,10 @@ public class OrderConfirmActivity extends AppCompatActivity {
                 mTextViewTimer.setText("done!");
             }
         }.start();
-        mTextViewOrderKey = (TextView)  findViewById(R.id.order_confirm_orderkey);
-        mTextViewOrderKey.setText(orderKey);
+        mTextViewOrderKey = (TextView) findViewById(R.id.order_confirm_orderkey);
+        mTextViewOrderKey.setText(mOrderId);
     }
+
     @Override
     public void onBackPressed() {
         Intent i = new Intent(this, MainActivity.class);

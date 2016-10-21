@@ -129,7 +129,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                             realm.copyToRealmOrUpdate(orderKey);
                         }
                     });
-                    startActivity(new Intent(PaymentActivity.this, OrderConfirmActivity.class).putExtra("orderKey", mOrderKey));
+                    startActivity(new Intent(PaymentActivity.this, OrderConfirmActivity.class).putExtra("orderKey", mOrderKey).putExtra("orderId",mOrder.getOrderId()));
                 }
             }
         });

@@ -96,4 +96,5 @@
     <string name="hint_enter_pincode">pincode</string>
     <string name="submit_text">SUBMIT</string>
     <string name="current_order">CURRENT ORDER</string>
+    <string name="confirm_booking">CONFIRM BOOKING</string>
 </resources>
