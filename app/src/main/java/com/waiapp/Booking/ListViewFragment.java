@@ -13,15 +13,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.waiapp.Model.ResourceOnline;
 import com.waiapp.R;
 
 public abstract class ListViewFragment extends Fragment {
 
-    private DatabaseReference mDatabase;
     private RecyclerView recyclerView;
     private LinearLayoutManager mManager;
     private FirebaseRecyclerAdapter<ResourceOnline, ResourceViewHolder> mAdapter;
@@ -36,7 +33,6 @@ public abstract class ListViewFragment extends Fragment {
 
     // callback interface to implement on item list click listener
     public interface OnResourceSelectedInterface{
-//        void onListResourceSelected(String key, ResourceOnline index, String callingFragment);
         void onListResourceSelected(String key, String Name, String callingFragment);
         void onResourceListdownloadcomplete(Boolean iscomplete);
     }
@@ -45,7 +41,6 @@ public abstract class ListViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.v("wai","ListViewFragment onCreateView");
         View view = inflater.inflate(R.layout.fragment_main_listview, container, false);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
         recyclerView = (RecyclerView) view.findViewById(R.id.main_rv_list_view);
         return view;
     }
@@ -86,7 +81,6 @@ public abstract class ListViewFragment extends Fragment {
                     ResourceViewHolder.class,params[0]) {
                 @Override
                 protected void populateViewHolder(ResourceViewHolder viewHolder, final ResourceOnline model, final int position) {
-                    final DatabaseReference resourceRef = getRef(position);
                     Log.v("wai", String.valueOf(position));
 
                     viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -94,13 +88,13 @@ public abstract class ListViewFragment extends Fragment {
                         public void onClick(View v) {
                             callingFragment = getCallingFragmentName();
                             Log.v("wai", callingFragment);
-//                            listener.onListResourceSelected(resourceRef.getKey(),model,callingFragment);
                             listener.onListResourceSelected(model.getResourceId(),model.getName(),callingFragment);
                         }
                     });
                     viewHolder.bindView(model);
                 }
             };
+            listener.onResourceListdownloadcomplete(true);
             return null;
         }
 
@@ -109,7 +103,6 @@ public abstract class ListViewFragment extends Fragment {
             super.onPostExecute(aVoid);
             Log.v("wai", "ListViewFragment onPostExecute");
             recyclerView.setAdapter(mAdapter);
-            listener.onResourceListdownloadcomplete(true);
         }
     }
 }

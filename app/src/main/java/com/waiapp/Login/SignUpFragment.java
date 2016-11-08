@@ -27,7 +27,8 @@ import com.waiapp.R;
  */
 public class SignUpFragment extends Fragment implements View.OnClickListener {
 
-    private static final String LOG_TAG = SignUpFragment.class.getSimpleName();
+//    private static final String LOG_TAG = SignUpFragment.class.getSimpleName();
+    private static final String LOG_TAG = "wai";
     private ProgressDialog mAuthProgressDialog;
 //    private Firebase mFirebaseRef;
     private FirebaseAuth mAuth;

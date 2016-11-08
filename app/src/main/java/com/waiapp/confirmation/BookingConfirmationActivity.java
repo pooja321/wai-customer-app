@@ -36,16 +36,13 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
         setSupportActionBar(mtoolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        resource = (ResourceOnline) getIntent().getSerializableExtra("resource");
         mResourceName = getIntent().getStringExtra("resourceName");
         callingFragment = getIntent().getStringExtra("fragment_name");
         mResourceKey = getIntent().getStringExtra("resourceKey");
-//        callingFragment = Constants.FIREBASE_CHILD_COOKING;
         Fragment fragment = null;
         switch(callingFragment){
             case(Constants.FIREBASE_CHILD_COOKING):
                 Toast.makeText(BookingConfirmationActivity.this, "cook fragment called", Toast.LENGTH_SHORT).show();
-//                fragment = CookBookingConfirmationFragment.newInstance(mResourceKey,resource);
                 fragment = CookBookingConfirmationFragment.newInstance(mResourceKey,mResourceName);
                 break;
             case(Constants.FIREBASE_CHILD_CLEANING):

@@ -31,7 +31,6 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
 
         mAuthProgressDialog = new ProgressDialog(this);
         mAuthProgressDialog.setTitle(getString(R.string.progress_dialog_loading));
-        mAuthProgressDialog.setMessage(getString(R.string.progress_dialog_authenticating_with_firebase));
         mAuthProgressDialog.setCancelable(false);
     }
 

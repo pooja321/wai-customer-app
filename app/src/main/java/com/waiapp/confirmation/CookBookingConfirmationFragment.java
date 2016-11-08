@@ -59,12 +59,10 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         // Required empty public constructor
     }
 
-//    public static CookBookingConfirmationFragment newInstance(String mResourceKey, ResourceOnline resource) {
     public static CookBookingConfirmationFragment newInstance(String key, String resourceName) {
         CookBookingConfirmationFragment fragment = new CookBookingConfirmationFragment();
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
-//        args.putSerializable(ARG_RESOURCE, resourceName);
         args.putString(ARG_RESOURCE, resourceName);
         fragment.setArguments(args);
         return fragment;
@@ -76,7 +74,6 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         Log.v("wai","onCreate");
         if (getArguments() != null) {
             mParamResourceKey = getArguments().getString(ARG_KEY);
-//            mParamResource = (ResourceOnline) getArguments().getSerializable(ARG_RESOURCE);
             mParamResourceName = getArguments().getString(ARG_RESOURCE);
         }
         if(savedInstanceState == null){

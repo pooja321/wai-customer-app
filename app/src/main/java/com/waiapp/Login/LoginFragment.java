@@ -123,10 +123,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
         mButtonSignIn = (Button) view.findViewById(R.id.login_with_password);
         LinearLayout linearLayoutLoginActivity = (LinearLayout) view.findViewById(R.id.linear_layout_login_activity);
         initializeBackground(linearLayoutLoginActivity);
+
         /* Setup the progress dialog that is displayed later when authenticating with Firebase */
         mAuthProgressDialog = new ProgressDialog(getActivity());
-        mAuthProgressDialog.setTitle(getString(R.string.progress_dialog_loading));
-        mAuthProgressDialog.setMessage(getString(R.string.progress_dialog_authenticating_with_firebase));
+        mAuthProgressDialog.setTitle(getString(R.string.progress_dialog_signingin));
         mAuthProgressDialog.setCancelable(false);
         /* Setup Google Sign In */
 //        SignInButton signInButton = (SignInButton)view.findViewById(R.id.login_with_google);
@@ -153,6 +153,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
 //                break;
         }
     }
+
     private void signInPassword() {
         String email = mEditTextEmailInput.getText().toString();
         String password = mEditTextPasswordInput.getText().toString();

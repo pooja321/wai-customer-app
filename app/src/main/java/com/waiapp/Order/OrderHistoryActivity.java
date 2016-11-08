@@ -1,17 +1,16 @@
 package com.waiapp.Order;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -24,12 +23,11 @@ import com.waiapp.Utility.Utilities;
 public class OrderHistoryActivity extends BaseActivity {
 
     private DatabaseReference mDatabase;
-    ChildEventListener childEventListener;
-    Query resourceQuery;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager mManager;
+    private ProgressDialog mAuthProgressDialog;
+    Query mResourceQuery;
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager mLinearLayoutManager;
     private FirebaseRecyclerAdapter<Order, OrderViewHolder> mAdapter;
-    private Toolbar mtoolbar;
     String UID;
 
     @Override
@@ -43,14 +41,19 @@ public class OrderHistoryActivity extends BaseActivity {
             UID = Utilities.getUid();
         }
         setTitle("Order History");
-        recyclerView = (RecyclerView) findViewById(R.id.order_history_recyclerview);
+        mAuthProgressDialog = new ProgressDialog(this);
+        mAuthProgressDialog.setTitle(getString(R.string.progress_dialog_loading));
+        mAuthProgressDialog.setCancelable(false);
+        mAuthProgressDialog.show();
 
-        mManager = new LinearLayoutManager(this);
-        mManager.setReverseLayout(true);
-        mManager.setStackFromEnd(true);
-        recyclerView.setLayoutManager(mManager);
-        resourceQuery = mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDERS).child(UID).orderByKey();
-        initFirebaseUI(resourceQuery);
+        mRecyclerView = (RecyclerView) findViewById(R.id.order_history_recyclerview);
+
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager.setReverseLayout(true);
+        mLinearLayoutManager.setStackFromEnd(true);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mResourceQuery = mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDERS).child(UID).orderByKey();
+        initFirebaseUI(mResourceQuery);
     }
 
     private void initFirebaseUI(Query resourceQuery) {
@@ -72,6 +75,7 @@ public class OrderHistoryActivity extends BaseActivity {
                 viewHolder.bindView(model);
             }
         };
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
+        mAuthProgressDialog.dismiss();
     }
 }

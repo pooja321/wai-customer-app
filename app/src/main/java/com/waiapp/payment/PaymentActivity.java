@@ -1,5 +1,6 @@
 package com.waiapp.payment;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -49,6 +50,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     RadioGroup mRadioGroupPayment;
     RadioButton mRadioButtonCOD, mRadioButtonPaytm, mRadioButtonPayu;
     Button mButtonSubmit;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         int id = v.getId();
         switch (id) {
             case R.id.payment_bt_submit:
+                showProgressDialog();
                 saveOrder();
         }
     }
@@ -130,6 +133,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         }
                     });
                     startActivity(new Intent(PaymentActivity.this, OrderConfirmActivity.class).putExtra("orderKey", mOrderKey).putExtra("orderId",mOrder.getOrderId()));
+                    closeProgressDialog();
                 }
             }
         });
@@ -171,6 +175,21 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     public void ExitOrder(Boolean exit) {
         if (exit) {
             startActivity(new Intent(PaymentActivity.this, MainActivity.class));
+        }
+    }
+
+    void showProgressDialog(){
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setTitle("Loading...");
+        mProgressDialog.show();
+    }
+
+    void closeProgressDialog(){
+        if(mProgressDialog.isShowing()){
+            mProgressDialog.dismiss();
         }
     }
 }

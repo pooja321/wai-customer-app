@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide;
 import com.waiapp.Model.ResourceOnline;
 import com.waiapp.R;
 
-public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class ResourceViewHolder extends RecyclerView.ViewHolder {
 
     private TextView mTextViewName, mTextViewResourceRating;
     private ImageView mImageViewResourcePic, mImageViewGenderIcon;
@@ -31,7 +31,7 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
         Uri profilePicUri = Uri.parse(resource.getPicture());
         mTextViewName.setText(_fullName);
         mTextViewResourceRating.setText(String.valueOf(resource.getRating()));
-        Glide.with(itemView.getContext()).load(profilePicUri).into(mImageViewResourcePic);
+        Glide.with(itemView.getContext()).load(profilePicUri).placeholder(R.drawable.beforeafter).into(mImageViewResourcePic);
         switch (resource.getGender()){
             case ("Male"):{
 //                mImageViewResourcePic.setImageResource(R.drawable.malechef);
@@ -45,10 +45,5 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder implements View.
                 break;
             }
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 }

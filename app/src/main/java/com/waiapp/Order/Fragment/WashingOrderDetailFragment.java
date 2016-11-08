@@ -1,6 +1,7 @@
 package com.waiapp.Order.Fragment;
 
 
+import android.app.ProgressDialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -49,6 +50,7 @@ public class WashingOrderDetailFragment extends Fragment implements View.OnClick
             mTextViewPincode;
     private Button mButtonCancel;
     HashMap<String, Object> orderBookingTime;
+    private ProgressDialog mAuthProgressDialog;
 
     public WashingOrderDetailFragment() {
         // Required empty public constructor
@@ -68,6 +70,7 @@ public class WashingOrderDetailFragment extends Fragment implements View.OnClick
         if (getArguments() != null) {
             mParamOrderKey = getArguments().getString(ARG_PARAM_ORDERKEY);
         }
+        ShowProgressDialog();
     }
 
     @Override
@@ -160,6 +163,9 @@ public class WashingOrderDetailFragment extends Fragment implements View.OnClick
                 mButtonCancel.setVisibility(View.GONE);
             }
         }
+        if(mAuthProgressDialog.isShowing()) {
+            mAuthProgressDialog.dismiss();
+        }
     }
 
     @Override
@@ -167,6 +173,7 @@ public class WashingOrderDetailFragment extends Fragment implements View.OnClick
         int id = v.getId();
         switch (id) {
             case R.id.washorderdetail_bt_cancel:
+                ShowProgressDialog();
                 cancelOrder();
         }
     }
@@ -190,5 +197,15 @@ public class WashingOrderDetailFragment extends Fragment implements View.OnClick
 
         mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDERS).child(mOrder.getResourceId()).child(mParamOrderKey).updateChildren(OrderUpdates);
         mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDERS).child(getUid()).child(mParamOrderKey).updateChildren(OrderUpdates);
+        if(mAuthProgressDialog.isShowing()) {
+            mAuthProgressDialog.dismiss();
+        }
+    }
+
+    void ShowProgressDialog(){
+        mAuthProgressDialog = new ProgressDialog(getActivity());
+        mAuthProgressDialog.setTitle(getString(R.string.progress_dialog_loading));
+        mAuthProgressDialog.setCancelable(false);
+        mAuthProgressDialog.show();
     }
 }

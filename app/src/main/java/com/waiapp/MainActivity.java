@@ -7,7 +7,6 @@ import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.roughike.bottombar.BottomBar;
@@ -24,9 +23,6 @@ public class MainActivity extends BaseActivity implements
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
-    private Toolbar mtoolbar;
-    int _membersCount, _mainCourseCount;
-    int membersAmount,mainCourseAmount;
     ProgressDialog mProgressDialog;
 
     @Override
@@ -35,20 +31,12 @@ public class MainActivity extends BaseActivity implements
         Log.v("wai","MainActivity oncreate");
         setContentView(R.layout.activity_main);
 
-//        mtoolbar = (Toolbar) findViewById(R.id.main_toolbar);
-//        mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
-//        setSupportActionBar(mtoolbar);
-//        setToolbarTitle(getResources().getString(R.string.app_name));
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage("Loading...");
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.show();
         Log.v("wai","show progress dialog box");
 
-        _membersCount = 2;
-        _mainCourseCount = 2;
-        membersAmount = 50;
-        mainCourseAmount = 50;
         BottomBar bottomBar = (BottomBar) findViewById(R.id.main_bottombar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
 
@@ -75,10 +63,7 @@ public class MainActivity extends BaseActivity implements
         startActivity(intent);
     }
 
-//    public void onListResourceSelected(String key, ResourceOnline resource, String callingFragment) {
     public void onListResourceSelected(String key, String Name, String callingFragment) {
-//        ArrayList<ResourceOnline> resourceList = new ArrayList<>();
-//        resourceList.add(resource);
         Intent intent = new Intent(MainActivity.this, BookingConfirmationActivity.class);
         intent.putExtra("resourceKey",key);
         intent.putExtra("resourceName",Name);
@@ -88,6 +73,7 @@ public class MainActivity extends BaseActivity implements
 
     @Override
     public void onResourceListdownloadcomplete(Boolean iscomplete) {
+        Log.v("wai", "onResourceListdownloadcomplete");
         if(iscomplete){
             if(mProgressDialog.isShowing()){
                 Log.v("wai","dismiss progress dialog box");
