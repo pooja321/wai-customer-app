@@ -25,6 +25,7 @@ public class Constants {
 
     //firebase properties
     public static final String FIREBASE_PROPERTY_TIMESTAMP = "timestamp";
+    public static final String FIREBASE_PROPERTY_ORDERTYPE= "orderType";
     public static final String FIREBASE_PROPERTY_EMAIL = "email";
     public static final String FIREBASE_PROPERTY_CUSTOMER_ID = "customerId";
 
@@ -55,4 +56,5 @@ public class Constants {
     public static final String FILTERBY_GENDER_MALE = "Male";
     public static final String FILTERBY_GENDER_FEMALE = "Female";
     public static final String ORDER_ID_PREFIX = "O";
+    public static final String CUSTOMER_ID_PREFIX = "C";
 }

@@ -14,10 +14,17 @@ import android.widget.Spinner;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.waiapp.MainActivity;
 import com.waiapp.Model.User;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
+
+import java.util.HashMap;
+
+import io.realm.Realm;
+
+import static com.waiapp.Utility.Utilities.generateCustomerId;
 
 public class FillDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -26,6 +33,7 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
     Button mButtonSubmit;
     Context context;
     private DatabaseReference mDatabase;
+    Realm mRealm;
 
     public static final String selectGenderLabel = "Select Gender";
     private String[] _gender = new String[]{selectGenderLabel,"Male", "Female"};
@@ -37,6 +45,7 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fill_details);
 
+        mRealm = Realm.getDefaultInstance();
         Toolbar mtoolbar = (Toolbar) findViewById(R.id.fill_detail_toolbar);
         mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
         setSupportActionBar(mtoolbar);
@@ -70,12 +79,17 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
         String _firstName = mEditTextFirstName.getText().toString();
         String _lastName = mEditTextLastName.getText().toString();
         long _mobile = Long.parseLong(mEditTextMobile.getText().toString());
+        String _userUID = values[0];
         String _Email = values[1];
+        HashMap<String, Object> timestampJoined = new HashMap<>();
+        timestampJoined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+        HashMap<String, Object> timestampChanged = new HashMap<>();
+        timestampChanged.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
 
-        String userId = values[0];
-        User user = new User(_firstName, _lastName, _Email,_genderSelected, _mobile);
+        String userId = generateCustomerId();
+        User user = new User(userId, _Email, _firstName, _genderSelected, _lastName, _mobile, timestampChanged, timestampJoined);
 
-        mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(userId).setValue(user);
+        mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(_userUID).setValue(user);
         startActivity(new Intent(FillDetailsActivity.this, MainActivity.class));
     }
 
