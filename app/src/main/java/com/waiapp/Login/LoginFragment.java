@@ -40,7 +40,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     private static final String LOG_TAG = LoginFragment.class.getSimpleName();
     private EditText mEditTextEmailInput, mEditTextPasswordInput;
     private Button mButtonSignIn;
-    TextView SignUptextView;
+    TextView mTextViewSignUp, mTextViewForgotPassword;
     /* A dialog that is presented until the Firebase authentication finished. */
     private ProgressDialog mAuthProgressDialog;
 
@@ -63,9 +63,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        SignUptextView = (TextView) view.findViewById(R.id.tv_sign_up);
-        SignUptextView.setOnClickListener(this);
-
+        mTextViewSignUp = (TextView) view.findViewById(R.id.login_tv_sign_up);
+        mTextViewForgotPassword = (TextView) view.findViewById(R.id.login_tv_forgot_password);
+        mTextViewSignUp.setOnClickListener(this);
+        mTextViewForgotPassword.setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -118,9 +119,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     }
 
     private void initializeScreen(View view) {
-        mEditTextEmailInput = (EditText) view.findViewById(R.id.edit_text_email);
-        mEditTextPasswordInput = (EditText) view.findViewById(R.id.edit_text_password);
-        mButtonSignIn = (Button) view.findViewById(R.id.login_with_password);
+        mEditTextEmailInput = (EditText) view.findViewById(R.id.login_et_email);
+        mEditTextPasswordInput = (EditText) view.findViewById(R.id.login_et_password);
+        mButtonSignIn = (Button) view.findViewById(R.id.login_btn_signin);
         LinearLayout linearLayoutLoginActivity = (LinearLayout) view.findViewById(R.id.linear_layout_login_activity);
         initializeBackground(linearLayoutLoginActivity);
 
@@ -140,12 +141,15 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_sign_up:
+            case R.id.login_tv_sign_up:
                 SignUpFragment signUpFragment = new SignUpFragment();
                 OnSignUpButtonClickedInterface listener = (OnSignUpButtonClickedInterface) getActivity();
                 listener.onSignUpFragmentSelected(signUpFragment);
                 break;
-            case R.id.login_with_password:
+            case R.id.login_tv_forgot_password:
+                startActivity(new Intent(getActivity(),ForgotPasswordActivity.class));
+                break;
+            case R.id.login_btn_signin:
                 signInPassword();
                 break;
 //            case R.id.login_with_google:

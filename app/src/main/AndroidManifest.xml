@@ -86,7 +86,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Order.OrderHistoryActivity" />
         </activity>
-        <activity android:name=".SettingsActivity"/>
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".Login.ForgotPasswordActivity"></activity>
     </application>
 
 </manifest>

@@ -15,6 +15,7 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder {
 
     private TextView mTextViewName, mTextViewResourceRating;
     private ImageView mImageViewResourcePic, mImageViewGenderIcon;
+    Uri profilePicUri;
 
     public ResourceViewHolder(View itemView) {
         super(itemView);
@@ -28,7 +29,12 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder {
     //set what views will display
     public void bindView(ResourceOnline resource){
         String _fullName = resource.getName();
-        Uri profilePicUri = Uri.parse(resource.getPicture());
+        if(resource.getPicture() != null){
+            profilePicUri = Uri.parse(resource.getPicture());
+            Glide.with(itemView.getContext()).load(profilePicUri).placeholder(R.drawable.beforeafter).into(mImageViewResourcePic);
+        }else{
+            Glide.with(itemView.getContext()).load(R.drawable.beforeafter).into(mImageViewResourcePic);
+        }
         mTextViewName.setText(_fullName);
         mTextViewResourceRating.setText(String.valueOf(resource.getRating()));
         Glide.with(itemView.getContext()).load(profilePicUri).placeholder(R.drawable.beforeafter).into(mImageViewResourcePic);

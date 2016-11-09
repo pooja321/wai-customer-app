@@ -1,5 +1,6 @@
 package com.waiapp.Address;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,21 +31,27 @@ import java.util.HashMap;
 
 public class AddressActivity extends AppCompatActivity {
 
+    String mOrderType, mResourceKey, mOrderId, UID;
+    double mTotalAmount;
+
     private DatabaseReference mDatabase;
     Query resourceQuery;
-    String UID;
     private FirebaseRecyclerAdapter<Address, AddressViewHolder> mAdapter;
     private Toolbar mtoolbar;
     private RecyclerView recyclerView;
     private LinearLayoutManager mManager;
-    String mOrderType, mResourceKey, mOrderId;
-    double mTotalAmount;
+    ProgressDialog mProgressDialog;
     Address mAddress = new Address();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.show();
 
         mTotalAmount = getIntent().getDoubleExtra("totalAmount", 0);
         mOrderType = getIntent().getStringExtra("orderType");
@@ -89,6 +97,10 @@ public class AddressActivity extends AppCompatActivity {
             }
         };
         recyclerView.setAdapter(mAdapter);
+        if(mProgressDialog.isShowing()){
+            Log.v("wai","dismiss progress dialog box");
+            mProgressDialog.dismiss();
+        }
     }
 
     private void createOrder(String addressKey) {
