@@ -59,7 +59,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         if (useDrawerToggle()) {
             actionBarDrawerToggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//            drawer.setDrawerListener(actionBarDrawerToggle);
             drawer.addDrawerListener(actionBarDrawerToggle);
         } else if (useToolbar() && getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,16 +83,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         if (id == R.id.nav_history) {
             startActivity(new Intent(this, OrderHistoryActivity.class));
-        } else if (id == R.id.nav_notifications) {
-
-        } else if (id == R.id.nav_chat_with_us) {
-
-        } else if (id == R.id.nav_invite_and_earn) {
-
-        } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-
-        } else if (id == R.id.nav_about) {
+        } else if (id == R.id.nav_profile) {
+            startActivity(new Intent(this, ProfileActivity.class));
 
         } else if (id == R.id.nav_logout) {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -104,6 +95,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(BaseActivity.this, "Please Login First", Toast.LENGTH_SHORT).show();
             }
         }
+//        else if (id == R.id.nav_notifications) {
+//
+//        } else if (id == R.id.nav_chat_with_us) {
+//
+//        } else if (id == R.id.nav_invite_and_earn) {
+//
+//        } else if (id == R.id.nav_about) {
+//
+//        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer != null) {
             drawer.closeDrawer(GravityCompat.START);

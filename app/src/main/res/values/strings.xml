@@ -104,4 +104,6 @@
     <string name="hint_email">Email</string>
     <string name="btn_reset_password">reset password</string>
     <string name="btn_back">go back</string>
+    <string name="change_password">Change Password</string>
+    <string name="profile">PROFILE</string>
 </resources>
