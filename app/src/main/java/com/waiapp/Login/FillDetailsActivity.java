@@ -87,8 +87,13 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
         timestampChanged.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
 
         String userId = generateCustomerId();
-        User user = new User(userId, _Email, _firstName, _genderSelected, _lastName, _mobile, timestampChanged, timestampJoined);
-
+        final User user = new User(userId, _Email, _firstName, _genderSelected, _lastName, _mobile, timestampChanged, timestampJoined);
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealm(user);
+            }
+        });
         mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(_userUID).setValue(user);
         startActivity(new Intent(FillDetailsActivity.this, MainActivity.class));
     }

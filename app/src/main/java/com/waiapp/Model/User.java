@@ -2,13 +2,22 @@ package com.waiapp.Model;
 
 import java.util.HashMap;
 
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by keviv on 21/07/2016.
  */
-public class User {
-    private String userId, firstName, lastName, Email, gender;
+public class User extends RealmObject {
+
+    @PrimaryKey
+    private String userId;
+    private String firstName, lastName, Email, gender;
     private long mobileNumber;
+    @Ignore
     private HashMap<String, Object> timestampChanged;
+    @Ignore
     private HashMap<String, Object> timestampJoined;
 
     public User() {
