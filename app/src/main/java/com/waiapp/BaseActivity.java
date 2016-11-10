@@ -19,16 +19,20 @@ import com.google.firebase.auth.FirebaseUser;
 import com.waiapp.Login.LoginActivity;
 import com.waiapp.Order.OrderHistoryActivity;
 
+import io.realm.Realm;
+
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private Toolbar toolbar;
     ActionBarDrawerToggle actionBarDrawerToggle;
+    Realm mRealm;
 
     @Override
     public void setContentView(int layoutResID) {
 
+        mRealm = Realm.getDefaultInstance();
         drawer = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_base, null);
         FrameLayout activityContainer = (FrameLayout) drawer.findViewById(R.id.activity_content);
         getLayoutInflater().inflate(layoutResID, activityContainer, true);
@@ -63,7 +67,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         } else if (useToolbar() && getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
 
     }
 

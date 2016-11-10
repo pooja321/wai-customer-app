@@ -45,6 +45,7 @@ public class AddressActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v("wai","AddressActivity onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
 
@@ -53,10 +54,12 @@ public class AddressActivity extends AppCompatActivity {
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.show();
 
+        mResourceKey = getIntent().getStringExtra("resourceKey");
         mTotalAmount = getIntent().getDoubleExtra("totalAmount", 0);
         mOrderType = getIntent().getStringExtra("orderType");
         mOrderId = getIntent().getStringExtra("orderId");
-        mResourceKey = getIntent().getStringExtra("resourceKey");
+        Log.v("wai", "Order Id: " + mOrderId);
+        Log.v("wai", "Order type: " + mOrderType);
         mtoolbar = (Toolbar) findViewById(R.id.address_toolbar);
         mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
 

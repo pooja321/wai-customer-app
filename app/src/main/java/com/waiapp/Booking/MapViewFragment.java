@@ -122,7 +122,8 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 //            }
 //        });
         mCenterMarkerOptions = new MarkerOptions();
-        mCenterMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+//        mCenterMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+        mCenterMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_person_pin_circle_black_36dp));
         return view;
 
     }

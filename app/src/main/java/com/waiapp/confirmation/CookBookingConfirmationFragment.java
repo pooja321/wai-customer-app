@@ -71,7 +71,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("wai","onCreate");
+        Log.v("wai","CookBookingConfirmationFragment onCreate");
         if (getArguments() != null) {
             mParamResourceKey = getArguments().getString(ARG_KEY);
             mParamResourceName = getArguments().getString(ARG_RESOURCE);
@@ -89,7 +89,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Log.v("wai","oncreateView");
+        Log.v("wai","CookBookingConfirmationFragment oncreateView");
         View view =  inflater.inflate(R.layout.fragment_cook_booking_confirmation, container, false);
         mListener = (OnUserSignUpRequired) getActivity();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -99,7 +99,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.v("wai","onViewCreated");
+        Log.v("wai","CookBookingConfirmationFragment onViewCreated");
         mCheckBoxTerms = (CheckBox) view.findViewById(R.id.cook_booking_cb_terms);
         mTextViewResourceName = (TextView) view.findViewById(R.id.cook_booking_tv_resource_name);
         mTextViewMembersCount = (TextView) view.findViewById(R.id.cook_booking_tv_members_count);
@@ -141,6 +141,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
                     if (user != null) {
                         // User is signed in
                         mOrderId = generateOrderId();
+                        Log.v("wai", "Order Id: " + mOrderId);
                         final CookingOrderAmountValues cookingOrderAmountValues = new CookingOrderAmountValues(mOrderId, mBaseAmount, mMainCourseAmount, mMainCourseCount, mMembersAmount, mMembersCount, mServiceTaxAmount, mTotalAmount);
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
