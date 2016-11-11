@@ -1,6 +1,5 @@
 package com.waiapp;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -23,19 +22,12 @@ public class MainActivity extends BaseActivity implements
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
-    ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.v("wai","MainActivity oncreate");
         setContentView(R.layout.activity_main);
-
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage("Loading...");
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.show();
-        Log.v("wai","show progress dialog box");
 
         BottomBar bottomBar = (BottomBar) findViewById(R.id.main_bottombar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -72,17 +64,6 @@ public class MainActivity extends BaseActivity implements
     }
 
     @Override
-    public void onResourceListdownloadcomplete(Boolean iscomplete) {
-        Log.v("wai", "onResourceListdownloadcomplete");
-        if(iscomplete){
-            if(mProgressDialog.isShowing()){
-                Log.v("wai","dismiss progress dialog box");
-                mProgressDialog.dismiss();
-            }
-        }
-    }
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
         this.finishAffinity();
@@ -109,8 +90,4 @@ public class MainActivity extends BaseActivity implements
 //        }
 //        return super.onOptionsItemSelected(item);
 //    }
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
 }

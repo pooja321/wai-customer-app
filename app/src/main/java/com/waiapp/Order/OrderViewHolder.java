@@ -19,7 +19,7 @@ public class OrderViewHolder extends RecyclerView.ViewHolder {
 
     String Orderstatus;
 
-    private TextView mTextViewOrderId, mTextViewOrderDate, mTextViewOrderStatus, mTextViewOrderAmount, mTextViewCurrentOrder;
+    private TextView mTextViewOrderId, mTextViewOrderDate, mTextViewOrderStatus, mTextViewOrderAmount;
     private ImageView mImageViewOrderType;
 
     public OrderViewHolder(View itemView) {
@@ -28,20 +28,12 @@ public class OrderViewHolder extends RecyclerView.ViewHolder {
         mTextViewOrderDate = (TextView) itemView.findViewById(R.id.order_item_tv_date);
         mTextViewOrderAmount = (TextView) itemView.findViewById(R.id.order_item_tv_orderamount);
         mTextViewOrderStatus = (TextView) itemView.findViewById(R.id.order_item_tv_orderstatus);
-//        mTextViewCurrentOrder = (TextView) itemView.findViewById(R.id.order_item_tv_current_order_ind);
         mImageViewOrderType = (ImageView) itemView.findViewById(R.id.order_item_iv_ordertype);
     }
 
     public void bindView(Order order){
         HashMap<String, Object> orderBookingTime;
         Orderstatus = order.getOrderStatus();
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            if (Objects.equals(Orderstatus, Constants.ORDER_STATUS_INPROGRESS) || Objects.equals(Orderstatus, Constants.ORDER_STATUS_ORDERED)){
-//                mTextViewCurrentOrder.setVisibility(View.VISIBLE);
-//            }else{
-//                mTextViewCurrentOrder.setVisibility(View.GONE);
-//            }
-//        }
         String orderType = order.getOrderType();
         switch (orderType){
             case Constants.ORDER_TYPE_COOKING:

@@ -16,10 +16,13 @@ import android.view.View;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.waiapp.Model.Address;
 import com.waiapp.Model.Order;
 import com.waiapp.R;
@@ -35,10 +38,10 @@ public class AddressActivity extends AppCompatActivity {
     double mTotalAmount;
 
     private DatabaseReference mDatabase;
-    Query resourceQuery;
+    Query mResourceQuery;
     private FirebaseRecyclerAdapter<Address, AddressViewHolder> mAdapter;
-    private Toolbar mtoolbar;
-    private RecyclerView recyclerView;
+    private Toolbar mToolbar;
+    private RecyclerView mRecyclerView;
     private LinearLayoutManager mManager;
     ProgressDialog mProgressDialog;
     Address mAddress = new Address();
@@ -52,6 +55,7 @@ public class AddressActivity extends AppCompatActivity {
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage("Loading...");
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setCancelable(false);
         mProgressDialog.show();
 
         mResourceKey = getIntent().getStringExtra("resourceKey");
@@ -60,18 +64,19 @@ public class AddressActivity extends AppCompatActivity {
         mOrderId = getIntent().getStringExtra("orderId");
         Log.v("wai", "Order Id: " + mOrderId);
         Log.v("wai", "Order type: " + mOrderType);
-        mtoolbar = (Toolbar) findViewById(R.id.address_toolbar);
-        mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
+        mToolbar = (Toolbar) findViewById(R.id.address_toolbar);
+        mToolbar.setTitleTextColor(getResources().getColor( R.color.white));
 
-        setSupportActionBar(mtoolbar);
+        setSupportActionBar(mToolbar);
         setTitle("Select Service Address");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = (RecyclerView) findViewById(R.id.address_listview);
+        mRecyclerView = (RecyclerView) findViewById(R.id.address_listview);
         mManager = new LinearLayoutManager(this);
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);
-        recyclerView.setLayoutManager(mManager);
+        mRecyclerView.setLayoutManager(mManager);
+        mRecyclerView.setHasFixedSize(true);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -79,8 +84,23 @@ public class AddressActivity extends AppCompatActivity {
             UID = Utilities.getUid();
         }
 
-        resourceQuery = mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID);
-        initFirebaseUI(resourceQuery);
+        mResourceQuery = mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID);
+        mResourceQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(mProgressDialog.isShowing()){
+                    mProgressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                if(mProgressDialog.isShowing()){
+                    mProgressDialog.dismiss();
+                }
+            }
+        });
+        initFirebaseUI(mResourceQuery);
     }
 
     private void initFirebaseUI(Query resourceQuery) {
@@ -99,11 +119,7 @@ public class AddressActivity extends AppCompatActivity {
                 viewHolder.bindView(model);
             }
         };
-        recyclerView.setAdapter(mAdapter);
-        if(mProgressDialog.isShowing()){
-            Log.v("wai","dismiss progress dialog box");
-            mProgressDialog.dismiss();
-        }
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void createOrder(String addressKey) {

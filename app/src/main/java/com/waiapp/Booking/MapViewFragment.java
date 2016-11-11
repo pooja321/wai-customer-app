@@ -72,11 +72,10 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     // Google client to interact with Google API
     public LocationManager mLocationManager;
     private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
     private GoogleMap mGoogleMap;
     private Marker mCenterMarker;
     private MarkerOptions mCenterMarkerOptions;
-    private Map<String,Marker> markers;
+    private Map<String,Marker> mMapMarkers;
     private GeoLocation mGeoLocation;
 
     //firebase
@@ -106,7 +105,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         mDatabase = getDatabaseReference();
         mJobType = getJobtype();
         mGeoFire = new GeoFire(mDatabase);
-        markers = new HashMap<String, Marker>();
+        mMapMarkers = new HashMap<String, Marker>();
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
@@ -301,7 +300,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     @Override
     public void onLocationChanged(Location location) {
         Log.v("wai","MapViewFragment onLocationChanged");
-        mLastLocation = location;
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -360,23 +358,23 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         }
         Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude))
                 .icon(BitmapDescriptorFactory.fromResource(resId)));
-        this.markers.put(key, marker);
+        this.mMapMarkers.put(key, marker);
     }
 
     @Override
     public void onKeyExited(String key) {
         // Remove any old marker
-        Marker marker = this.markers.get(key);
+        Marker marker = this.mMapMarkers.get(key);
         if (marker != null) {
             marker.remove();
-            this.markers.remove(key);
+            this.mMapMarkers.remove(key);
         }
     }
 
     @Override
     public void onKeyMoved(String key, GeoLocation location) {
         // Move the marker
-        Marker marker = markers.get(key);
+        Marker marker = mMapMarkers.get(key);
         if (marker != null) {
             this.animateMarkerTo(marker, location.latitude, location.longitude);
         }

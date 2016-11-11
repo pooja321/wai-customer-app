@@ -186,7 +186,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setCancelable(false);
-        mProgressDialog.setTitle("Loading...");
+        mProgressDialog.setTitle("Saving...");
         mProgressDialog.show();
     }
 
