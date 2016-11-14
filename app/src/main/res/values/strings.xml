@@ -106,4 +106,9 @@
     <string name="btn_back">go back</string>
     <string name="change_password">Change Password</string>
     <string name="profile">PROFILE</string>
+    <string name="error_invalid_email">Invalid Email</string>
+    <string name="error_user_doesnt_exists">Sorry, not a member yet</string>
+    <string name="error_wrong_password">Incorrect Password</string>
+    <string name="error_email_password_notmatch">Email id and password mismatch</string>
+    <string name="error_email_in_use">email address is already in use by another account</string>
 </resources>

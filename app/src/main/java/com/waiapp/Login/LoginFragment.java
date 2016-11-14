@@ -30,6 +30,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.waiapp.MainActivity;
@@ -37,7 +39,7 @@ import com.waiapp.R;
 
 public class LoginFragment extends Fragment implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String LOG_TAG = LoginFragment.class.getSimpleName();
+    private static final String LOG_TAG = "wai";
     private EditText mEditTextEmailInput, mEditTextPasswordInput;
     private Button mButtonSignIn;
     TextView mTextViewSignUp, mTextViewForgotPassword;
@@ -161,8 +163,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     private void signInPassword() {
         String email = mEditTextEmailInput.getText().toString();
         String password = mEditTextPasswordInput.getText().toString();
+        boolean validEmail = isEmailValid(email);
 
-        if (email.equals("")) {
+        if (email.equals("") || !validEmail) {
             mEditTextEmailInput.setError(getString(R.string.error_cannot_be_empty));
             return;
         }
@@ -178,8 +181,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                         Log.d(LOG_TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
 
                         if (!task.isSuccessful()) {
-                            Log.w(LOG_TAG, "signInWithEmail", task.getException());
-                            Toast.makeText(getActivity(), "Authentication failed.",Toast.LENGTH_SHORT).show();
+                            Log.v("wai","exception ", task.getException());
+                            try {
+                                throw task.getException();
+                            } catch(FirebaseAuthInvalidCredentialsException e) {
+                                mEditTextPasswordInput.setError(getString(R.string.error_email_password_notmatch));
+                            } catch(FirebaseAuthInvalidUserException e) {
+                                mEditTextEmailInput.setError(getString(R.string.error_user_doesnt_exists));
+                            } catch(Exception e) {
+                                Log.e(LOG_TAG, e.getMessage());
+                            }
                         }else{
                             Toast.makeText(getActivity(), "Authentication Successful.",Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getActivity(),MainActivity.class));
@@ -187,6 +198,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                         mAuthProgressDialog.dismiss();
                     }
                 });
+    }
+
+    private boolean isEmailValid(String email) {
+
+        boolean isGoodEmail = (email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches());
+
+        if (!isGoodEmail) {
+            mEditTextEmailInput.setError(String.format(getString(R.string.error_invalid_email_not_valid),  email));
+            return false;
+        }
+        return isGoodEmail;
     }
 
     /*** Sign in with Google plus when user clicks "Sign in with Google" textView (button)  */

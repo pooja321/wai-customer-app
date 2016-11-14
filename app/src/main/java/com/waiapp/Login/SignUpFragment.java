@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.waiapp.R;
 
@@ -100,11 +101,18 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(LOG_TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+                        Log.v(LOG_TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
                         if (!task.isSuccessful()) {
-                            Log.d(LOG_TAG, "createUserWithEmail:onComplete:" + task.getException().getMessage());
-                            Toast.makeText(getActivity(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Log.v(LOG_TAG, "createUserWithEmail:onComplete:" + task.getException().getMessage());
+                            Log.v("wai","createUserWithEmail:Exception ", task.getException());
+                            try {
+                                throw task.getException();
+                            } catch(FirebaseAuthUserCollisionException e) {
+                                mEditTextEmailCreate.setError(getString(R.string.error_email_in_use));
+                            } catch(Exception e) {
+                                Log.e(LOG_TAG, e.getMessage());
+                            }
                         } else {
                             onAuthSuccess(task.getResult().getUser());
                             Toast.makeText(getActivity(), "User registered", Toast.LENGTH_SHORT).show();
