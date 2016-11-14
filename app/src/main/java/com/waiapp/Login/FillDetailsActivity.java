@@ -74,18 +74,28 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
             }
         });
     }
-    private void submitDetails() {
 
+    private void submitDetails() {
+        long _mobile = 0L;
         String _firstName = mEditTextFirstName.getText().toString();
         String _lastName = mEditTextLastName.getText().toString();
-        long _mobile = Long.parseLong(mEditTextMobile.getText().toString());
+        if (mEditTextMobile.getText().length() > 0) {
+            _mobile = Long.parseLong(mEditTextMobile.getText().toString());
+        }else{
+            mEditTextMobile.setError(getResources().getString(R.string.error_invalid_phone_number));
+        }
+        boolean validFirstName = isFNameValid(_firstName);
+        boolean validLastName = isLNameValid(_lastName);
+        boolean validphoneNumber = isNumberValid(String.valueOf(_mobile));
+
+        if (!validFirstName || !validLastName || !validphoneNumber) return;
+
         String _userUID = values[0];
         String _Email = values[1];
         HashMap<String, Object> timestampJoined = new HashMap<>();
         timestampJoined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
         HashMap<String, Object> timestampChanged = new HashMap<>();
         timestampChanged.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
-
         String userId = generateCustomerId();
         final User user = new User(userId, _Email, _firstName, _genderSelected, _lastName, _mobile, timestampChanged, timestampJoined);
         mRealm.executeTransactionAsync(new Realm.Transaction() {
@@ -109,5 +119,29 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private boolean isFNameValid(String fname) {
+        if (fname.isEmpty()) {
+            mEditTextFirstName.setError(getResources().getString(R.string.error_invalid_name));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isLNameValid(String lname) {
+        if (lname.isEmpty()) {
+            mEditTextLastName.setError(getResources().getString(R.string.error_invalid_name));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isNumberValid(String number) {
+        if (number.length() < 10) {
+            mEditTextMobile.setError(getResources().getString(R.string.error_invalid_phone_number));
+            return false;
+        }
+        return true;
     }
 }

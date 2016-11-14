@@ -111,4 +111,6 @@
     <string name="error_wrong_password">Incorrect Password</string>
     <string name="error_email_password_notmatch">Email id and password mismatch</string>
     <string name="error_email_in_use">email address is already in use by another account</string>
+    <string name="error_invalid_name">Cannot be empty</string>
+    <string name="error_invalid_phone_number">Invalid Phone Number</string>
 </resources>

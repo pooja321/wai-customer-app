@@ -25,6 +25,8 @@
         android:id="@+id/til_firstname_create"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="@dimen/lists_title_bottom_margin">
 
         <EditText
@@ -43,6 +45,8 @@
         android:id="@+id/til_lastname_create"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="@dimen/lists_title_bottom_margin">
 
         <EditText
@@ -61,6 +65,8 @@
         android:id="@+id/til_mobile_create"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="@dimen/lists_title_bottom_margin">
 
         <EditText
@@ -80,6 +86,8 @@
         android:id="@+id/spinner_gender"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginBottom="@dimen/lists_title_bottom_margin"
         android:background="@color/colorwhite"
         android:spinnerMode="dropdown" />
@@ -89,6 +97,8 @@
         style="@style/buttonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:text="@string/submit_text"/>
 
 </LinearLayout>
