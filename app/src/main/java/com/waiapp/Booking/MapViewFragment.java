@@ -80,8 +80,8 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     private GoogleMap mGoogleMap;
     private Marker mCenterMarker;
     private MarkerOptions mCenterMarkerOptions;
-    private Map<String, Marker> mMapMarkers = new HashMap<>();
-    private Map<String, ResourceOnline> mMapResourceList = new HashMap<>();
+    private Map<String, Marker> mMapMarkers;
+    public Map<String, ResourceOnline> mMapResourceList = new HashMap<>();
     DatabaseReference mGeoDatabaseRef, mOnlineResourceDatabaseRef;
     private GeoFire mGeoFire;
     private GeoQuery mGeoQuery;
@@ -97,6 +97,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         View view = inflater.inflate(R.layout.fragment_main_map_view, container, false);
         Log.v("wai", "MapViewFragment onCreateView");
         mGeoDatabaseRef = getGeoDatabaseReference();
+        mMapMarkers = new HashMap<>();
         mJobType = getJobtype();
         mGeoFire = new GeoFire(mGeoDatabaseRef);
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
