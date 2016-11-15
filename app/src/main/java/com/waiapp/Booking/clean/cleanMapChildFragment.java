@@ -10,10 +10,10 @@ import com.waiapp.Utility.Constants;
  */
 public class cleanMapChildFragment extends MapViewFragment {
 
-    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+
     @Override
-    public DatabaseReference getDatabaseReference() {
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+    public DatabaseReference getGeoDatabaseReference() {
         return mDatabase.child(Constants.FIREBASE_CHILD_ONLINE_CLEAN_GEO);
     }
 
