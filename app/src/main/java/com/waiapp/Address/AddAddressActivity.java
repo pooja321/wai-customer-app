@@ -106,13 +106,13 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
         mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID).push().setValue(address).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                mSaveProgressDialog.dismiss();
                 if (!task.isSuccessful()) {
                     Toast.makeText(AddAddressActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(AddAddressActivity.this, "Addess Added", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(AddAddressActivity.this, AddressActivity.class));
                 }
+                mSaveProgressDialog.dismiss();
             }
         });
     }

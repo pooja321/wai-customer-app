@@ -8,22 +8,37 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/feed_item_margin"
         android:layout_marginLeft="@dimen/feed_item_margin"
         android:layout_marginRight="@dimen/feed_item_margin"
         android:layout_marginTop="@dimen/feed_item_margin"
-        android:layout_marginBottom="@dimen/feed_item_margin"
         android:background="@drawable/bg_rectangle_solid_white_corner"
         android:orientation="vertical"
         android:paddingBottom="@dimen/feed_item_padding_top_bottom"
         android:paddingLeft="@dimen/feed_item_padding_left_right"
         android:paddingTop="@dimen/feed_item_padding_top_bottom">
 
-        <TextView
-            android:id="@+id/address_item_addressname"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Address Name"
-            android:textSize="@dimen/text_size_medium" />
+            android:layout_marginRight="16dp">
+
+            <TextView
+                android:id="@+id/address_item_addressname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address Name"
+                android:textSize="@dimen/text_size_medium" />
+
+            <ImageButton
+                android:id="@+id/address_item_ib_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@null"
+                android:src="@drawable/ic_mode_edit"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -45,14 +60,16 @@
                 android:text="Area Name"
                 android:textSize="@dimen/text_size_normal" />
         </LinearLayout>
+
         <TextView
             android:id="@+id/address_item_landmark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Landmark"
             android:textSize="@dimen/text_size_normal" />
+
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -63,6 +80,7 @@
                 android:layout_marginRight="4dp"
                 android:text="City"
                 android:textSize="@dimen/text_size_normal" />
+
             <TextView
                 android:id="@+id/address_item_statename"
                 android:layout_width="wrap_content"
@@ -70,6 +88,7 @@
                 android:layout_marginRight="4dp"
                 android:text="State"
                 android:textSize="@dimen/text_size_normal" />
+
             <TextView
                 android:id="@+id/address_item_pincode"
                 android:layout_width="wrap_content"
