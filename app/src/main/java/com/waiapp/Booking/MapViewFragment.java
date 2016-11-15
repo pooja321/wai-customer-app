@@ -38,7 +38,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -55,7 +54,7 @@ import java.util.Map;
  */
 public abstract class MapViewFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, GeoQueryEventListener, GoogleMap.OnCameraMoveListener {
+        LocationListener, GeoQueryEventListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     public interface onAddressSearchClick {
         void startAddressSearchActivity();
@@ -63,9 +62,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     private String mJobType;
     private static final int PERMISSION_REQUEST_CODE = 1;
-    private static int UPDATE_INTERVAL = 10000; // 10 sec
-    private static int FATEST_INTERVAL = 5000; // 5 sec
-    private static int DISPLACEMENT = 10; // 10 meters
 
     EditText mAddressSearchEditText;
 
@@ -76,14 +72,10 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     private Marker mCenterMarker;
     private MarkerOptions mCenterMarkerOptions;
     private Map<String,Marker> mMapMarkers;
-    private GeoLocation mGeoLocation;
 
-    //firebase
-    private DatabaseReference mDatabase;
-    private Circle mSearchCircle;
     private GeoFire mGeoFire;
     private GeoQuery mGeoQuery;
-
+    private HashMap<String, Marker> markerHashMap = new HashMap<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,17 +84,10 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.v("wai","MapViewFragment onActivityCreated");
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_map_view, container, false);
         Log.v("wai","MapViewFragment onCreateView");
-        mDatabase = getDatabaseReference();
+        DatabaseReference mDatabase = getDatabaseReference();
         mJobType = getJobtype();
         mGeoFire = new GeoFire(mDatabase);
         mMapMarkers = new HashMap<String, Marker>();
@@ -128,7 +113,9 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     }
 
     public abstract DatabaseReference getDatabaseReference();
+
     public abstract String getJobtype();
+
     private void buildAlertMessageNoGps() {
         Log.v("wai","MapViewFragment buildAlertMessageNoGps");
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -151,11 +138,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     private boolean checkPermission() {
         Log.v("wai","MapViewFragment checkPermission");
         int result = ContextCompat.checkSelfPermission(getContext().getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
+        return result == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermission() {
@@ -167,7 +150,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -255,6 +238,8 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mGoogleMap.setOnCameraMoveListener(this);
+        mGoogleMap.setOnMarkerClickListener(this);
+        mGoogleMap.setOnInfoWindowClickListener(this);
         LatLng centerOfMap = mGoogleMap.getCameraPosition().target;
         mCenterMarkerOptions.position(centerOfMap);
         mCenterMarker = mGoogleMap.addMarker(mCenterMarkerOptions);
@@ -266,7 +251,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
             buildGoogleApiClient();
             mGoogleMap.setMyLocationEnabled(true);
         }
-        mGeoLocation = new GeoLocation(centerOfMap.latitude,centerOfMap.longitude);
+        GeoLocation mGeoLocation = new GeoLocation(centerOfMap.latitude, centerOfMap.longitude);
         mGeoQuery = mGeoFire.queryAtLocation(mGeoLocation, 3);
         mGeoQuery.addGeoQueryEventListener(this);
     }
@@ -275,9 +260,12 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     public void onConnected(@Nullable Bundle bundle) {
         Log.v("wai","MapViewFragment onConnected");
         LocationRequest mLocationRequest = new LocationRequest();
+        int UPDATE_INTERVAL = 10000;
         mLocationRequest.setInterval(UPDATE_INTERVAL);
+        int FATEST_INTERVAL = 5000;
         mLocationRequest.setFastestInterval(FATEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        int DISPLACEMENT = 10;
         mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
         if (ContextCompat.checkSelfPermission(getContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -324,7 +312,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 //        Toast.makeText(getActivity(), position, Toast.LENGTH_SHORT).show();
     }
 
-
     @Override
     public void onGeoQueryError(DatabaseError error) {
         new AlertDialog.Builder(getActivity())
@@ -359,6 +346,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude))
                 .icon(BitmapDescriptorFactory.fromResource(resId)));
         this.mMapMarkers.put(key, marker);
+        markerHashMap.put(key, marker);
     }
 
     @Override
@@ -369,6 +357,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
             marker.remove();
             this.mMapMarkers.remove(key);
         }
+        markerHashMap.remove(key);
     }
 
     @Override
@@ -378,6 +367,19 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         if (marker != null) {
             this.animateMarkerTo(marker, location.latitude, location.longitude);
         }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        if (markerHashMap.containsValue(marker)){
+            Toast.makeText(getActivity(), "marker found", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Toast.makeText(getActivity(), "Click Info Window", Toast.LENGTH_SHORT).show();
     }
 
     // Animation handler for old APIs without animation support
