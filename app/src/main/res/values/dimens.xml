@@ -31,7 +31,7 @@
     <dimen name="text_size_medium">18sp</dimen>
     <dimen name="text_size_large">24sp</dimen>
     <!--list item dimensions -->
-    <dimen name="feed_item_margin">4dp</dimen>
+    <dimen name="feed_item_margin">2dp</dimen>
     <dimen name="feed_item_padding_top_bottom">8dp</dimen>
     <dimen name="feed_item_padding_left_right">16dp</dimen>
     <dimen name="feed_item_profile_pic">62dp</dimen>

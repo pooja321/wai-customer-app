@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -22,8 +24,11 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
@@ -38,12 +43,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.waiapp.Model.ResourceOnline;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
 
@@ -55,7 +63,7 @@ import java.util.Map;
  */
 public abstract class MapViewFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        LocationListener, GeoQueryEventListener, GoogleMap.OnCameraMoveListener {
+        LocationListener, GeoQueryEventListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     public interface onAddressSearchClick {
         void startAddressSearchActivity();
@@ -63,9 +71,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     private String mJobType;
     private static final int PERMISSION_REQUEST_CODE = 1;
-    private static int UPDATE_INTERVAL = 10000; // 10 sec
-    private static int FATEST_INTERVAL = 5000; // 5 sec
-    private static int DISPLACEMENT = 10; // 10 meters
 
     EditText mAddressSearchEditText;
 
@@ -75,37 +80,26 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     private GoogleMap mGoogleMap;
     private Marker mCenterMarker;
     private MarkerOptions mCenterMarkerOptions;
-    private Map<String,Marker> mMapMarkers;
-    private GeoLocation mGeoLocation;
-
-    //firebase
-    private DatabaseReference mDatabase;
-    private Circle mSearchCircle;
+    private Map<String, Marker> mMapMarkers;
+    public Map<String, ResourceOnline> mMapResourceList = new HashMap<>();
+    DatabaseReference mGeoDatabaseRef, mOnlineResourceDatabaseRef;
     private GeoFire mGeoFire;
     private GeoQuery mGeoQuery;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("wai","MapViewFragment onCreate");
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.v("wai","MapViewFragment onActivityCreated");
-
+        Log.v("wai", "MapViewFragment onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_map_view, container, false);
-        Log.v("wai","MapViewFragment onCreateView");
-        mDatabase = getDatabaseReference();
+        Log.v("wai", "MapViewFragment onCreateView");
+        mGeoDatabaseRef = getGeoDatabaseReference();
+        mMapMarkers = new HashMap<>();
         mJobType = getJobtype();
-        mGeoFire = new GeoFire(mDatabase);
-        mMapMarkers = new HashMap<String, Marker>();
+        mGeoFire = new GeoFire(mGeoDatabaseRef);
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
@@ -127,10 +121,12 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     }
 
-    public abstract DatabaseReference getDatabaseReference();
+    public abstract DatabaseReference getGeoDatabaseReference();
+
     public abstract String getJobtype();
+
     private void buildAlertMessageNoGps() {
-        Log.v("wai","MapViewFragment buildAlertMessageNoGps");
+        Log.v("wai", "MapViewFragment buildAlertMessageNoGps");
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
@@ -149,17 +145,13 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     }
 
     private boolean checkPermission() {
-        Log.v("wai","MapViewFragment checkPermission");
+        Log.v("wai", "MapViewFragment checkPermission");
         int result = ContextCompat.checkSelfPermission(getContext().getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
+        return result == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermission() {
-        Log.v("wai","MapViewFragment requestPermission");
+        Log.v("wai", "MapViewFragment requestPermission");
         if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)) {
             Toast.makeText(getActivity().getApplicationContext(), "GPS permission allows us to access location data. Please allow in App Settings for additional functionality.", Toast.LENGTH_LONG).show();
         }
@@ -167,7 +159,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -192,7 +184,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
      * LocationServices API.
      */
     protected synchronized void buildGoogleApiClient() {
-        Log.v("wai","MapViewFragment buildGoogleApiClient");
+        Log.v("wai", "MapViewFragment buildGoogleApiClient");
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -209,13 +201,13 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     @Override
     public void onPause() {
         super.onPause();
-        Log.v("wai","MapViewFragment onPause");
+        Log.v("wai", "MapViewFragment onPause");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.v("wai","MapViewFragment onResume");
+        Log.v("wai", "MapViewFragment onResume");
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }
@@ -224,7 +216,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     @Override
     public void onStart() {
         super.onStart();
-        Log.v("wai","MapViewFragment onStart");
+        Log.v("wai", "MapViewFragment onStart");
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }
@@ -233,13 +225,13 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     @Override
     public void onStop() {
         super.onStop();
-        Log.v("wai","MapViewFragment onStop");
-        if(mGoogleApiClient != null) {
+        Log.v("wai", "MapViewFragment onStop");
+        if (mGoogleApiClient != null) {
             if (mGoogleApiClient.isConnected()) {
                 mGoogleApiClient.disconnect();
             }
         }
-        if(mGeoQuery != null) {
+        if (mGeoQuery != null) {
             mGeoQuery.removeAllListeners();
         }
     }
@@ -251,10 +243,14 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.v("wai","MapViewFragment onMapReady");
+        Log.v("wai", "MapViewFragment onMapReady");
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mGoogleMap.setOnCameraMoveListener(this);
+        mGoogleMap.setOnMarkerClickListener(this);
+        mGoogleMap.setOnInfoWindowClickListener(this);
+        mGoogleMap.setInfoWindowAdapter(new ResourceInfoMarkerWindow());
+
         LatLng centerOfMap = mGoogleMap.getCameraPosition().target;
         mCenterMarkerOptions.position(centerOfMap);
         mCenterMarker = mGoogleMap.addMarker(mCenterMarkerOptions);
@@ -266,18 +262,21 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
             buildGoogleApiClient();
             mGoogleMap.setMyLocationEnabled(true);
         }
-        mGeoLocation = new GeoLocation(centerOfMap.latitude,centerOfMap.longitude);
+        GeoLocation mGeoLocation = new GeoLocation(centerOfMap.latitude, centerOfMap.longitude);
         mGeoQuery = mGeoFire.queryAtLocation(mGeoLocation, 3);
         mGeoQuery.addGeoQueryEventListener(this);
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.v("wai","MapViewFragment onConnected");
+        Log.v("wai", "MapViewFragment onConnected");
         LocationRequest mLocationRequest = new LocationRequest();
+        int UPDATE_INTERVAL = 10000;
         mLocationRequest.setInterval(UPDATE_INTERVAL);
+        int FATEST_INTERVAL = 5000;
         mLocationRequest.setFastestInterval(FATEST_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        int DISPLACEMENT = 10;
         mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
         if (ContextCompat.checkSelfPermission(getContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -299,7 +298,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.v("wai","MapViewFragment onLocationChanged");
+        Log.v("wai", "MapViewFragment onLocationChanged");
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -316,14 +315,13 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     public void onCameraMove() {
         LatLng centerOfMap = mGoogleMap.getCameraPosition().target;
         mCenterMarker.setPosition(centerOfMap);
-        mGeoQuery.setCenter(new GeoLocation(centerOfMap.latitude,centerOfMap.longitude));
+        mGeoQuery.setCenter(new GeoLocation(centerOfMap.latitude, centerOfMap.longitude));
         mGeoQuery.setRadius(3);
 //        LatLng centermarkerposition = mCenterMarker.getPosition();
 //        String position = String.format("%.2f %.2f", centermarkerposition.latitude, centermarkerposition.longitude );
 //        Log.v("wai", "onCameraMove center marker position: " + position);
 //        Toast.makeText(getActivity(), position, Toast.LENGTH_SHORT).show();
     }
-
 
     @Override
     public void onGeoQueryError(DatabaseError error) {
@@ -342,9 +340,9 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onKeyEntered(String key, GeoLocation location) {
-        Log.v("wai", "onKeyEntered: " + String.format("%.2f %.2f",location.latitude, location.longitude ));
+        Log.v("wai", "onKeyEntered: " + String.format("%.2f %.2f", location.latitude, location.longitude));
         int resId = 0;
-        switch (mJobType){
+        switch (mJobType) {
             case Constants.FIREBASE_CHILD_CLEANING:
                 resId = getResources().getIdentifier("ic_person_black_24dp", "drawable", "com.waiapp");
                 break;
@@ -359,6 +357,26 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude))
                 .icon(BitmapDescriptorFactory.fromResource(resId)));
         this.mMapMarkers.put(key, marker);
+        Log.v("wai", "key: " + key);
+        getResourceData(key, marker.getId());
+    }
+
+    private void getResourceData(final String key, final String id) {
+        Log.v("wai", "getResourceDatamarker id: " + key);
+        mOnlineResourceDatabaseRef = FirebaseDatabase.getInstance().getReference().child(Constants.FIREBASE_CHILD_ONLINE_RESOURCE).child(mJobType).child(key);
+        mOnlineResourceDatabaseRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.v("wai", "onDataChange dataSnapshot: " + dataSnapshot.toString());
+                mMapResourceList.put(id, dataSnapshot.getValue(ResourceOnline.class));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -368,6 +386,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         if (marker != null) {
             marker.remove();
             this.mMapMarkers.remove(key);
+            mMapResourceList.remove(marker.getId());
         }
     }
 
@@ -378,6 +397,19 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         if (marker != null) {
             this.animateMarkerTo(marker, location.latitude, location.longitude);
         }
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+//        if (markerHashMap.containsValue(marker)){
+//            Toast.makeText(getActivity(), "marker found", Toast.LENGTH_SHORT).show();
+//        }
+        return false;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Toast.makeText(getActivity(), "Click Info Window", Toast.LENGTH_SHORT).show();
     }
 
     // Animation handler for old APIs without animation support
@@ -391,7 +423,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
             @Override
             public void run() {
                 float elapsed = SystemClock.uptimeMillis() - start;
-                float t = elapsed/DURATION_MS;
+                float t = elapsed / DURATION_MS;
                 float v = interpolator.getInterpolation(t);
 
                 double currentLat = (lat - startPosition.latitude) * v + startPosition.latitude;
@@ -404,5 +436,63 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
                 }
             }
         });
+    }
+
+    class ResourceInfoMarkerWindow implements GoogleMap.InfoWindowAdapter {
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+            Log.v("wai","getInfoWindow: " + marker.getId());
+            if (!(marker.getId().equals("m0"))) {
+                View view = getActivity().getLayoutInflater().inflate(R.layout.list_resource_item, null);
+                render(marker, view);
+                return view;
+            }
+            return null;
+        }
+
+        private void render(Marker marker, View view) {
+            TextView mTextViewName, mTextViewResourceRating;
+            ImageView mImageViewResourcePic, mImageViewGenderIcon;
+            Uri profilePicUri = null;
+
+            mTextViewName = (TextView) view.findViewById(R.id.list_item_name);
+            mTextViewResourceRating = (TextView) view.findViewById(R.id.list_item_rating);
+            mImageViewResourcePic = (ImageView) view.findViewById(R.id.list_item_profilePic);
+            mImageViewGenderIcon = (ImageView) view.findViewById(R.id.list_item_gender);
+
+            String id = marker.getId();
+            Log.v("wai", "render id: " + id);
+            ResourceOnline resource = mMapResourceList.get(id);
+
+            String _fullName = resource.getName();
+            if (resource.getPicture() != null) {
+                profilePicUri = Uri.parse(resource.getPicture());
+                Glide.with(view.getContext()).load(profilePicUri).placeholder(R.drawable.beforeafter).into(mImageViewResourcePic);
+            } else {
+                Glide.with(view.getContext()).load(R.drawable.beforeafter).into(mImageViewResourcePic);
+            }
+            mTextViewName.setText(_fullName);
+            mTextViewResourceRating.setText(String.valueOf(resource.getRating()));
+            Glide.with(view.getContext()).load(profilePicUri).placeholder(R.drawable.beforeafter).into(mImageViewResourcePic);
+            switch (resource.getGender()) {
+                case ("Male"): {
+                    mImageViewGenderIcon.setImageResource(R.drawable.human_male);
+                    mImageViewGenderIcon.setColorFilter(Color.rgb(33, 150, 243));
+                    break;
+                }
+                case ("Female"): {
+                    mImageViewGenderIcon.setImageResource(R.drawable.human_female);
+                    mImageViewGenderIcon.setColorFilter(Color.rgb(233, 30, 99));
+                    break;
+                }
+            }
+
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            return null;
+        }
     }
 }

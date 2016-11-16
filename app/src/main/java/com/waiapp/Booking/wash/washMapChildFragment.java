@@ -12,7 +12,7 @@ public class washMapChildFragment extends MapViewFragment {
 
     private DatabaseReference mDatabase;
     @Override
-    public DatabaseReference getDatabaseReference() {
+    public DatabaseReference getGeoDatabaseReference() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         return mDatabase.child(Constants.FIREBASE_CHILD_ONLINE_WASH_GEO);
     }
