@@ -14,10 +14,17 @@ import android.widget.Spinner;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.waiapp.MainActivity;
 import com.waiapp.Model.User;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
+
+import java.util.HashMap;
+
+import io.realm.Realm;
+
+import static com.waiapp.Utility.Utilities.generateCustomerId;
 
 public class FillDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -26,9 +33,10 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
     Button mButtonSubmit;
     Context context;
     private DatabaseReference mDatabase;
+    Realm mRealm;
 
     public static final String selectGenderLabel = "Select Gender";
-    private String[] _gender = new String[]{selectGenderLabel,"Male", "Female"};
+    private String[] _gender = new String[]{selectGenderLabel, "Male", "Female"};
     private String _genderSelected;
     private String[] values;
 
@@ -37,8 +45,9 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fill_details);
 
+        mRealm = Realm.getDefaultInstance();
         Toolbar mtoolbar = (Toolbar) findViewById(R.id.fill_detail_toolbar);
-        mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
+        mtoolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(mtoolbar);
 
         values = getIntent().getExtras().getStringArray("user");
@@ -65,24 +74,44 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
             }
         });
     }
-    private void submitDetails() {
 
+    private void submitDetails() {
+        long _mobile = 0L;
         String _firstName = mEditTextFirstName.getText().toString();
         String _lastName = mEditTextLastName.getText().toString();
-        long _mobile = Long.parseLong(mEditTextMobile.getText().toString());
+        if (mEditTextMobile.getText().length() > 0) {
+            _mobile = Long.parseLong(mEditTextMobile.getText().toString());
+        } else {
+            mEditTextMobile.setError(getResources().getString(R.string.error_invalid_phone_number));
+        }
+        boolean validFirstName = isFNameValid(_firstName);
+        boolean validLastName = isLNameValid(_lastName);
+        boolean validphoneNumber = isNumberValid(String.valueOf(_mobile));
+
+        if (!validFirstName || !validLastName || !validphoneNumber) return;
+
+        String _userUID = values[0];
         String _Email = values[1];
-
-        String userId = values[0];
-        User user = new User(_firstName, _lastName, _Email,_genderSelected, _mobile);
-
-        mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(userId).setValue(user);
+        HashMap<String, Object> timestampJoined = new HashMap<>();
+        timestampJoined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+        HashMap<String, Object> timestampChanged = new HashMap<>();
+        timestampChanged.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+        String userId = generateCustomerId();
+        final User user = new User(userId, _Email, _firstName, _genderSelected, _lastName, _mobile, timestampChanged, timestampJoined);
+        mRealm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealm(user);
+            }
+        });
+        mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(_userUID).setValue(user);
         startActivity(new Intent(FillDetailsActivity.this, MainActivity.class));
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner genderSpinner = (Spinner) parent;
-        if(genderSpinner.getId() == R.id.spinner_gender)   {
+        if (genderSpinner.getId() == R.id.spinner_gender) {
             _genderSelected = parent.getItemAtPosition(position).toString();
         }
     }
@@ -90,5 +119,29 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    private boolean isFNameValid(String fname) {
+        if (fname.isEmpty()) {
+            mEditTextFirstName.setError(getResources().getString(R.string.error_invalid_name));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isLNameValid(String lname) {
+        if (lname.isEmpty()) {
+            mEditTextLastName.setError(getResources().getString(R.string.error_invalid_name));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isNumberValid(String number) {
+        if (number.length() < 10) {
+            mEditTextMobile.setError(getResources().getString(R.string.error_invalid_phone_number));
+            return false;
+        }
+        return true;
     }
 }

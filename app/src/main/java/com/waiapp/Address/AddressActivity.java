@@ -1,5 +1,6 @@
 package com.waiapp.Address;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -7,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,10 +16,13 @@ import android.view.View;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 import com.waiapp.Model.Address;
 import com.waiapp.Model.Order;
 import com.waiapp.R;
@@ -29,38 +34,49 @@ import java.util.HashMap;
 
 public class AddressActivity extends AppCompatActivity {
 
-    private DatabaseReference mDatabase;
-    Query resourceQuery;
-    String UID;
-    private FirebaseRecyclerAdapter<Address, AddressViewHolder> mAdapter;
-    private Toolbar mtoolbar;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager mManager;
-    String mOrderType, mResourceKey, mOrderId;
+    String mOrderType, mResourceKey, mOrderId, UID;
     double mTotalAmount;
+
+    private DatabaseReference mDatabase;
+    Query mResourceQuery;
+    private FirebaseRecyclerAdapter<Address, AddressViewHolder> mAdapter;
+    private Toolbar mToolbar;
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager mManager;
+    ProgressDialog mProgressDialog;
     Address mAddress = new Address();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.v("wai","AddressActivity onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
 
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage("Loading...");
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
+
+        mResourceKey = getIntent().getStringExtra("resourceKey");
         mTotalAmount = getIntent().getDoubleExtra("totalAmount", 0);
         mOrderType = getIntent().getStringExtra("orderType");
         mOrderId = getIntent().getStringExtra("orderId");
-        mResourceKey = getIntent().getStringExtra("resourceKey");
-        mtoolbar = (Toolbar) findViewById(R.id.address_toolbar);
-        mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
+        Log.v("wai", "Order Id: " + mOrderId);
+        Log.v("wai", "Order type: " + mOrderType);
+        mToolbar = (Toolbar) findViewById(R.id.address_toolbar);
+        mToolbar.setTitleTextColor(getResources().getColor( R.color.white));
 
-        setSupportActionBar(mtoolbar);
+        setSupportActionBar(mToolbar);
         setTitle("Select Service Address");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView = (RecyclerView) findViewById(R.id.address_listview);
+        mRecyclerView = (RecyclerView) findViewById(R.id.address_listview);
         mManager = new LinearLayoutManager(this);
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);
-        recyclerView.setLayoutManager(mManager);
+        mRecyclerView.setLayoutManager(mManager);
+        mRecyclerView.setHasFixedSize(true);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -68,8 +84,23 @@ public class AddressActivity extends AppCompatActivity {
             UID = Utilities.getUid();
         }
 
-        resourceQuery = mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID);
-        initFirebaseUI(resourceQuery);
+        mResourceQuery = mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID);
+        mResourceQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(mProgressDialog.isShowing()){
+                    mProgressDialog.dismiss();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                if(mProgressDialog.isShowing()){
+                    mProgressDialog.dismiss();
+                }
+            }
+        });
+        initFirebaseUI(mResourceQuery);
     }
 
     private void initFirebaseUI(Query resourceQuery) {
@@ -88,7 +119,7 @@ public class AddressActivity extends AppCompatActivity {
                 viewHolder.bindView(model);
             }
         };
-        recyclerView.setAdapter(mAdapter);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void createOrder(String addressKey) {

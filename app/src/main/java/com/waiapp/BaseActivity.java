@@ -1,6 +1,8 @@
 package com.waiapp;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,17 +19,21 @@ import com.google.firebase.auth.FirebaseUser;
 import com.waiapp.Login.LoginActivity;
 import com.waiapp.Order.OrderHistoryActivity;
 
+import io.realm.Realm;
+
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private Toolbar toolbar;
-    private String mToolbarTitle;
+    ActionBarDrawerToggle actionBarDrawerToggle;
+    Realm mRealm;
 
     @Override
     public void setContentView(int layoutResID) {
 
-        drawer = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_base,null);
+        mRealm = Realm.getDefaultInstance();
+        drawer = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_base, null);
         FrameLayout activityContainer = (FrameLayout) drawer.findViewById(R.id.activity_content);
         getLayoutInflater().inflate(layoutResID, activityContainer, true);
         super.setContentView(drawer);
@@ -41,11 +47,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 ////            }
 ////        });
         toolbar = (Toolbar) findViewById(R.id.toolbar_base);
-        toolbar.setTitleTextColor(getResources().getColor( R.color.white));
-        if (useToolbar())  {
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+        if (useToolbar()) {
             setSupportActionBar(toolbar);
-        }
-        else   {
+        } else {
             toolbar.setVisibility(View.GONE);
         }
         setUpNavView();
@@ -55,27 +60,23 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        if( useDrawerToggle()) {
-            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        if (useDrawerToggle()) {
+            actionBarDrawerToggle = new ActionBarDrawerToggle(
                     this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-            drawer.setDrawerListener(toggle);
-            toggle.syncState();
-        } else if (useToolbar() && getSupportActionBar() != null){
+            drawer.addDrawerListener(actionBarDrawerToggle);
+        } else if (useToolbar() && getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-
     }
-    protected boolean useDrawerToggle()
-    {
+
+    protected boolean useDrawerToggle() {
         return true;
     }
 
-    protected boolean useToolbar()
-    {
+    protected boolean useToolbar() {
         return true;
     }
-
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -85,16 +86,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         if (id == R.id.nav_history) {
             startActivity(new Intent(this, OrderHistoryActivity.class));
-        } else if (id == R.id.nav_notifications) {
-
-        } else if (id == R.id.nav_chat_with_us) {
-
-        } else if (id == R.id.nav_invite_and_earn) {
-
-        } else if (id == R.id.nav_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-
-        } else if (id == R.id.nav_about) {
+        } else if (id == R.id.nav_profile) {
+            startActivity(new Intent(this, ProfileActivity.class));
 
         } else if (id == R.id.nav_logout) {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -105,13 +98,31 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(BaseActivity.this, "Please Login First", Toast.LENGTH_SHORT).show();
             }
         }
+//        else if (id == R.id.nav_notifications) {
+//
+//        } else if (id == R.id.nav_chat_with_us) {
+//
+//        } else if (id == R.id.nav_invite_and_earn) {
+//
+//        } else if (id == R.id.nav_about) {
+//
+//        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer != null) {
             drawer.closeDrawer(GravityCompat.START);
         }
         return true;
     }
-    public String getUid() {
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        actionBarDrawerToggle.onConfigurationChanged(newConfig);
     }
 }

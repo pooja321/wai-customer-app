@@ -3,6 +3,8 @@ package com.waiapp.Login;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,14 +14,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
-import com.waiapp.MainActivity;
 import com.waiapp.R;
 
 /**
@@ -27,39 +28,26 @@ import com.waiapp.R;
  */
 public class SignUpFragment extends Fragment implements View.OnClickListener {
 
-    private static final String LOG_TAG = SignUpFragment.class.getSimpleName();
+    private static final String LOG_TAG = "wai";
+    private String mUserEmail, mPassword;
+
     private ProgressDialog mAuthProgressDialog;
-//    private Firebase mFirebaseRef;
     private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
     private EditText mEditTextEmailCreate, mEditTextPasswordCreate;
     private Button mButtonSignUp;
     private TextView mTextViewSignInLink;
-    private String mUserEmail, mPassword;
+
+
     public interface OnSignInButtonClickedInterface {
         public void onSignInFragmentSelected(Fragment fragment);
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        
-        View view = inflater.inflate(R.layout.fragment_signup,container,false);
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);
 
-                } else {
-                    // User is signed out
-                    Log.d(LOG_TAG, "onAuthStateChanged:signed_out");
-                }
-            }
-        };
+        View view = inflater.inflate(R.layout.fragment_signup, container, false);
+        mAuth = FirebaseAuth.getInstance();
         initializeScreen(view);
         return view;
     }
@@ -83,7 +71,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_create_account_final:
                 onCreateAccountPressed();
                 break;
@@ -113,15 +101,21 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(LOG_TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+                        Log.v(LOG_TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
                         if (!task.isSuccessful()) {
-                            Log.d(LOG_TAG, "createUserWithEmail:onComplete:" + task.getException().getMessage());
-                            Toast.makeText(getActivity(), "Authentication failed.",Toast.LENGTH_SHORT).show();
-                        }else{
+                            Log.v(LOG_TAG, "createUserWithEmail:onComplete:" + task.getException().getMessage());
+                            Log.v("wai","createUserWithEmail:Exception ", task.getException());
+                            try {
+                                throw task.getException();
+                            } catch(FirebaseAuthUserCollisionException e) {
+                                mEditTextEmailCreate.setError(getString(R.string.error_email_in_use));
+                            } catch(Exception e) {
+                                Log.e(LOG_TAG, e.getMessage());
+                            }
+                        } else {
                             onAuthSuccess(task.getResult().getUser());
-//                            startActivity(new Intent(getActivity(),MainActivity.class));
-                            Toast.makeText(getActivity(),"User registered",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "User registered", Toast.LENGTH_SHORT).show();
                         }
                         mAuthProgressDialog.dismiss();
                     }
@@ -129,15 +123,27 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
     }
 
     private void onAuthSuccess(FirebaseUser user) {
-        startActivity(new Intent(getActivity(),FillDetailsActivity.class).putExtra("user",new String[]{user.getUid(),user.getEmail()}));
+        sendVerificationEmail(user);
+        startActivity(new Intent(getActivity(), FillDetailsActivity.class).putExtra("user", new String[]{user.getUid(), user.getEmail()}));
+    }
+
+    private void sendVerificationEmail(FirebaseUser user) {
+        user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(getActivity(), "Verification Email has been sent", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private boolean isEmailValid(String email) {
-        boolean isGoodEmail =
-                (email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches());
+
+        boolean isGoodEmail = (email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches());
+
         if (!isGoodEmail) {
-            mEditTextEmailCreate.setError(String.format(getString(R.string.error_invalid_email_not_valid),
-                    email));
+            mEditTextEmailCreate.setError(String.format(getString(R.string.error_invalid_email_not_valid),  email));
             return false;
         }
         return isGoodEmail;

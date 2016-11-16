@@ -70,20 +70,19 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     EditText mAddressSearchEditText;
 
     // Google client to interact with Google API
-    public LocationManager locationManager;
+    public LocationManager mLocationManager;
     private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
     private GoogleMap mGoogleMap;
     private Marker mCenterMarker;
     private MarkerOptions mCenterMarkerOptions;
-    private Map<String,Marker> markers;
-    private GeoLocation geoLocation;
+    private Map<String,Marker> mMapMarkers;
+    private GeoLocation mGeoLocation;
 
     //firebase
     private DatabaseReference mDatabase;
-    private Circle searchCircle;
-    private GeoFire geoFire;
-    private GeoQuery geoQuery;
+    private Circle mSearchCircle;
+    private GeoFire mGeoFire;
+    private GeoQuery mGeoQuery;
 
 
     @Override
@@ -105,10 +104,10 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         Log.v("wai","MapViewFragment onCreateView");
         mDatabase = getDatabaseReference();
         mJobType = getJobtype();
-        geoFire = new GeoFire(mDatabase);
-        markers = new HashMap<String, Marker>();
-        locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        mGeoFire = new GeoFire(mDatabase);
+        mMapMarkers = new HashMap<String, Marker>();
+        mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
         }
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.main_map);
@@ -122,7 +121,8 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 //            }
 //        });
         mCenterMarkerOptions = new MarkerOptions();
-        mCenterMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+//        mCenterMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+        mCenterMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_person_pin_circle_black_36dp));
         return view;
 
     }
@@ -239,8 +239,8 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
                 mGoogleApiClient.disconnect();
             }
         }
-        if(geoQuery != null) {
-            geoQuery.removeAllListeners();
+        if(mGeoQuery != null) {
+            mGeoQuery.removeAllListeners();
         }
     }
 
@@ -255,6 +255,9 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mGoogleMap.setOnCameraMoveListener(this);
+        LatLng centerOfMap = mGoogleMap.getCameraPosition().target;
+        mCenterMarkerOptions.position(centerOfMap);
+        mCenterMarker = mGoogleMap.addMarker(mCenterMarkerOptions);
         if (!checkPermission()) {
             Log.v("wai", "no location permission");
             requestPermission();
@@ -263,7 +266,9 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
             buildGoogleApiClient();
             mGoogleMap.setMyLocationEnabled(true);
         }
-
+        mGeoLocation = new GeoLocation(centerOfMap.latitude,centerOfMap.longitude);
+        mGeoQuery = mGeoFire.queryAtLocation(mGeoLocation, 3);
+        mGeoQuery.addGeoQueryEventListener(this);
     }
 
     @Override
@@ -295,33 +300,28 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     @Override
     public void onLocationChanged(Location location) {
         Log.v("wai","MapViewFragment onLocationChanged");
-        mLastLocation = location;
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
-        LatLng centerOfMap = mGoogleMap.getCameraPosition().target;
-        mCenterMarkerOptions.position(centerOfMap);
-        mCenterMarker = mGoogleMap.addMarker(mCenterMarkerOptions);
-
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
-        if(mLastLocation != null) {
-            geoLocation = new GeoLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-        }
-        geoQuery = geoFire.queryAtLocation(geoLocation, 10);
-        geoQuery.addGeoQueryEventListener(this);
-        geoQuery.setCenter(new GeoLocation(location.getLatitude(),location.getLongitude()));
-        geoQuery.setRadius(100);
     }
+
     @Override
     public void onCameraMove() {
         LatLng centerOfMap = mGoogleMap.getCameraPosition().target;
         mCenterMarker.setPosition(centerOfMap);
+        mGeoQuery.setCenter(new GeoLocation(centerOfMap.latitude,centerOfMap.longitude));
+        mGeoQuery.setRadius(3);
+//        LatLng centermarkerposition = mCenterMarker.getPosition();
+//        String position = String.format("%.2f %.2f", centermarkerposition.latitude, centermarkerposition.longitude );
+//        Log.v("wai", "onCameraMove center marker position: " + position);
+//        Toast.makeText(getActivity(), position, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -342,6 +342,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onKeyEntered(String key, GeoLocation location) {
+        Log.v("wai", "onKeyEntered: " + String.format("%.2f %.2f",location.latitude, location.longitude ));
         int resId = 0;
         switch (mJobType){
             case Constants.FIREBASE_CHILD_CLEANING:
@@ -357,27 +358,28 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         }
         Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude))
                 .icon(BitmapDescriptorFactory.fromResource(resId)));
-        this.markers.put(key, marker);
+        this.mMapMarkers.put(key, marker);
     }
 
     @Override
     public void onKeyExited(String key) {
         // Remove any old marker
-        Marker marker = this.markers.get(key);
+        Marker marker = this.mMapMarkers.get(key);
         if (marker != null) {
             marker.remove();
-            this.markers.remove(key);
+            this.mMapMarkers.remove(key);
         }
     }
 
     @Override
     public void onKeyMoved(String key, GeoLocation location) {
         // Move the marker
-        Marker marker = markers.get(key);
+        Marker marker = mMapMarkers.get(key);
         if (marker != null) {
             this.animateMarkerTo(marker, location.latitude, location.longitude);
         }
     }
+
     // Animation handler for old APIs without animation support
     private void animateMarkerTo(final Marker marker, final double lat, final double lng) {
         final Handler handler = new Handler();

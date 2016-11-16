@@ -13,7 +13,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class SettingsActivity extends BaseActivity implements View.OnClickListener {
+public class ProfileActivity extends BaseActivity implements View.OnClickListener {
 
     private EditText mEditTextNewPassword;
     private Button mButtonChangePassword;
@@ -23,15 +23,14 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_profile);
         setTitle("Settings");
-        mEditTextNewPassword = (EditText) findViewById(R.id.settings_new_password);
-        mButtonChangePassword = (Button) findViewById(R.id.settings_bt_changePassword);
+        mEditTextNewPassword = (EditText) findViewById(R.id.profile_new_password);
+        mButtonChangePassword = (Button) findViewById(R.id.profile_bt_changePassword);
         mButtonChangePassword.setOnClickListener(this);
 
         mAuthProgressDialog = new ProgressDialog(this);
         mAuthProgressDialog.setTitle(getString(R.string.progress_dialog_loading));
-        mAuthProgressDialog.setMessage(getString(R.string.progress_dialog_authenticating_with_firebase));
         mAuthProgressDialog.setCancelable(false);
     }
 
@@ -39,7 +38,7 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
-            case R.id.settings_bt_changePassword:
+            case R.id.profile_bt_changePassword:
                 String password = mEditTextNewPassword.getText().toString();
                 mAuthProgressDialog.show();
                 if (password.equals("")) {
@@ -62,12 +61,12 @@ public class SettingsActivity extends BaseActivity implements View.OnClickListen
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                Toast.makeText(SettingsActivity.this, "Password is updated!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileActivity.this, "Password is updated!", Toast.LENGTH_SHORT).show();
                                 mEditTextNewPassword.setText("");
                                 mEditTextNewPassword.clearFocus();
                             } else {
                                 mEditTextNewPassword.setError(task.getException().getMessage());
-                                Toast.makeText(SettingsActivity.this, "Failed to update password!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ProfileActivity.this, "Failed to update password!", Toast.LENGTH_SHORT).show();
                             }
                             mAuthProgressDialog.dismiss();
                         }

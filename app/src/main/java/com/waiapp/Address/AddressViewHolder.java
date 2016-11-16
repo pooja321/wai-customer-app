@@ -2,7 +2,9 @@ package com.waiapp.Address;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.waiapp.Model.Address;
 import com.waiapp.R;
@@ -14,6 +16,7 @@ public class AddressViewHolder extends RecyclerView.ViewHolder implements View.O
 
     private TextView mTextViewAddressName, mTextViewHouseNo, mTextViewAreaName, mTextViewLandMark, mTextViewCity, mTextViewState,
             mTextViewPincode;
+    private ImageButton mImageButtonEditAddress;
 
     public AddressViewHolder(View itemView) {
         super(itemView);
@@ -24,6 +27,7 @@ public class AddressViewHolder extends RecyclerView.ViewHolder implements View.O
         mTextViewCity = (TextView) itemView.findViewById(R.id.address_item_cityname);
         mTextViewState = (TextView) itemView.findViewById(R.id.address_item_statename);
         mTextViewPincode = (TextView) itemView.findViewById(R.id.address_item_pincode);
+        mImageButtonEditAddress = (ImageButton) itemView.findViewById(R.id.address_item_ib_edit);
     }
 
     @Override
@@ -31,7 +35,7 @@ public class AddressViewHolder extends RecyclerView.ViewHolder implements View.O
 
     }
 
-    public void bindView(Address address) {
+    public void bindView(final Address address) {
         mTextViewAddressName.setText(String.valueOf(address.getAddressName()));
         mTextViewHouseNo.setText(String.valueOf(address.getHouseNo()));
         mTextViewAreaName.setText(String.valueOf(address.getAreaName()));
@@ -39,5 +43,11 @@ public class AddressViewHolder extends RecyclerView.ViewHolder implements View.O
         mTextViewCity.setText(String.valueOf(address.getCity()));
         mTextViewState.setText(String.valueOf(address.getState()));
         mTextViewPincode.setText(String.valueOf(address.getPincode()));
+        mImageButtonEditAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(itemView.getContext(), address.getAddressName(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

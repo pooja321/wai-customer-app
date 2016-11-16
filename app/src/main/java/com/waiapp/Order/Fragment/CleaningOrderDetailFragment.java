@@ -1,6 +1,7 @@
 package com.waiapp.Order.Fragment;
 
 
+import android.app.ProgressDialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,7 +25,10 @@ import com.waiapp.Model.OrderAmount;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -44,6 +48,8 @@ public class CleaningOrderDetailFragment extends Fragment implements View.OnClic
     private TextView mTextViewAddressName, mTextViewHouseNo, mTextViewAreaName, mTextViewLandMark, mTextViewCity, mTextViewState,
             mTextViewPincode;
     private Button mButtonCancel;
+    HashMap<String, Object> orderBookingTime;
+    private ProgressDialog mAuthProgressDialog;
 
     public CleaningOrderDetailFragment() {
         // Required empty public constructor
@@ -63,6 +69,7 @@ public class CleaningOrderDetailFragment extends Fragment implements View.OnClic
         if (getArguments() != null) {
             mParamOrderKey = getArguments().getString(ARG_ORDERKEY);
         }
+        ShowProgressDialog();
     }
 
     @Override
@@ -124,6 +131,14 @@ public class CleaningOrderDetailFragment extends Fragment implements View.OnClic
 
         mTextViewOrderId.setText(mOrder.getOrderId());
         mTextViewOrderStatus.setText(mStatus);
+        orderBookingTime = mOrder.getOrderbookingTime();
+        Long timestamp = (Long) orderBookingTime.get(Constants.FIREBASE_PROPERTY_TIMESTAMP);
+        Date date = new Date(timestamp);
+        Log.v("wai", String.valueOf(timestamp));
+        Log.v("wai", String.valueOf(date));
+        SimpleDateFormat sfd = new SimpleDateFormat("EEE MMM dd yyyy", Locale.US);
+        mTextViewOrderDate.setText(sfd.format(date));
+
         mTextViewPaymentMode.setText(mOrder.getPaymentMode());
         mTextViewRoomsAmount.setText(String.valueOf(mCleaningOrderAmountValues.getRoomsAmount()));
         mTextViewWashroomsAmount.setText(String.valueOf(mCleaningOrderAmountValues.getWashroomsAmount()));
@@ -148,6 +163,9 @@ public class CleaningOrderDetailFragment extends Fragment implements View.OnClic
                 mButtonCancel.setVisibility(View.GONE);
             }
         }
+        if(mAuthProgressDialog.isShowing()) {
+            mAuthProgressDialog.dismiss();
+        }
     }
 
     @Override
@@ -155,6 +173,7 @@ public class CleaningOrderDetailFragment extends Fragment implements View.OnClic
         int id = v.getId();
         switch (id) {
             case R.id.cleanorderdetail_bt_cancel:
+                ShowProgressDialog();
                 cancelOrder();
         }
     }
@@ -173,10 +192,21 @@ public class CleaningOrderDetailFragment extends Fragment implements View.OnClic
                 } else {
                     Toast.makeText(getActivity(), "user order history status update successfully", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
 
         mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDERS).child(mOrder.getResourceId()).child(mParamOrderKey).updateChildren(OrderUpdates);
         mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDERS).child(getUid()).child(mParamOrderKey).updateChildren(OrderUpdates);
+        if(mAuthProgressDialog.isShowing()) {
+            mAuthProgressDialog.dismiss();
+        }
+    }
+
+    void ShowProgressDialog(){
+        mAuthProgressDialog = new ProgressDialog(getActivity());
+        mAuthProgressDialog.setTitle(getString(R.string.progress_dialog_loading));
+        mAuthProgressDialog.setCancelable(false);
+        mAuthProgressDialog.show();
     }
 }
