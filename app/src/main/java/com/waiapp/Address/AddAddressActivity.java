@@ -101,7 +101,8 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
             UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         }
 
-        Address address = new Address(addressName, addressType, houseNo, areaName, landmark, city, state, country, pincode);
+
+        Address address = new Address(addressName,addressType, houseNo, areaName, landmark, city, state, country, pincode);
 
         mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID).push().setValue(address).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
