@@ -28,15 +28,15 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
 
     private DatabaseReference mDatabase;
 
-    private EditText mEditTextAddressName, mEditTextHouseNo, mEditTextAreaName, mEditTextLandMark, mEditTextCity, mEditTextPincode;
+    private EditText mEditTextAddressName, mEditTextHouseNo, mEditTextAreaName, mEditTextLandMark, mEditTextCity, mEditTextPincode, mEditTextState;
     private Spinner mSpinnerAddressType;
     private Button mButtonSubmit;
     private Toolbar mtoolbar;
     private ProgressDialog mSaveProgressDialog;
 
-    String addressName, addressType, houseNo, areaName, landmark, city, state, country, pincode, UID;
+    String addressName, addressid, addressType, houseNo, areaName, landmark, city, state, country, pincode, UID;
     public static final String selectAddressTypeLabel = "Select Address Type";
-    private String[] addressTypeList = new String[]{selectAddressTypeLabel,"Flat", "House"};
+    private String[] addressTypeList = new String[]{selectAddressTypeLabel, "Flat", "House"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +45,7 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
 
         mtoolbar = (Toolbar) findViewById(R.id.addaddress_toolbar);
         mtoolbar.setTitle("Add Address");
-        mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
+        mtoolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(mtoolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -57,6 +57,7 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
         mEditTextLandMark = (EditText) findViewById(R.id.addaddress_et_landmark);
         mEditTextCity = (EditText) findViewById(R.id.addaddress_et_city);
         mEditTextPincode = (EditText) findViewById(R.id.addaddress_et_pincode);
+        mEditTextState = (EditText) findViewById(R.id.addaddress_et_state);
 
         mSpinnerAddressType = (Spinner) findViewById(R.id.addaddress_spinner_address_type);
         if (mSpinnerAddressType != null) {
@@ -78,7 +79,7 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id){
+        switch (id) {
             case (R.id.addaddress_button_submit):
                 mSaveProgressDialog.show();
                 addAddress(v);
@@ -93,18 +94,19 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
         landmark = mEditTextLandMark.getText().toString();
         city = mEditTextCity.getText().toString();
         pincode = mEditTextPincode.getText().toString();
-        state = "Haryana";
+        state = mEditTextState.getText().toString();
         country = "India";
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         }
+        addressid = mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).push().getKey();
 
 
-        Address address = new Address(addressName,addressType, houseNo, areaName, landmark, city, state, country, pincode);
+        Address address = new Address(addressid, addressName, addressType, houseNo, areaName, landmark, city, state, country, pincode);
 
-        mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID).push().setValue(address).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID).child(addressid).setValue(address).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (!task.isSuccessful()) {
@@ -121,7 +123,7 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner addressTypeSpinner = (Spinner) parent;
-        if(addressTypeSpinner.getId() == R.id.addaddress_spinner_address_type)   {
+        if (addressTypeSpinner.getId() == R.id.addaddress_spinner_address_type) {
             addressType = parent.getItemAtPosition(position).toString();
         }
     }

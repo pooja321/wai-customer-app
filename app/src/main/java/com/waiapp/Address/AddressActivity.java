@@ -48,7 +48,7 @@ public class AddressActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.v("wai","AddressActivity onCreate");
+        Log.v("wai", "AddressActivity onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
 
@@ -65,7 +65,7 @@ public class AddressActivity extends AppCompatActivity {
         Log.v("wai", "Order Id: " + mOrderId);
         Log.v("wai", "Order type: " + mOrderType);
         mToolbar = (Toolbar) findViewById(R.id.address_toolbar);
-        mToolbar.setTitleTextColor(getResources().getColor( R.color.white));
+        mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
 
         setSupportActionBar(mToolbar);
         setTitle("Select Service Address");
@@ -88,14 +88,14 @@ public class AddressActivity extends AppCompatActivity {
         mResourceQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(mProgressDialog.isShowing()){
+                if (mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                if(mProgressDialog.isShowing()){
+                if (mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }
             }
@@ -104,8 +104,8 @@ public class AddressActivity extends AppCompatActivity {
     }
 
     private void initFirebaseUI(Query resourceQuery) {
-        mAdapter = new FirebaseRecyclerAdapter<Address, AddressViewHolder>(Address.class,R.layout.list_address_item,
-                AddressViewHolder.class,resourceQuery) {
+        mAdapter = new FirebaseRecyclerAdapter<Address, AddressViewHolder>(Address.class, R.layout.list_address_item,
+                AddressViewHolder.class, resourceQuery) {
             @Override
             protected void populateViewHolder(AddressViewHolder viewHolder, final Address model, final int position) {
                 final DatabaseReference addressRef = getRef(position);
@@ -126,10 +126,10 @@ public class AddressActivity extends AppCompatActivity {
         String _UID = Utilities.getUid();
         HashMap<String, Object> orderCreationTime = new HashMap<>();
         orderCreationTime.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
-        final Order order = new Order(mOrderId, mOrderType, _UID, mResourceKey,addressKey,Constants.ORDER_STATUS_INCOMPLETE,
-                Constants.ORDER_PROGRESS_STATUS_PAYMENT_PENDING,null,mTotalAmount,orderCreationTime,null,null,null,false);
+        final Order order = new Order(mOrderId, mOrderType, _UID, mResourceKey, addressKey, Constants.ORDER_STATUS_INCOMPLETE,
+                Constants.ORDER_PROGRESS_STATUS_PAYMENT_PENDING, null, mTotalAmount, orderCreationTime, null, null, null, false);
         startActivity(new Intent(AddressActivity.this, PaymentActivity.class)
-                .putExtra("order",order).putExtra("Address",mAddress));
+                .putExtra("order", order).putExtra("Address", mAddress));
 
     }
 
@@ -152,7 +152,7 @@ public class AddressActivity extends AppCompatActivity {
             startActivity(new Intent(this, AddAddressActivity.class));
             return true;
         }
-        if (id== android.R.id.home) {
+        if (id == android.R.id.home) {
             Intent intent = NavUtils.getParentActivityIntent(this);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             NavUtils.navigateUpTo(this, intent);
