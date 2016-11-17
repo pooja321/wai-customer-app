@@ -11,6 +11,7 @@ public class Address extends RealmObject implements Serializable {
 
     private String addressName;
     private String addressType;
+    private String addressId;
     private String houseNo;
     private String AreaName;
     private String landmark;
@@ -20,12 +21,17 @@ public class Address extends RealmObject implements Serializable {
     private String pincode;
     private static final long serialVersionUID = 1L;
 
-    public Address() {
+    public Address()
+    {
+
+
     }
 
-    public Address(String addressName, String addressType, String houseNo, String areaName, String landmark, String city, String state, String country, String pincode ) {
+
+    public Address(String addressName,String addressId, String addressType, String houseNo, String areaName, String landmark, String city, String state, String country, String pincode ) {
         this.addressName = addressName;
         this.addressType = addressType;
+        this.addressId = addressId;
         AreaName = areaName;
         this.city = city;
         this.country = country;
@@ -33,6 +39,8 @@ public class Address extends RealmObject implements Serializable {
         this.landmark = landmark;
         this.pincode = pincode;
         this.state = state;
+
+
     }
 
     public String getAddressName() {
@@ -106,4 +114,12 @@ public class Address extends RealmObject implements Serializable {
     public void setState(String state) {
         this.state = state;
     }
+    public String getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
+    }
+
 }

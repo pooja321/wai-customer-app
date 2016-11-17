@@ -1,10 +1,10 @@
 package com.waiapp.Address;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.waiapp.Model.Address;
 import com.waiapp.R;
@@ -46,7 +46,7 @@ public class AddressViewHolder extends RecyclerView.ViewHolder implements View.O
         mImageButtonEditAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(itemView.getContext(), address.getAddressName(), Toast.LENGTH_SHORT).show();
+                itemView.getContext().startActivity(new Intent(itemView.getContext(),EditAddressActivity.class));
             }
         });
     }

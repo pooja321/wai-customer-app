@@ -49,8 +49,8 @@ public abstract class ListViewFragment extends Fragment {
         mProgressDialog = new ProgressDialog(getActivity());
         mProgressDialog.setTitle("Loading..");
         mProgressDialog.setMessage("Please Wait...");
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.show();
+        mProgressDialog.setCancelable(true);
+//        mProgressDialog.show();
         return view;
     }
 
