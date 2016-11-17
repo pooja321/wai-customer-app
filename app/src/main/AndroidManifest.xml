@@ -87,7 +87,8 @@
                 android:value=".Order.OrderHistoryActivity" />
         </activity>
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".Login.ForgotPasswordActivity"></activity>
+        <activity android:name=".Login.ForgotPasswordActivity" />
+        <activity android:name=".Address.EditAddressActivity"></activity>
     </application>
 
 </manifest>
