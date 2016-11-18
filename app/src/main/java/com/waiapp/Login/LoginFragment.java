@@ -192,12 +192,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                                 Log.e(LOG_TAG, e.getMessage());
                             }
                         }else{
+                            FirebaseUser user = task.getResult().getUser();
+                            getUserData(user);
                             Toast.makeText(getActivity(), "Authentication Successful.",Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getActivity(),MainActivity.class));
                         }
                         mAuthProgressDialog.dismiss();
                     }
                 });
+    }
+
+    private void getUserData(FirebaseUser user) {
+        String UserKey = user.getUid();
     }
 
     private boolean isEmailValid(String email) {

@@ -56,6 +56,9 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        setTitle("Add Address");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mEditTextAddressName = (EditText) findViewById(R.id.addaddress_et_address_name);
         mEditTextHouseNo = (EditText) findViewById(R.id.addaddress_et_houseno);
         mEditTextAreaName = (EditText) findViewById(R.id.addaddress_et_areaname);
@@ -95,12 +98,13 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
         int id = v.getId();
         switch (id) {
             case (R.id.addaddress_button_submit):
-                addAddress(v);
+                failFlag = false;
+                addAddress();
                 break;
         }
     }
 
-    private void addAddress(View v) {
+    private void addAddress() {
         addressName = mEditTextAddressName.getText().toString();
         houseNo = mEditTextHouseNo.getText().toString();
         areaName = mEditTextAreaName.getText().toString();
@@ -111,9 +115,7 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
         country = "India";
 
         String EmptyString = getResources().getString(R.string.provide_necessary_details);
-        String Provide_10_characters = getResources().getString(R.string.less_than_10_character);
         String Provide_6_characters = getResources().getString(R.string.less_than_6_character);
-
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -158,30 +160,18 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
         } else {
             mTIL_State.setErrorEnabled(false);
         }
-        if (pincode.equals("")) {
-            failFlag = true;
-            mTIL_Pincode.setError(EmptyString);
-        } else {
-            mTIL_Pincode.setErrorEnabled(false);
-        }
-        if (houseNo.length() < 10 && houseNo.length() > 0) {
-            failFlag = true;
-            mTIL_Housenum.setError(Provide_10_characters);
-        } else {
-            mTIL_Housenum.setErrorEnabled(false);
-        }
-        if (pincode.length() < 6 && houseNo.length() > 0) {
+        if (pincode.length() < 6) {
             failFlag = true;
             mTIL_Pincode.setError(Provide_6_characters);
         } else {
             mTIL_Pincode.setErrorEnabled(false);
         }
-        if (addressType==selectAddressTypeLabel)
-        {
+        if (addressType.equals(selectAddressTypeLabel)) {
+            failFlag = true;
             Toast.makeText(this, "Please select valid Address Type", Toast.LENGTH_SHORT).show();
         }
 
-        if (failFlag == false) {
+        if (!failFlag) {
             mSaveProgressDialog.show();
 
             Address address = new Address(addressid, addressName, addressType, houseNo, areaName, landmark, city, state, country, pincode);
