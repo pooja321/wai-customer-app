@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.waiapp.Address.AddAddressActivity">
+    tools:context="com.waiapp.Address.EditAddressActivity">
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -24,7 +24,7 @@
                 android:theme="@style/AppTheme.AppBarOverlay">
 
                 <android.support.v7.widget.Toolbar
-                    android:id="@+id/addaddress_toolbar"
+                    android:id="@+id/editaddress_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="?attr/colorPrimary"
@@ -33,13 +33,13 @@
             </android.support.design.widget.AppBarLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_address_title"
+                android:id="@+id/til_firstname_create"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/textinputlayout_margin">
 
                 <EditText
-                    android:id="@+id/addaddress_et_address_name"
+                    android:id="@+id/editaddress_et_address_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_enter_address_name"
@@ -51,20 +51,20 @@
             </android.support.design.widget.TextInputLayout>
 
             <Spinner
-                android:id="@+id/addaddress_spinner_address_type"
+                android:id="@+id/editaddress_spinner_address_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#fff"
                 android:spinnerMode="dropdown" />
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_house_no"
+                android:id="@+id/til_lastname_create"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/textinputlayout_margin">
 
                 <EditText
-                    android:id="@+id/addaddress_et_houseno"
+                    android:id="@+id/editaddress_et_houseno"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_enter_house_no"
@@ -76,13 +76,12 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_area_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/textinputlayout_margin">
 
                 <EditText
-                    android:id="@+id/addaddress_et_areaname"
+                    android:id="@+id/editaddress_et_areaname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_enter_area_name"
@@ -94,13 +93,12 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_landmark"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/textinputlayout_margin">
 
                 <EditText
-                    android:id="@+id/addaddress_et_landmark"
+                    android:id="@+id/editaddress_et_landmark"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_enter_landmark"
@@ -112,13 +110,12 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_city"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/textinputlayout_margin">
 
                 <EditText
-                    android:id="@+id/addaddress_et_city"
+                    android:id="@+id/editaddress_et_city"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_enter_cityname"
@@ -131,13 +128,12 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_State"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/textinputlayout_margin">
 
                 <EditText
-                    android:id="@+id/addaddress_et_state"
+                    android:id="@+id/editaddress_et_state"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_enter_statename"
@@ -151,13 +147,12 @@
 
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_pincode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/textinputlayout_margin">
 
                 <EditText
-                    android:id="@+id/addaddress_et_pincode"
+                    android:id="@+id/editaddress_et_pincode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_enter_pincode"
@@ -169,15 +164,8 @@
                     android:textSize="@dimen/text_size_normal" />
             </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="fields marked with * are mandatory"
-                android:textAlignment="center"
-                android:textColor="@color/Red" />
-
             <Button
-                android:id="@+id/addaddress_button_submit"
+                android:id="@+id/editaddress_button_submit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorAccent"

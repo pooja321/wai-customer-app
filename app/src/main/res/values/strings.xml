@@ -2,7 +2,7 @@
     <string name="app_name">WAI</string>
 
     <!-- Login and Create Account Screen  -->
-    <string name="text_dont_have_account">Don\'t have an account?</string>
+    <string name="text_dont_have_account">Dont have an account?</string>
     <string name="text_already_have_account">Already have an account?</string>
     <string name="button_create_account">Sign Up</string>
     <string name="button_sign_in">Sign In</string>
@@ -89,12 +89,13 @@
     <string name="hint_enter_mobile">Mobile Number</string>
     <string name="hint_enter_first_name">First Name</string>
     <string name="action_add">Add</string>
-    <string name="hint_enter_address_name">Address Title</string>
-    <string name="hint_enter_house_no">Flat No/House No</string>
+    <string name="hint_enter_address_name">Address Title*</string>
+    <string name="hint_enter_house_no">Flat No/House No*</string>
     <string name="hint_enter_area_name">Area Name</string>
-    <string name="hint_enter_landmark">Landmark</string>
-    <string name="hint_enter_cityname">City</string>
-    <string name="hint_enter_pincode">pincode</string>
+    <string name="hint_enter_landmark">Landmark(Optional)</string>
+    <string name="hint_enter_cityname">City*</string>
+    <string name="hint_enter_statename">State*</string>
+    <string name="hint_enter_pincode">Pincode*</string>
     <string name="submit_text">SUBMIT</string>
     <string name="current_order">CURRENT ORDER</string>
     <string name="confirm_booking">CONFIRM BOOKING</string>
@@ -113,4 +114,12 @@
     <string name="error_email_in_use">email address is already in use by another account</string>
     <string name="error_invalid_name">Cannot be empty</string>
     <string name="error_invalid_phone_number">Invalid Phone Number</string>
+
+    <!-- Add Address Activity Strings -->
+
+    <string name="provide_necessary_details">Please provide the necessary details.</string>
+    <string name="provide_mobile_num">Please provide a valid mobile number.</string>
+    <string name="less_than_6_character">This cannot be less than 6 characters.</string>
+    <string name="less_than_10_character">This cannot be less than 10 characters.</string>
+
 </resources>

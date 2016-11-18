@@ -36,7 +36,7 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
     Realm mRealm;
 
     public static final String selectGenderLabel = "Select Gender";
-    private String[] _gender = new String[]{selectGenderLabel,"Male", "Female"};
+    private String[] _gender = new String[]{selectGenderLabel, "Male", "Female"};
     private String _genderSelected;
     private String[] values;
 
@@ -47,7 +47,7 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
 
         mRealm = Realm.getDefaultInstance();
         Toolbar mtoolbar = (Toolbar) findViewById(R.id.fill_detail_toolbar);
-        mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
+        mtoolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(mtoolbar);
 
         values = getIntent().getExtras().getStringArray("user");
@@ -81,7 +81,7 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
         String _lastName = mEditTextLastName.getText().toString();
         if (mEditTextMobile.getText().length() > 0) {
             _mobile = Long.parseLong(mEditTextMobile.getText().toString());
-        }else{
+        } else {
             mEditTextMobile.setError(getResources().getString(R.string.error_invalid_phone_number));
         }
         boolean validFirstName = isFNameValid(_firstName);
@@ -111,7 +111,7 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner genderSpinner = (Spinner) parent;
-        if(genderSpinner.getId() == R.id.spinner_gender)   {
+        if (genderSpinner.getId() == R.id.spinner_gender) {
             _genderSelected = parent.getItemAtPosition(position).toString();
         }
     }

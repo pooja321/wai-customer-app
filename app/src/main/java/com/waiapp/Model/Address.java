@@ -8,7 +8,7 @@ import io.realm.RealmObject;
  * Created by keviv on 03/08/2016.
  */
 public class Address extends RealmObject implements Serializable {
-
+    private String addressId;
     private String addressName;
     private String addressType;
     private String houseNo;
@@ -20,23 +20,37 @@ public class Address extends RealmObject implements Serializable {
     private String pincode;
     private static final long serialVersionUID = 1L;
 
-    public Address() {
+    public Address()
+    {
+
+
     }
 
-    public Address(String addressName, String addressType, String houseNo, String areaName, String landmark, String city, String state, String country, String pincode ) {
+    public Address(String addressId, String addressName, String addressType, String houseNo, String areaName, String landmark, String city, String state, String country, String pincode ) {
+        this.addressId=addressId;
         this.addressName = addressName;
         this.addressType = addressType;
-        AreaName = areaName;
+        this.AreaName = areaName;
         this.city = city;
         this.country = country;
         this.houseNo = houseNo;
         this.landmark = landmark;
         this.pincode = pincode;
         this.state = state;
+
+
     }
 
     public String getAddressName() {
         return addressName;
+    }
+
+    public String getAddressId() {
+        return addressId;
+    }
+
+    public void setAddressId(String addressId) {
+        this.addressId = addressId;
     }
 
     public void setAddressName(String addressName) {
@@ -103,7 +117,4 @@ public class Address extends RealmObject implements Serializable {
         return state;
     }
 
-    public void setState(String state) {
-        this.state = state;
-    }
 }
