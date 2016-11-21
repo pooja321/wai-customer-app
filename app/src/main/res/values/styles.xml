@@ -12,7 +12,7 @@
     </style>
 
     <style name="HintText">
-        <item name="android:textSize">0dp</item>
+        <item name="android:textSize">0sp</item>
     </style>
 
     <style name="LoginCreateText">
