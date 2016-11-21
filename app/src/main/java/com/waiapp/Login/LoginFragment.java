@@ -34,8 +34,17 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.waiapp.MainActivity;
+import com.waiapp.Model.User;
 import com.waiapp.R;
+import com.waiapp.Utility.Constants;
+
+import io.realm.Realm;
 
 public class LoginFragment extends Fragment implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
@@ -48,6 +57,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
+    private DatabaseReference mDatabase;
+
+    Realm mrealm;
 
     /* A flag indicating that a PendingIntent is in progress and prevents us from starting further intents. */
     private boolean mGoogleIntentInProgress;
@@ -65,11 +78,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+
+        mrealm = Realm.getDefaultInstance();
+
         mTextViewSignUp = (TextView) view.findViewById(R.id.login_tv_sign_up);
         mTextViewForgotPassword = (TextView) view.findViewById(R.id.login_tv_forgot_password);
         mTextViewSignUp.setOnClickListener(this);
         mTextViewForgotPassword.setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -95,7 +113,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                 .build();
 
         /*** Build a GoogleApiClient with access to the Google Sign-In API and the options specified by gso.      */
-        if(mGoogleApiClient == null){
+        if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                     .enableAutoManage(getActivity() /* FragmentActivity */, this /* OnConnectionFailedListener */)
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
@@ -149,13 +167,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                 listener.onSignUpFragmentSelected(signUpFragment);
                 break;
             case R.id.login_tv_forgot_password:
-                startActivity(new Intent(getActivity(),ForgotPasswordActivity.class));
+                startActivity(new Intent(getActivity(), ForgotPasswordActivity.class));
                 break;
             case R.id.login_btn_signin:
                 signInPassword();
                 break;
 //            case R.id.login_with_google:
-                //onSignInGooglePressed(v);
+            //onSignInGooglePressed(v);
 //                break;
         }
     }
@@ -163,6 +181,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     private void signInPassword() {
         String email = mEditTextEmailInput.getText().toString();
         String password = mEditTextPasswordInput.getText().toString();
+
         boolean validEmail = isEmailValid(email);
 
         if (email.equals("") || !validEmail) {
@@ -175,35 +194,57 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
             return;
         }
         mAuthProgressDialog.show();
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener( getActivity(), new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(LOG_TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                Log.d(LOG_TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
 
-                        if (!task.isSuccessful()) {
-                            Log.v("wai","exception ", task.getException());
-                            try {
-                                throw task.getException();
-                            } catch(FirebaseAuthInvalidCredentialsException e) {
-                                mEditTextPasswordInput.setError(getString(R.string.error_email_password_notmatch));
-                            } catch(FirebaseAuthInvalidUserException e) {
-                                mEditTextEmailInput.setError(getString(R.string.error_user_doesnt_exists));
-                            } catch(Exception e) {
-                                Log.e(LOG_TAG, e.getMessage());
-                            }
-                        }else{
-                            FirebaseUser user = task.getResult().getUser();
-                            getUserData(user);
-                            Toast.makeText(getActivity(), "Authentication Successful.",Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getActivity(),MainActivity.class));
-                        }
+                if (!task.isSuccessful()) {
+                    Log.v("wai", "exception ", task.getException());
+                    try {
+                        throw task.getException();
+                    } catch (FirebaseAuthInvalidCredentialsException e) {
+                        mEditTextPasswordInput.setError(getString(R.string.error_email_password_notmatch));
+                    } catch (FirebaseAuthInvalidUserException e) {
+                        mEditTextEmailInput.setError(getString(R.string.error_user_doesnt_exists));
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, e.getMessage());
+                    }
+                    mAuthProgressDialog.dismiss();
+                } else {
+                    FirebaseUser user = task.getResult().getUser();
+                    getUserData(user);
+                    Toast.makeText(getActivity(), "Authentication Successful.", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+    }
+
+    private void getUserData(final FirebaseUser user) {
+        String UserKey = user.getUid();
+        Log.v("wai", "Userkey: " + UserKey);
+        mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(UserKey).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(final DataSnapshot dataSnapshot) {
+                Log.v("wai", "Value from ondata change" + dataSnapshot.getValue().toString());
+
+                mrealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+                        User user = dataSnapshot.getValue(User.class);
+                        realm.copyToRealmOrUpdate(user);
+                        startActivity(new Intent(getActivity(), MainActivity.class));
                         mAuthProgressDialog.dismiss();
                     }
                 });
-    }
+            }
 
-    private void getUserData(FirebaseUser user) {
-        String UserKey = user.getUid();
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                mAuthProgressDialog.dismiss();
+            }
+        });
     }
 
     private boolean isEmailValid(String email) {
@@ -211,20 +252,25 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
         boolean isGoodEmail = (email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches());
 
         if (!isGoodEmail) {
-            mEditTextEmailInput.setError(String.format(getString(R.string.error_invalid_email_not_valid),  email));
+            mEditTextEmailInput.setError(String.format(getString(R.string.error_invalid_email_not_valid), email));
             return false;
         }
         return isGoodEmail;
     }
 
-    /*** Sign in with Google plus when user clicks "Sign in with Google" textView (button)  */
+    /***
+     * Sign in with Google plus when user clicks "Sign in with Google" textView (button)
+     */
     public void onSignInGooglePressed(View view) {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_GOOGLE_LOGIN);
 
     }
-    /*** This callback is triggered when any startActivityForResult finishes. The requestCode maps to
-     * the value passed into startActivityForResult.  */
+
+    /***
+     * This callback is triggered when any startActivityForResult finishes. The requestCode maps to
+     * the value passed into startActivityForResult.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -235,6 +281,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
         }
 
     }
+
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(LOG_TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
@@ -250,8 +297,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                                 Log.w(LOG_TAG, "signInWithCredential", task.getException());
                                 Toast.makeText(getActivity(), "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
-                            }else{
-                                startActivity(new Intent(getActivity(),MainActivity.class));
+                            } else {
+                                startActivity(new Intent(getActivity(), MainActivity.class));
                             }
                         }
                     });
@@ -281,12 +328,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mGoogleApiClient != null){
+        if (mGoogleApiClient != null) {
             mGoogleApiClient.stopAutoManage(getActivity());
             mGoogleApiClient.disconnect();
         }
 
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -306,6 +354,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
             mGoogleApiClient.disconnect();
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();

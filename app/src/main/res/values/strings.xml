@@ -85,13 +85,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="hint_enter_last_name">Last Name</string>
-    <string name="hint_enter_mobile">Mobile Number</string>
-    <string name="hint_enter_first_name">First Name</string>
+    <string name="hint_enter_last_name">Last Name : Not Set</string>
+    <string name="hint_enter_mobile">Mobile Number : Not Set</string>
+    <string name="hint_enter_first_name">First Name : Not Set</string>
     <string name="action_add">Add</string>
     <string name="hint_enter_address_name">Address Title*</string>
     <string name="hint_enter_house_no">Flat No/House No*</string>
-    <string name="hint_enter_area_name">Area Name</string>
+    <string name="hint_enter_area_name">Area Name*</string>
     <string name="hint_enter_landmark">Landmark(Optional)</string>
     <string name="hint_enter_cityname">City*</string>
     <string name="hint_enter_statename">State*</string>

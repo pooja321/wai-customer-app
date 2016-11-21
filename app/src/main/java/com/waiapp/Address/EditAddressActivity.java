@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,10 +35,11 @@ public class EditAddressActivity extends AppCompatActivity {
     private Button mButtonSubmit;
     Address mAddress;
     String addressName, addressType, houseNo, areaName, landmark, city, state, country, pincode, UID;
+    TextView mTextviewDisplayMessage;
 
     boolean failFlag = false;
     public static final String selectAddressTypeLabel = "Select Address Type*";
-    private String[] addressTypeList = new String[]{selectAddressTypeLabel, "Flat", "House"};
+    
     Toolbar mtoolbar;
 
     @Override
@@ -45,13 +47,16 @@ public class EditAddressActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_address);
         mAddress = (Address) getIntent().getSerializableExtra("Address");
-        Log.v("wai","EditAddressActivity onCreate addressid: " + mAddress.getAddressId());
-        Log.v("wai","EditAddressActivity onCreate addressid: " + mAddress.getAddressName());
+        Log.v("wai", "EditAddressActivity onCreate addressid: " + mAddress.getAddressId());
+        Log.v("wai", "EditAddressActivity onCreate addressid: " + mAddress.getAddressName());
         mtoolbar = (Toolbar) findViewById(R.id.editaddress_toolbar);
         mtoolbar.setTitle("Edit Address");
         mtoolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(mtoolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        String[] addressTypeList = new String[]{mAddress.getAddressType(), "Flat", "House"};
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -67,6 +72,9 @@ public class EditAddressActivity extends AppCompatActivity {
         mEditTextPincode = (EditText) findViewById(R.id.editaddress_et_pincode);
         mEditTextState = (EditText) findViewById(R.id.editaddress_et_state);
         mButtonSubmit = (Button) findViewById(R.id.editaddress_button_submit);
+        mTextviewDisplayMessage = (TextView) findViewById(R.id.editaddress_textview_displaymessage);
+
+        mTextviewDisplayMessage.setVisibility(TextView.GONE);
 
         mEditTextAddressName.setText(mAddress.getAddressName());
         mEditTextHouseNo.setText(mAddress.getHouseNo());
@@ -77,6 +85,7 @@ public class EditAddressActivity extends AppCompatActivity {
         mEditTextState.setText(mAddress.getState());
 
         mSpinnerAddressType = (Spinner) findViewById(R.id.editaddress_spinner_address_type);
+
         if (mSpinnerAddressType != null) {
             mSpinnerAddressType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -84,6 +93,7 @@ public class EditAddressActivity extends AppCompatActivity {
                     Spinner addressTypeSpinner = (Spinner) parent;
                     if (addressTypeSpinner.getId() == R.id.editaddress_spinner_address_type) {
                         addressType = parent.getItemAtPosition(position).toString();
+
                     }
                 }
 
@@ -132,10 +142,6 @@ public class EditAddressActivity extends AppCompatActivity {
             failFlag = true;
             mEditTextAreaName.setError(EmptyString);
         }
-        if (landmark.equals("")) {
-            failFlag = true;
-            mEditTextLandMark.setError(EmptyString);
-        }
         if (city.equals("")) {
             failFlag = true;
             mEditTextCity.setError(EmptyString);
@@ -165,8 +171,11 @@ public class EditAddressActivity extends AppCompatActivity {
                     if (!task.isSuccessful()) {
                         Toast.makeText(EditAddressActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(EditAddressActivity.this, "Addess Added", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(EditAddressActivity.this, AddressActivity.class));
+                        Toast.makeText(EditAddressActivity.this, "Addess Updated", Toast.LENGTH_SHORT).show();
+                        mButtonSubmit.setVisibility(Button.GONE);
+                        mTextviewDisplayMessage.setVisibility(TextView.VISIBLE);
+
+
                     }
                 }
             });
@@ -176,7 +185,7 @@ public class EditAddressActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id== android.R.id.home) {
+        if (id == android.R.id.home) {
             Intent intent = NavUtils.getParentActivityIntent(this);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             NavUtils.navigateUpTo(this, intent);

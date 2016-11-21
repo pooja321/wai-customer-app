@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,6 +39,8 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
     private ProgressDialog mSaveProgressDialog;
 
     String addressName, addressid, addressType, houseNo, areaName, landmark, city, state, country, pincode, UID;
+    TextView mTextviewDisplayMessage;
+
     public static final String selectAddressTypeLabel = "Select Address Type*";
     private String[] addressTypeList = new String[]{selectAddressTypeLabel, "Flat", "House"};
 
@@ -68,7 +71,9 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
         mEditTextCity = (EditText) findViewById(R.id.addaddress_et_city);
         mEditTextPincode = (EditText) findViewById(R.id.addaddress_et_pincode);
         mEditTextState = (EditText) findViewById(R.id.addaddress_et_state);
+        mTextviewDisplayMessage = (TextView) findViewById(R.id.addaddress_textview_displaymessage);
 
+        mTextviewDisplayMessage.setVisibility(TextView.GONE);
 
         mTIL_Address_title = (TextInputLayout) findViewById(R.id.til_address_title);
         mTIL_Housenum = (TextInputLayout) findViewById(R.id.til_house_no);
@@ -144,12 +149,7 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
         } else {
             mTIL_Area_name.setErrorEnabled(false);
         }
-        if (landmark.equals("")) {
-            failFlag = true;
-            mTIL_Landmark.setError(EmptyString);
-        } else {
-            mTIL_Landmark.setErrorEnabled(false);
-        }
+
         if (city.equals("")) {
             failFlag = true;
             mTIL_City.setError(EmptyString);
@@ -186,7 +186,8 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
                         Toast.makeText(AddAddressActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(AddAddressActivity.this, "Addess Added", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(AddAddressActivity.this, AddressActivity.class));
+                        mButtonSubmit.setVisibility(Button.GONE);
+                        mTextviewDisplayMessage.setVisibility(TextView.VISIBLE);
                     }
                     mSaveProgressDialog.dismiss();
                 }

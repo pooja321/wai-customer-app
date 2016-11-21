@@ -102,7 +102,7 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
             @Override
             public void execute(Realm realm) {
                 realm.copyToRealmOrUpdate(user);
-            }
+}
         });
         mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(_userUID).setValue(user);
         startActivity(new Intent(FillDetailsActivity.this, MainActivity.class));
