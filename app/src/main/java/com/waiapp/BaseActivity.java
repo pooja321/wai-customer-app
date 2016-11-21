@@ -12,14 +12,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.waiapp.Login.LoginActivity;
+import com.waiapp.Model.User;
 import com.waiapp.Order.OrderHistoryActivity;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -29,6 +32,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     ActionBarDrawerToggle actionBarDrawerToggle;
     Realm mRealm;
 
+    User Name;
+
     @Override
     public void setContentView(int layoutResID) {
 
@@ -37,15 +42,17 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         FrameLayout activityContainer = (FrameLayout) drawer.findViewById(R.id.activity_content);
         getLayoutInflater().inflate(layoutResID, activityContainer, true);
         super.setContentView(drawer);
+        String UserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.inflateHeaderView(R.layout.nav_header_base);
-//        LinearLayout navHeaderbase = (LinearLayout) findViewById(R.id.nav_header_base);
-////        navHeaderbase.setOnClickListener(new View.OnClickListener(){
-////            public void onClick(View v) {
-////                Intent intent = new Intent(BaseActivity.this, ProfileAcitivity.class);
-////                startActivity(intent);
-////            }
-////        });
+        View Nav_View =  navigationView.getHeaderView(0);
+        TextView nav_Username = (TextView)Nav_View.findViewById(R.id.navheader_userName);
+        RealmResults<User> UserResults = mRealm.where(User.class).equalTo("Email",UserEmail).findAll();
+        if (UserResults.size() > 0){
+            Name = UserResults.get(0);
+        }
+        String firstname = Name.getFirstName();
+        String lastname = Name.getLastName();
+        nav_Username.setText(String.format("%s %s",firstname,lastname));
         toolbar = (Toolbar) findViewById(R.id.toolbar_base);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         if (useToolbar()) {
