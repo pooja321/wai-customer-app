@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -32,7 +33,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     ActionBarDrawerToggle actionBarDrawerToggle;
     Realm mRealm;
 
-    User Name;
+    User user;
 
     @Override
     public void setContentView(int layoutResID) {
@@ -43,16 +44,20 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         getLayoutInflater().inflate(layoutResID, activityContainer, true);
         super.setContentView(drawer);
         String UserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        Log.v("wai","Email: " + UserEmail);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         View Nav_View =  navigationView.getHeaderView(0);
         TextView nav_Username = (TextView)Nav_View.findViewById(R.id.navheader_userName);
         RealmResults<User> UserResults = mRealm.where(User.class).equalTo("Email",UserEmail).findAll();
-        if (UserResults.size() > 0){
-            Name = UserResults.get(0);
+        if (UserResults.size() > 0) {
+            user = UserResults.get(0);
+            if (user != null) {
+                String firstname = user.getFirstName();
+                String lastname = user.getLastName();
+                nav_Username.setText(String.format("%s %s", firstname, lastname));
+            }
         }
-        String firstname = Name.getFirstName();
-        String lastname = Name.getLastName();
-        nav_Username.setText(String.format("%s %s",firstname,lastname));
+
         toolbar = (Toolbar) findViewById(R.id.toolbar_base);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         if (useToolbar()) {
