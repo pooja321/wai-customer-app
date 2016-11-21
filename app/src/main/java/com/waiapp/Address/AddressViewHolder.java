@@ -46,7 +46,8 @@ public class AddressViewHolder extends RecyclerView.ViewHolder implements View.O
         mButtonEditAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemView.getContext().startActivity(new Intent(itemView.getContext(), EditAddressActivity.class).putExtra("Address", address));
+                itemView.getContext().startActivity(new Intent(itemView.getContext(), EditAddressActivity.class)
+                        .putExtra("Address", address));
             }
         });
     }

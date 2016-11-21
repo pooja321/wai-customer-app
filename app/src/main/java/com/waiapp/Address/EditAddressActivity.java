@@ -3,8 +3,11 @@ package com.waiapp.Address;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,7 +32,7 @@ public class EditAddressActivity extends AppCompatActivity {
 
     private EditText mEditTextAddressName, mEditTextHouseNo, mEditTextAreaName, mEditTextLandMark, mEditTextCity, mEditTextPincode, mEditTextState;
     private Button mButtonSubmit;
-    Address mAddress = new Address();
+    Address mAddress;
     String addressName, addressType, houseNo, areaName, landmark, city, state, country, pincode, UID;
 
     boolean failFlag = false;
@@ -42,7 +45,8 @@ public class EditAddressActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_address);
         mAddress = (Address) getIntent().getSerializableExtra("Address");
-
+        Log.v("wai","EditAddressActivity onCreate addressid: " + mAddress.getAddressId());
+        Log.v("wai","EditAddressActivity onCreate addressid: " + mAddress.getAddressName());
         mtoolbar = (Toolbar) findViewById(R.id.editaddress_toolbar);
         mtoolbar.setTitle("Edit Address");
         mtoolbar.setTitleTextColor(getResources().getColor(R.color.white));
@@ -50,6 +54,10 @@ public class EditAddressActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
 
         mEditTextAddressName = (EditText) findViewById(R.id.editaddress_et_address_name);
         mEditTextHouseNo = (EditText) findViewById(R.id.editaddress_et_houseno);
@@ -89,11 +97,6 @@ public class EditAddressActivity extends AppCompatActivity {
         ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(EditAddressActivity.this, android.R.layout.simple_spinner_dropdown_item, addressTypeList);
         genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerAddressType.setAdapter(genderAdapter);
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        }
 
         mButtonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +159,7 @@ public class EditAddressActivity extends AppCompatActivity {
         if (!failFlag) {
             Address address = new Address(mAddress.getAddressId(), addressName, addressType, houseNo, areaName, landmark, city, state, country, pincode);
 
-            mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID).child(address.getAddressId()).setValue(address).addOnCompleteListener(new OnCompleteListener<Void>() {
+            mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID).child(mAddress.getAddressId()).setValue(address).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (!task.isSuccessful()) {
@@ -168,6 +171,18 @@ public class EditAddressActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id== android.R.id.home) {
+            Intent intent = NavUtils.getParentActivityIntent(this);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            NavUtils.navigateUpTo(this, intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

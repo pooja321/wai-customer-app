@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -176,7 +178,8 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
 
             Address address = new Address(addressid, addressName, addressType, houseNo, areaName, landmark, city, state, country, pincode);
 
-            mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID).child(addressid).setValue(address).addOnCompleteListener(new OnCompleteListener<Void>() {
+            mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID).child(addressid).setValue(address)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (!task.isSuccessful()) {
@@ -202,5 +205,17 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id== android.R.id.home) {
+            Intent intent = NavUtils.getParentActivityIntent(this);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            NavUtils.navigateUpTo(this, intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
