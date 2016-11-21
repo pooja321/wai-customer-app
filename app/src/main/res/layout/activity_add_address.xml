@@ -31,6 +31,13 @@
                     app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             </android.support.design.widget.AppBarLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_address_title"
@@ -168,6 +175,7 @@
                     android:textColorHint="@color/colordarkgrey"
                     android:textSize="@dimen/text_size_normal" />
             </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -175,6 +183,12 @@
                 android:text="fields marked with * are mandatory"
                 android:textAlignment="center"
                 android:textColor="@color/Red" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp">
 
             <Button
                 android:id="@+id/addaddress_button_submit"
@@ -183,6 +197,15 @@
                 android:background="@color/colorAccent"
                 android:text="SUBMIT"
                 android:textSize="@dimen/text_size_normal" />
+            <TextView
+                android:id="@+id/addaddress_textview_displaymessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="*Your address is updated please press Back button to go to the Address screen"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="#000000"/>
+        </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

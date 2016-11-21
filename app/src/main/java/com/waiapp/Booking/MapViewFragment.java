@@ -54,13 +54,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.waiapp.Model.ResourceOnline;
 import com.waiapp.R;
 import com.waiapp.Utility.Constants;
+import com.waiapp.confirmation.BookingConfirmationActivity;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by keviv on 27/06/2016.
- */
 public abstract class MapViewFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener, GeoQueryEventListener, GoogleMap.OnCameraMoveListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
@@ -100,6 +98,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         mMapMarkers = new HashMap<>();
         mJobType = getJobtype();
         mGeoFire = new GeoFire(mGeoDatabaseRef);
+
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
@@ -340,7 +339,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onKeyEntered(String key, GeoLocation location) {
-        Log.v("wai", "onKeyEntered: " + String.format("%.2f %.2f", location.latitude, location.longitude));
+        Log.v("wai", "onKeyEntered location: " + String.format("%.2f %.2f", location.latitude, location.longitude));
         int resId = 0;
         switch (mJobType) {
             case Constants.FIREBASE_CHILD_CLEANING:
@@ -357,12 +356,13 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude))
                 .icon(BitmapDescriptorFactory.fromResource(resId)));
         this.mMapMarkers.put(key, marker);
-        Log.v("wai", "key: " + key);
+        Log.v("wai", "onKeyEntered marker key: " + key);
         getResourceData(key, marker.getId());
     }
 
     private void getResourceData(final String key, final String id) {
-        Log.v("wai", "getResourceDatamarker id: " + key);
+//        final Realm mRealm = Realm.getDefaultInstance();
+        Log.v("wai", "getResourceData marker id: " + id);
         mOnlineResourceDatabaseRef = FirebaseDatabase.getInstance().getReference().child(Constants.FIREBASE_CHILD_ONLINE_RESOURCE).child(mJobType).child(key);
         mOnlineResourceDatabaseRef.addValueEventListener(new ValueEventListener() {
 
@@ -370,6 +370,26 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.v("wai", "onDataChange dataSnapshot: " + dataSnapshot.toString());
                 mMapResourceList.put(id, dataSnapshot.getValue(ResourceOnline.class));
+//                final ResourceOnline resourceOnline = dataSnapshot.getValue(ResourceOnline.class);
+//                Log.v("wai", "onKeyEntered: resource online id: " + resourceOnline.getResourceId());
+//                Log.v("wai", "onKeyEntered: resource list size: " + String.valueOf(mMapResourceList.size()));
+//                mRealm.executeTransactionAsync(new Realm.Transaction() {
+//                    @Override
+//                    public void execute(Realm realm) {
+//                        realm.copyToRealmOrUpdate(resourceOnline);
+//                    }
+//                }, new Realm.Transaction.OnSuccess() {
+//                    @Override
+//                    public void onSuccess() {
+//                        final RealmResults<ResourceOnline> ResourcesOnlineResults = mRealm.where(ResourceOnline.class).equalTo("resourceId",resourceOnline.getResourceId())
+//                                .findAll();
+//                        if (ResourcesOnlineResults.size() > 0) {
+//                            Log.v("wai", "getResourceData onSuccess Realmsize: " + String.valueOf(ResourcesOnlineResults.size()));
+//                        }else{
+//                            Log.v("wai", "getResourceData onSuccess Realmsize is zero ");
+//                        }
+//                    }
+//                });
             }
 
             @Override
@@ -377,17 +397,36 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
             }
         });
+//        mRealm.close();
     }
 
     @Override
     public void onKeyExited(String key) {
+        Log.v("wai", "onKeyExited marker key: " + key);
+//        Realm realm = Realm.getDefaultInstance();
         // Remove any old marker
         Marker marker = this.mMapMarkers.get(key);
         if (marker != null) {
             marker.remove();
             this.mMapMarkers.remove(key);
             mMapResourceList.remove(marker.getId());
+//            final String markerId = marker.getId();
+//            realm.executeTransactionAsync(new Realm.Transaction() {
+//                @Override
+//                public void execute(Realm realm) {
+//                    Log.v("wai", "onKeyExited id: " + markerId);
+//                    ResourceOnline resourceOnline = mMapResourceList.get(markerId);
+//                    String resourceId = resourceOnline.getResourceId();
+//                    RealmResults<ResourceOnline> ResourcesOnlineResults2 = realm.where(ResourceOnline.class).equalTo("resourceId",resourceId).findAll();
+//                    if (ResourcesOnlineResults2.size() > 0) {
+//                        ResourcesOnlineResults2.deleteAllFromRealm();
+//                    }else{
+//                        Log.v("wai", "onKeyExited Realmsize is zero ");
+//                    }
+//                }
+//            });
         }
+//        realm.close();
     }
 
     @Override
@@ -409,7 +448,13 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(getActivity(), "Click Info Window", Toast.LENGTH_SHORT).show();
+        String id = marker.getId();
+        ResourceOnline resourceOnline = mMapResourceList.get(id);
+        startActivity(new Intent(getActivity(), BookingConfirmationActivity.class)
+                .putExtra("resourceName",resourceOnline.getName())
+                .putExtra("fragment_name",mJobType)
+                .putExtra("resourceKey",resourceOnline.getResourceId()));
+        Toast.makeText(getActivity(), resourceOnline.getName(), Toast.LENGTH_SHORT).show();
     }
 
     // Animation handler for old APIs without animation support

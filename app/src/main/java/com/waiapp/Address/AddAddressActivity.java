@@ -5,14 +5,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,6 +39,8 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
     private ProgressDialog mSaveProgressDialog;
 
     String addressName, addressid, addressType, houseNo, areaName, landmark, city, state, country, pincode, UID;
+    TextView mTextviewDisplayMessage;
+
     public static final String selectAddressTypeLabel = "Select Address Type*";
     private String[] addressTypeList = new String[]{selectAddressTypeLabel, "Flat", "House"};
 
@@ -66,7 +71,9 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
         mEditTextCity = (EditText) findViewById(R.id.addaddress_et_city);
         mEditTextPincode = (EditText) findViewById(R.id.addaddress_et_pincode);
         mEditTextState = (EditText) findViewById(R.id.addaddress_et_state);
+        mTextviewDisplayMessage = (TextView) findViewById(R.id.addaddress_textview_displaymessage);
 
+        mTextviewDisplayMessage.setVisibility(TextView.GONE);
 
         mTIL_Address_title = (TextInputLayout) findViewById(R.id.til_address_title);
         mTIL_Housenum = (TextInputLayout) findViewById(R.id.til_house_no);
@@ -142,12 +149,7 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
         } else {
             mTIL_Area_name.setErrorEnabled(false);
         }
-        if (landmark.equals("")) {
-            failFlag = true;
-            mTIL_Landmark.setError(EmptyString);
-        } else {
-            mTIL_Landmark.setErrorEnabled(false);
-        }
+
         if (city.equals("")) {
             failFlag = true;
             mTIL_City.setError(EmptyString);
@@ -176,14 +178,16 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
 
             Address address = new Address(addressid, addressName, addressType, houseNo, areaName, landmark, city, state, country, pincode);
 
-            mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID).child(addressid).setValue(address).addOnCompleteListener(new OnCompleteListener<Void>() {
+            mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID).child(addressid).setValue(address)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (!task.isSuccessful()) {
                         Toast.makeText(AddAddressActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(AddAddressActivity.this, "Addess Added", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(AddAddressActivity.this, AddressActivity.class));
+                        mButtonSubmit.setVisibility(Button.GONE);
+                        mTextviewDisplayMessage.setVisibility(TextView.VISIBLE);
                     }
                     mSaveProgressDialog.dismiss();
                 }
@@ -202,5 +206,17 @@ public class AddAddressActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id== android.R.id.home) {
+            Intent intent = NavUtils.getParentActivityIntent(this);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            NavUtils.navigateUpTo(this, intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

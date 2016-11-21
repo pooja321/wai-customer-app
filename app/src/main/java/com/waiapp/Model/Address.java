@@ -20,10 +20,7 @@ public class Address extends RealmObject implements Serializable {
     private String pincode;
     private static final long serialVersionUID = 1L;
 
-    public Address()
-    {
-
-
+    public Address() {
     }
 
     public Address(String addressId, String addressName, String addressType, String houseNo, String areaName, String landmark, String city, String state, String country, String pincode ) {

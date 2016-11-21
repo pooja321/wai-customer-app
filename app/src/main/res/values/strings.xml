@@ -91,7 +91,7 @@
     <string name="action_add">Add</string>
     <string name="hint_enter_address_name">Address Title*</string>
     <string name="hint_enter_house_no">Flat No/House No*</string>
-    <string name="hint_enter_area_name">Area Name</string>
+    <string name="hint_enter_area_name">Area Name*</string>
     <string name="hint_enter_landmark">Landmark(Optional)</string>
     <string name="hint_enter_cityname">City*</string>
     <string name="hint_enter_statename">State*</string>

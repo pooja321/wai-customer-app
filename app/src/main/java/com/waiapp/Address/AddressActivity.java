@@ -34,6 +34,10 @@ import java.util.HashMap;
 
 public class AddressActivity extends AppCompatActivity {
 
+    public static final String KEY_RESOURCE_KEY = "resourceKey";
+    public static final String KEY_TOTAL_AMOUNT = "totalAmount";
+    public static final String KEY_ORDER_TYPE = "orderType";
+    public static final String KEY_ORDER_ID = "orderId";
     String mOrderType, mResourceKey, mOrderId, UID;
     double mTotalAmount;
 
@@ -58,10 +62,10 @@ public class AddressActivity extends AppCompatActivity {
         mProgressDialog.setCancelable(false);
         mProgressDialog.show();
 
-        mResourceKey = getIntent().getStringExtra("resourceKey");
-        mTotalAmount = getIntent().getDoubleExtra("totalAmount", 0);
-        mOrderType = getIntent().getStringExtra("orderType");
-        mOrderId = getIntent().getStringExtra("orderId");
+        mResourceKey = getIntent().getStringExtra(KEY_RESOURCE_KEY);
+        mTotalAmount = getIntent().getDoubleExtra(KEY_TOTAL_AMOUNT, 0);
+        mOrderType = getIntent().getStringExtra(KEY_ORDER_TYPE);
+        mOrderId = getIntent().getStringExtra(KEY_ORDER_ID);
         Log.v("wai", "Order Id: " + mOrderId);
         Log.v("wai", "Order type: " + mOrderType);
         mToolbar = (Toolbar) findViewById(R.id.address_toolbar);
@@ -159,5 +163,50 @@ public class AddressActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.v("wai", "AddressActivity onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.v("wai", "AddressActivity onStop");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.v("wai", "AddressActivity onResume");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.v("wai", "AddressActivity onStart");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(KEY_RESOURCE_KEY,mResourceKey);
+        outState.putDouble(KEY_TOTAL_AMOUNT,mTotalAmount);
+        outState.putString(KEY_ORDER_TYPE,mOrderType);
+        outState.putString(KEY_ORDER_ID,mOrderId);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.v("wai", "onViewStateRestored");
+        if (savedInstanceState != null){
+            mResourceKey = savedInstanceState.getString(KEY_RESOURCE_KEY);
+            mTotalAmount = savedInstanceState.getDouble(KEY_TOTAL_AMOUNT);
+            mOrderType = savedInstanceState.getString(KEY_ORDER_TYPE);
+            mOrderId = savedInstanceState.getString(KEY_ORDER_ID);
+        }
     }
 }
