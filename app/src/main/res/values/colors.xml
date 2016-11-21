@@ -16,6 +16,7 @@
     <color name="google">#C6412C</color>
     <color name="Gray">#D3D3D3</color>
     <color name="white">#FFFFFF</color>
+    <color name="Red">#F44336</color>
 
     <color name="feed_bg">#d3d6db</color>
     <color name="feed_item_bg">#ffffff</color>

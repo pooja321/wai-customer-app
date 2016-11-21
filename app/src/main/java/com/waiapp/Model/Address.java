@@ -34,6 +34,8 @@ public class Address extends RealmObject implements Serializable {
         this.landmark = landmark;
         this.pincode = pincode;
         this.state = state;
+
+
     }
 
     public String getAddressName() {
@@ -112,7 +114,4 @@ public class Address extends RealmObject implements Serializable {
         return state;
     }
 
-    public void setState(String state) {
-        this.state = state;
-    }
 }

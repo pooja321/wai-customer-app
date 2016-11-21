@@ -2,16 +2,20 @@ package com.waiapp.Model;
 
 import java.util.HashMap;
 
-/**
- * Created by keviv on 21/08/2016.
- */
-//public class ResourceOnline implements Serializable {
-//    private static final long serialVersionUID = 1L;
-public class ResourceOnline {
-    private String resourceId, Name,Gender,picture;
+import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
+
+public class ResourceOnline extends RealmObject {
+
+    @PrimaryKey
+    private String resourceId;
+    private String Name,Gender,picture;
     private int rating;
     private double Lat, Long;
+    @Ignore
     private HashMap<String, Object> timestampLogin;
+    @Ignore
     private HashMap<String, Object> timestampLogout;
 
     public ResourceOnline(){
