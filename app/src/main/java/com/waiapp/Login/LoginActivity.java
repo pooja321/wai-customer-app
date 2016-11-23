@@ -27,15 +27,12 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
             fragmentManager = getSupportFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.login_frame_placeholder, loginFragment, LOGIN_FRAGMENT);
+            fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
     }
 
 
-//    public void onSkipLoginButtonClick(View view){
-//        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//        startActivity(intent);
-//    }
 
     @Override
     public void onBackPressed() {

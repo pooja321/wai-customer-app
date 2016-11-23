@@ -87,14 +87,17 @@
                 android:value=".Order.OrderHistoryActivity" />
         </activity>
         <activity android:name=".ProfileActivity" />
-
         <activity android:name=".Login.ForgotPasswordActivity" />
         <activity android:name=".Address.EditAddressActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Address.AddressActivity" />
         </activity>
-
+        <activity android:name=".EditUserProfile">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ProfileActivity" />
+        </activity>
     </application>
 
 </manifest>
