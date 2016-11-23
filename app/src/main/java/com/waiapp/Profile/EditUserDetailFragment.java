@@ -1,4 +1,4 @@
-package com.waiapp.EditProfile;
+package com.waiapp.Profile;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,7 +22,7 @@ import java.util.Map;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class EditUserDetail extends Fragment {
+public class EditUserDetailFragment extends Fragment {
 
     EditText mEditTextFirstName,mEditTextLastName, mEditTextMobile;
     Button mButtonSubmit;
@@ -34,8 +34,8 @@ public class EditUserDetail extends Fragment {
     Long UpdateMobile;
     private DatabaseReference mDatabase;
 
-    public static EditUserDetail newInstance() {
-        EditUserDetail fragment = new EditUserDetail();
+    public static EditUserDetailFragment newInstance() {
+        EditUserDetailFragment fragment = new EditUserDetailFragment();
 
         return fragment;
     }

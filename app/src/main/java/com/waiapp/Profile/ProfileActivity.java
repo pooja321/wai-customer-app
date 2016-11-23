@@ -1,4 +1,4 @@
-package com.waiapp;
+package com.waiapp.Profile;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -8,7 +8,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.waiapp.BaseActivity;
 import com.waiapp.Model.User;
+import com.waiapp.R;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -73,10 +75,10 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         int id = v.getId();
         switch (id) {
             case R.id.user_profile_changepassword:
-                startActivity(new Intent(ProfileActivity.this, EditUserProfile.class).putExtra(UserKey,2));
+                startActivity(new Intent(ProfileActivity.this, EditUserProfileActivity.class).putExtra(UserKey,2));
                 break;
             case R.id.user_profile_editdetail:
-                startActivity(new Intent(ProfileActivity.this, EditUserProfile.class).putExtra(UserKey,1));
+                startActivity(new Intent(ProfileActivity.this, EditUserProfileActivity.class).putExtra(UserKey,1));
                 break;
 //                String password = mEditTextNewPassword.getText().toString();
 //                mAuthProgressDialog.show();

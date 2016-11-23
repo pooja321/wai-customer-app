@@ -1,4 +1,4 @@
-package com.waiapp;
+package com.waiapp.Profile;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,13 +7,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import com.waiapp.EditProfile.ChangePassword;
-import com.waiapp.EditProfile.EditUserDetail;
+import com.waiapp.R;
 
-import static com.waiapp.ProfileActivity.UserKey;
+import static com.waiapp.Profile.ProfileActivity.UserKey;
 import static com.waiapp.confirmation.BookingConfirmationActivity.SAVED_FRAGMENT;
 
-public class EditUserProfile extends AppCompatActivity {
+public class EditUserProfileActivity extends AppCompatActivity {
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
     Toolbar mToolbar;
@@ -30,12 +29,12 @@ public class EditUserProfile extends AppCompatActivity {
 
         switch (key) {
             case (1):
-                fragment = EditUserDetail.newInstance();
+                fragment = EditUserDetailFragment.newInstance();
                 getSupportActionBar().setTitle("Edit Profile");
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 break;
             case (2):
-                fragment = ChangePassword.newInstance();
+                fragment = ChangePasswordFragment.newInstance();
                 getSupportActionBar().setTitle("Change Password");
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 break;

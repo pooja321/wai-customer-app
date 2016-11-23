@@ -1,4 +1,4 @@
-package com.waiapp.EditProfile;
+package com.waiapp.Profile;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,16 +7,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.waiapp.R;
 
 
-public class ChangePassword extends Fragment {
+public class ChangePasswordFragment extends Fragment {
     EditText mEditTextNewPassword,mEditTextConfirmPassword;
     Button mSubmit;
     String mNewPassword,mConfirmPassword;
-    public static ChangePassword newInstance() {
-        ChangePassword fragment = new ChangePassword();
+    public static ChangePasswordFragment newInstance() {
+        ChangePasswordFragment fragment = new ChangePasswordFragment();
         return fragment;
     }
     @Override
@@ -32,9 +33,9 @@ public class ChangePassword extends Fragment {
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mNewPassword==mConfirmPassword)
+                if (mNewPassword.equals(mConfirmPassword))
                 {
-                    
+                    Toast.makeText(getActivity(), "hello", Toast.LENGTH_SHORT).show();
                 }
             }
         });
