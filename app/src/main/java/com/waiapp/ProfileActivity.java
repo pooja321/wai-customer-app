@@ -33,6 +33,7 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         setTitle("My Profile");
 
         mRealm = Realm.getDefaultInstance();
+
         String UserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
         mTextViewEmail = (TextView) findViewById(R.id.user_profile_email);
