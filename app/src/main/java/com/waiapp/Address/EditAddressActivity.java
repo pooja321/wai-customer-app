@@ -47,8 +47,10 @@ public class EditAddressActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_address);
         mAddress = (Address) getIntent().getSerializableExtra("Address");
+        Log.v("wai", "EditAddressActivity onCreate maddress: " + mAddress);
         Log.v("wai", "EditAddressActivity onCreate addressid: " + mAddress.getAddressId());
-        Log.v("wai", "EditAddressActivity onCreate addressid: " + mAddress.getAddressName());
+        Log.v("wai", "EditAddressActivity onCreate addressName: " + mAddress.getAddressName());
+        Log.v("wai", "EditAddressActivity onCreate selectAdresstype: " + selectAddressTypeLabel);
         mtoolbar = (Toolbar) findViewById(R.id.editaddress_toolbar);
         mtoolbar.setTitle("Edit Address");
         mtoolbar.setTitleTextColor(getResources().getColor(R.color.white));
@@ -56,12 +58,13 @@ public class EditAddressActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         String[] addressTypeList = new String[]{mAddress.getAddressType(), "Flat", "House"};
-
+        Log.v("wai", "EditAddressActivity onCreate addressTypelist: " + addressTypeList);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            Log.v("wai", "EditAddressActivity onCreate UID: " + UID);
         }
 
         mEditTextAddressName = (EditText) findViewById(R.id.editaddress_et_address_name);

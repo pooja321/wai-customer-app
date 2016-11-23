@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.waiapp.Profile.ProfileActivity;
 import com.waiapp.Login.LoginActivity;
 import com.waiapp.Model.User;
 import com.waiapp.Order.OrderHistoryActivity;
