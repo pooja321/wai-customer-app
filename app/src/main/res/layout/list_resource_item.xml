@@ -27,7 +27,7 @@
                 android:id="@+id/list_item_profilePic"
                 android:layout_width="@dimen/feed_item_profile_pic"
                 android:layout_height="@dimen/feed_item_profile_pic"
-                android:src="@drawable/sean" />
+                android:src="@drawable/beforeafter" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
