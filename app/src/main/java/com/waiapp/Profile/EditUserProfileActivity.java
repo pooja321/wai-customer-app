@@ -38,6 +38,11 @@ public class EditUserProfileActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle("Change Password");
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 break;
+            case (3):
+                fragment = ChangeEmailFragment.newInstance();
+                getSupportActionBar().setTitle("Change Email");
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                break;
 
         }
 
