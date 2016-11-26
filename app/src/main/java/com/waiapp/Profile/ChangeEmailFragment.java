@@ -76,7 +76,7 @@ public class ChangeEmailFragment extends Fragment {
 
         String UserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(UID).updateChildren(childUpdates);
-        Log.v("wai","<<<<<<<UserEmail" + UserEmail);
+        Log.v("wai","<<<<<<<UserEmail " + UserEmail);
 
         mRealm.beginTransaction();
         User UserResults = mRealm.where(User.class).equalTo("Email", UserEmail).findFirst();

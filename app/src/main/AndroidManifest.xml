@@ -98,6 +98,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Profile.ProfileActivity" />
         </activity>
+        <activity android:name=".TermsAndConditionsActivity"></activity>
     </application>
 
 </manifest>

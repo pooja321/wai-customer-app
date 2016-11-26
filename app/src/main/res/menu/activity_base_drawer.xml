@@ -22,10 +22,10 @@
             <!--android:id="@+id/nav_invite_and_earn"-->
             <!--android:title="@string/invite_and_earn"-->
             <!--android:icon="@drawable/ic_people_black_24dp"/>-->
-        <!--<item-->
-            <!--android:id="@+id/nav_about"-->
-            <!--android:title="@string/about"-->
-            <!--android:icon="@drawable/ic_tag_faces_black_24dp"/>-->
+        <item
+            android:id="@+id/nav_terms"
+            android:title="TERMS AND CONDITIONS"
+            android:icon="@drawable/ic_action_document"/>
         <item
             android:id="@+id/nav_logout"
             android:title="@string/logout"
