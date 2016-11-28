@@ -6,16 +6,12 @@
     <string name="text_already_have_account">Already have an account?</string>
     <string name="button_create_account">Sign Up</string>
     <string name="button_sign_in">Sign In</string>
-    <string name="button_signin_with_google">SIGN IN WITH GOOGLE</string>
     <string name="button_signin_with_password">SIGN IN</string>
     <string name="hint_enter_email">Enter your email</string>
-    <string name="hint_enter_username">Enter your name</string>
     <string name="hint_enter_password">Enter password</string>
-    <string name="image_view_logo_image">Logo Image</string>
 
     <!-- Activity Titles  -->
     <string name="title_activity_create_account">Create Account</string>
-    <string name="title_activity_orders">OrdersActivity</string>
     <string name="confirm_booking_activity_title">Booking Details</string>
     <string name="label_order_confirm">Order Confirmed</string>
     <string name="label_add_address">Add Address</string>
@@ -25,66 +21,29 @@
     <!-- Instructions and Loading Text -->
     <string name="progress_dialog_loading">Loading…</string>
     <string name="progress_dialog_signingin">Signing In…</string>
-    <string name="progress_dialog_authenticating">Authenticating…</string>
     <string name="progress_dialog_creating_user_with_firebase">Attempting to create account…</string>
-    <string name="progress_dialog_check_inbox">Please check your inbox for your password</string>
 
     <!-- Log Messages -->
-    <string name="log_message_password_changed_successfully">Password changed successfully from temporary password to </string>
-    <string name="log_message_auth_successful">auth successful.</string>
 
     <!-- Base Error Strings-->
-    <string name="log_error_updating_data">Error updating data: </string>
-    <string name="log_error_the_read_failed">The read failed: </string>
-    <string name="log_error_occurred">"Error occurred: "</string>
 
     <!-- Errors -->
-    <string name="dialog_title_error">Error</string>
-    <string name="error_message_failed_sign_in_no_network">There was a problem with the network connection.\nAre you sure you\'re connected to the internet?</string>
-    <string name="log_error_invalid_provider">"Invalid provider: "</string>
-    <string name="log_error_failed_to_change_password">"Failed to change the password: "</string>
     <string name="error_invalid_email_not_valid">%s is not a valid email</string>
-    <string name="error_message_email_issue">There was an error with your email; please check that you entered it correctly.</string>
-    <string name="error_you_didnt_give_permissions">You must give ShoppingList++ permission to access your Google account information if you want to use Google sign-in.</string>
-    <string name="error_email_taken">The email is already taken.</string>
     <string name="error_invalid_password_not_valid">Please enter a password that is at least 6 characters long.</string>
     <string name="error_cannot_be_empty">This cannot be empty.</string>
 
     <!-- OAuth Format -->
-    <string name="oauth2_format">oauth2:%s</string>
 
     <!-- Google Errors -->
-    <string name="google_error_recoverable_oauth_error">"Recoverable Google OAuth error: "</string>
-    <string name="google_error_google_play_services_not_available">Google Play Services are not available.</string>
-    <string name="google_error_trying_to_connect_google_api">Trying to connect to Google API</string>
-    <string name="google_error_auth_with_google">"Error authenticating with Google: "</string>
-    <string name="google_error_network_error">"Network error: "</string>
-    <string name="google_error_cant_connect_to_api">Are you sure that you set up a project for your app?
-        Check out : https://console.developers.google.com/project. Also make sure you have all the proper
-    gradle dependencies</string>
-    <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
 
     <!-- navigation Drawer Strings -->
     <string name="history">HISTORY</string>
-    <string name="your_address">YOUR ADDRESSES</string>
-    <string name="notifications">NOTIFICATIONS</string>
-    <string name="chat_with_us">CHAT WITH US</string>
-    <string name="invite_and_earn">INVITE AND EARN</string>
-    <string name="need_help">NEED HELP?</string>
-    <string name="settings">SETTINGS</string>
-    <string name="about">ABOUT</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="Profile_Picture_content_desc">person name</string>
-    <string name="Rs">\u20B9</string>
-    <string name="rs">\u20A8</string>
     <string name="logout">LOGOUT</string>
-    <string name="add_resource">Add Resource</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_enter_last_name">Last Name : Not Set</string>
     <string name="hint_enter_mobile">Mobile Number : Not Set</string>
     <string name="hint_enter_first_name">First Name : Not Set</string>
@@ -97,7 +56,6 @@
     <string name="hint_enter_statename">State*</string>
     <string name="hint_enter_pincode">Pincode*</string>
     <string name="submit_text">SUBMIT</string>
-    <string name="current_order">CURRENT ORDER</string>
     <string name="confirm_booking">CONFIRM BOOKING</string>
     <string name="button_forgot_password">Forgot Your Password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
@@ -105,11 +63,8 @@
     <string name="hint_email">Email</string>
     <string name="btn_reset_password">reset password</string>
     <string name="btn_back">go back</string>
-    <string name="change_password">Change Password</string>
     <string name="profile">PROFILE</string>
-    <string name="error_invalid_email">Invalid Email</string>
     <string name="error_user_doesnt_exists">Sorry, not a member yet</string>
-    <string name="error_wrong_password">Incorrect Password</string>
     <string name="error_email_password_notmatch">Email id and password mismatch</string>
     <string name="error_email_in_use">email address is already in use by another account</string>
     <string name="error_invalid_name">Cannot be empty</string>
@@ -118,8 +73,6 @@
     <!-- Add Address Activity Strings -->
 
     <string name="provide_necessary_details">Please provide the necessary details.</string>
-    <string name="provide_mobile_num">Please provide a valid mobile number.</string>
     <string name="less_than_6_character">This cannot be less than 6 characters.</string>
-    <string name="less_than_10_character">This cannot be less than 10 characters.</string>
 
 </resources>

@@ -5,7 +5,7 @@
     android:background="@color/grey"
     android:orientation="vertical"
     android:padding="8dp"
-    tools:context="com.waiapp.Order.Fragment.CookingOrderDetailFragment">
+    tools:context=".Order.Fragment.CookingOrderDetailFragment">
 
     <ScrollView
         android:layout_width="match_parent"

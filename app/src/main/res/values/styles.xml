@@ -11,10 +11,6 @@
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
-    <style name="HintText">
-        <item name="android:textSize">0sp</item>
-    </style>
-
     <style name="LoginCreateText">
         <item name="android:textSize">@dimen/login_buttons_text_size</item>
         <item name="android:layout_margin">2dp</item>
