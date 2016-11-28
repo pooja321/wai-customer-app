@@ -6,15 +6,11 @@
     <color name="colorPrimary">#252525</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#f8c800</color>
-    <color name="colorSplash">#00E5FF</color>
     <color name="colorwhite">#FFFFFF</color>
-    <color name="colorLoginBackground">#26A69A</color>
     <color name="grey">#EDEEEF</color>
     <color name="colordarkgrey">#303030</color>
     <color name="colorlightgrey">#424242</color>
     <color name="black">#616161</color>
-    <color name="google">#C6412C</color>
-    <color name="Gray">#D3D3D3</color>
     <color name="white">#FFFFFF</color>
     <color name="Red">#F44336</color>
     <color name="DarkBlack">#000</color>
@@ -22,6 +18,4 @@
     <color name="feed_bg">#d3d6db</color>
     <color name="feed_item_bg">#ffffff</color>
     <color name="feed_item_border">#c2c3c8</color>
-    <color name="link">#0a80d1</color>
-    <color name="timestamp">#a0a3a7</color>
 </resources>

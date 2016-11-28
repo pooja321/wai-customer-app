@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.waiapp">
+    package="customer.thewaiapp.com">
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -25,7 +25,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAB_b3rfb_k8NO6SZHQYP-rUr_phIamn6Q" />
+            android:value="AIzaSyCsG8BUhLh2OQxih1HclXuWvsfD2jHDf-4" />
 
         <activity android:name=".MainActivity" />
         <activity
@@ -46,7 +46,7 @@
             android:label="@string/confirm_booking_activity_title">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.waiapp.MainActivity" />
+                android:value=".MainActivity" />
         </activity>
         <activity android:name=".SortFilterActivity" />
         <activity
