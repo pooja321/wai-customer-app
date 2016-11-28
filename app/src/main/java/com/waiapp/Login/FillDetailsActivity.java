@@ -144,4 +144,9 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
         }
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }

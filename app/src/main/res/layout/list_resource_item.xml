@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/feed_bg"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -43,6 +42,7 @@
                         android:id="@+id/list_item_gender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
                         android:src="@drawable/human_male"  />
 
                     <TextView
@@ -56,31 +56,34 @@
                         android:textSize="@dimen/text_size_normal" />
                 </RelativeLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/list_item_rating"
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
                         android:gravity="center"
-                        android:background="@drawable/rating_bg_stroke"
+                        android:background="@drawable/bg_rectangle_solid_yellow_corner"
                         android:padding="8dp"
                         android:text="4"
                         android:textColor="@color/white"
                         android:textSize="@dimen/text_size_normal" />
 
-                    <!--<TextView-->
-                        <!--android:id="@+id/list_item_distance"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_alignParentRight="true"-->
-                        <!--android:background="@drawable/bg_oval_stroke_gray"-->
-                        <!--android:padding="8dp"-->
-                        <!--android:text="3 KM away"-->
-                        <!--android:textSize="@dimen/text_size_normal" />-->
-                </RelativeLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:background="@drawable/bg_oval_stroke_gray"
+                        android:padding="4dp"
+                        android:text="Click to book"
+                        android:textSize="@dimen/text_size_normal" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
