@@ -186,12 +186,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
 
         boolean validEmail = isEmailValid(email);
 
-        if (email.equals("") || !validEmail) {
-            mEditTextEmailInput.setError(getString(R.string.error_cannot_be_empty));
+        if (!validEmail) {
             return;
         }
 
         if (password.equals("")) {
+            mEditTextPasswordInput.requestFocus();
             mEditTextPasswordInput.setError(getString(R.string.error_cannot_be_empty));
             return;
         }
@@ -206,8 +206,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                     try {
                         throw task.getException();
                     } catch (FirebaseAuthInvalidCredentialsException e) {
+                        mEditTextPasswordInput.requestFocus();
                         mEditTextPasswordInput.setError(getString(R.string.error_email_password_notmatch));
                     } catch (FirebaseAuthInvalidUserException e) {
+                        mEditTextEmailInput.requestFocus();
                         mEditTextEmailInput.setError(getString(R.string.error_user_doesnt_exists));
                     } catch (Exception e) {
                         Log.e(LOG_TAG, e.getMessage());
@@ -254,6 +256,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
         boolean isGoodEmail = (email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches());
 
         if (!isGoodEmail) {
+            mEditTextEmailInput.requestFocus();
             mEditTextEmailInput.setError(String.format(getString(R.string.error_invalid_email_not_valid), email));
             return false;
         }

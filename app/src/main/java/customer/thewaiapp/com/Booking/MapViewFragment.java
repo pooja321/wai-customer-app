@@ -344,13 +344,13 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         int resId = 0;
         switch (mJobType) {
             case Constants.FIREBASE_CHILD_CLEANING:
-                resId = getResources().getIdentifier("ic_person_black_24dp", "drawable", "com.waiapp");
+                resId = getResources().getIdentifier("ic_person_black_24dp", "drawable", "customer.thewaiapp.com");
                 break;
             case Constants.FIREBASE_CHILD_WASHING:
-                resId = getResources().getIdentifier("ic_hanger_black_24dp", "drawable", "com.waiapp");
+                resId = getResources().getIdentifier("ic_hanger_black_24dp", "drawable", "customer.thewaiapp.com");
                 break;
             case Constants.FIREBASE_CHILD_COOKING:
-                resId = getResources().getIdentifier("ic_local_dining_black_24dp", "drawable", "com.waiapp");
+                resId = getResources().getIdentifier("ic_local_dining_black_24dp", "drawable", "customer.thewaiapp.com");
                 break;
 
         }
