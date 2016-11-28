@@ -79,7 +79,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textColor="@color/black"
-                        android:background="@drawable/bg_oval_stroke_gray"
                         android:padding="4dp"
                         android:text="Click to book"
                         android:textSize="@dimen/text_size_normal" />

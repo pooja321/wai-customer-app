@@ -44,6 +44,7 @@
     <string name="logout">LOGOUT</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hint_enter_last_name">Last Name </string>
     <string name="hint_enter_mobile">Mobile Number </string>
     <string name="hint_enter_first_name">First Name </string>
@@ -119,5 +120,4 @@
 \n 19.	Each party acknowledges that the other party has entered into this agreement relying on the limitations of liability stated herein and that those limitations are an essential basis of the bargain between the parties.
          \n
 </string>
-
 </resources>

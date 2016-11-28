@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_marginTop="16dp"
     android:orientation="vertical"
-    tools:context="com.waiapp.Profile.EditUserDetailFragment">
+    tools:context=".Profile.EditUserDetailFragment">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/edit_userdetail_til_firstname"

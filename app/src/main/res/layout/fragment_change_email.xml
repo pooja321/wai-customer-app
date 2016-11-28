@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
     android:orientation="vertical"
-    tools:context="com.waiapp.Profile.ChangeEmailFragment">
+    tools:context=".Profile.ChangeEmailFragment">
 
 
     <android.support.design.widget.TextInputLayout

@@ -6,7 +6,7 @@
     android:padding="8dp"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:context="com.waiapp.TermsAndConditionsActivity">
+    tools:context=".TermsAndConditionsActivity">
 
     <TextView
         android:layout_width="match_parent"
