@@ -1,5 +1,6 @@
 package customer.thewaiapp.com.Address;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -38,6 +39,8 @@ public class EditAddressActivity extends AppCompatActivity {
     Address mAddress;
     String addressName, addressType, houseNo, areaName, landmark, city, state, country, pincode, UID;
     TextView mTextviewDisplayMessage;
+
+    private ProgressDialog mSaveProgressDialog;
 
     boolean failFlag = false;
     public static final String selectAddressTypeLabel = "Select Address Type*";
@@ -117,6 +120,9 @@ public class EditAddressActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 failFlag = false;
+                mSaveProgressDialog = new ProgressDialog(EditAddressActivity.this);
+                mSaveProgressDialog.setMessage("Saving Your Address");
+                mSaveProgressDialog.setCancelable(false);
                 updateAddress();
             }
         });
@@ -175,6 +181,7 @@ public class EditAddressActivity extends AppCompatActivity {
             Toast.makeText(EditAddressActivity.this, "Please select valid Address Type", Toast.LENGTH_SHORT).show();
         }
         if (!failFlag) {
+            mSaveProgressDialog.show();
             Address address = new Address(mAddress.getAddressId(), addressName, addressType, houseNo, areaName, landmark, city, state, country, pincode);
 
             mDatabase.child(Constants.FIREBASE_CHILD_ADDRESS).child(UID).child(mAddress.getAddressId()).setValue(address).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -187,6 +194,7 @@ public class EditAddressActivity extends AppCompatActivity {
                         mButtonSubmit.setVisibility(Button.GONE);
                         mTextviewDisplayMessage.setVisibility(TextView.VISIBLE);
                     }
+                    mSaveProgressDialog.dismiss();
                 }
             });
         }

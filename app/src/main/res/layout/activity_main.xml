@@ -10,7 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <FrameLayout
             android:id="@+id/main_placeholder"
@@ -22,7 +23,8 @@
             android:id="@+id/main_bottombar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:layout_gravity="bottom"
+            android:background="@color/colorAccent"
+            android:layout_gravity="top"
             app:bb_tabXmlResource="@xml/main_bottombar_tabs" />
 
     </LinearLayout>
