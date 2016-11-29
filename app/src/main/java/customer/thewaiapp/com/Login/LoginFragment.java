@@ -54,7 +54,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     private EditText mEditTextEmailInput, mEditTextPasswordInput;
     private Button mButtonSignIn;
     TextView mTextViewSignUp, mTextViewForgotPassword;
-    /* A dialog that is presented until the Firebase authentication finished. */
     private ProgressDialog mAuthProgressDialog;
 
     private FirebaseAuth mAuth;
@@ -186,8 +185,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
 
         boolean validEmail = isEmailValid(email);
 
-        if (email.equals("") || !validEmail) {
-            mEditTextEmailInput.setError(getString(R.string.error_cannot_be_empty));
+        if (!validEmail) {
+//            mEditTextEmailInput.setError(getString(R.string.error_cannot_be_empty));
             return;
         }
 
@@ -255,6 +254,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
 
         if (!isGoodEmail) {
             mEditTextEmailInput.setError(String.format(getString(R.string.error_invalid_email_not_valid), email));
+            mEditTextEmailInput.setFocusable(true);
             return false;
         }
         return isGoodEmail;

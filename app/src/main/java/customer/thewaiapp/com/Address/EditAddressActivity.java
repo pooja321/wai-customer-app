@@ -138,30 +138,37 @@ public class EditAddressActivity extends AppCompatActivity {
         if (addressName.equals("")) {
             failFlag = true;
             mEditTextAddressName.setError(EmptyString);
+            mEditTextAddressName.requestFocus();
         }
         if (houseNo.equals("")) {
             failFlag = true;
             mEditTextHouseNo.setError(EmptyString);
+            mEditTextHouseNo.requestFocus();
         }
         if (areaName.equals("")) {
             failFlag = true;
             mEditTextAreaName.setError(EmptyString);
+            mEditTextAreaName.requestFocus();
         }
         if (city.equals("")) {
             failFlag = true;
             mEditTextCity.setError(EmptyString);
+            mEditTextCity.requestFocus();
         }
         if (state.equals("")) {
             failFlag = true;
             mEditTextState.setError(EmptyString);
+            mEditTextState.requestFocus();
         }
         if (pincode.equals("")) {
             failFlag = true;
             mEditTextPincode.setError(EmptyString);
+            mEditTextPincode.requestFocus();
         }
         if (pincode.length() < 6 && houseNo.length() > 0) {
             failFlag = true;
             mEditTextPincode.setError(Provide_6_characters);
+            mEditTextPincode.requestFocus();
         }
         if (addressType.equals(selectAddressTypeLabel)) {
             failFlag = true;
@@ -179,8 +186,6 @@ public class EditAddressActivity extends AppCompatActivity {
                         Toast.makeText(EditAddressActivity.this, "Addess Updated", Toast.LENGTH_SHORT).show();
                         mButtonSubmit.setVisibility(Button.GONE);
                         mTextviewDisplayMessage.setVisibility(TextView.VISIBLE);
-
-
                     }
                 }
             });

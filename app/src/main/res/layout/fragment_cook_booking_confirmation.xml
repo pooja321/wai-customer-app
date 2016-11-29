@@ -147,7 +147,7 @@
                             android:layout_width="36dp"
                             android:layout_height="match_parent"
                             android:background="@color/white"
-                            android:text="+" />
+                            android:text="-" />
 
                         <TextView
                             android:id="@+id/cook_booking_tv_members_count"
@@ -165,7 +165,7 @@
                             android:layout_width="36dp"
                             android:layout_height="match_parent"
                             android:background="@color/white"
-                            android:text="-" />
+                            android:text="+" />
                     </LinearLayout>
 
                     <TextView
@@ -209,7 +209,7 @@
                             android:layout_width="36dp"
                             android:layout_height="match_parent"
                             android:background="@color/white"
-                            android:text="+" />
+                            android:text="-" />
 
                         <TextView
                             android:id="@+id/cook_booking_tv_maincourse_count"

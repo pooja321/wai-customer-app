@@ -104,7 +104,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
         }
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.main_map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.main_map_fragment);
         mapFragment.getMapAsync(this);
         final onAddressSearchClick listener = (onAddressSearchClick) getActivity();
 //        mAddressSearchEditText = (EditText) view.findViewById(R.id.main_ed_search_address_id);
