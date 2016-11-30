@@ -8,7 +8,7 @@
     <string name="button_sign_in">Sign In</string>
     <string name="button_signin_with_password">SIGN IN</string>
     <string name="hint_enter_email">Enter your email</string>
-    <string name="hint_enter_password">Enter password</string>
+    <string name="hint_enter_password">Enter password </string>
 
     <!-- Activity Titles  -->
     <string name="title_activity_create_account">Create Account</string>
@@ -37,7 +37,7 @@
     <!-- Google Errors -->
 
     <!-- navigation Drawer Strings -->
-    <string name="history">HISTORY</string>
+    <string name="history">BOOKING HISTORY</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

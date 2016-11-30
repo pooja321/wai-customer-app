@@ -1,7 +1,9 @@
 package customer.thewaiapp.com.Order.Fragment;
 
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -174,8 +176,25 @@ public class WashingOrderDetailFragment extends Fragment implements View.OnClick
         int id = v.getId();
         switch (id) {
             case R.id.washorderdetail_bt_cancel:
-                ShowProgressDialog();
-                cancelOrder();
+                AlertDialog.Builder alertDialog= new AlertDialog.Builder(getActivity());
+                alertDialog.setMessage("Are you sure you want to cancel");
+
+                alertDialog.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ShowProgressDialog();
+                        cancelOrder();
+                    }
+                });
+
+                alertDialog.setPositiveButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                alertDialog.show();
+
         }
     }
 

@@ -51,7 +51,7 @@
                 android:id="@+id/edit_text_password_create"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_enter_password"
+                android:hint="Enter password (min 6 char)"
                 android:inputType="textPassword"
                 android:padding="@dimen/edit_text_padding"
                 android:textSize="@dimen/login_buttons_text_size" />

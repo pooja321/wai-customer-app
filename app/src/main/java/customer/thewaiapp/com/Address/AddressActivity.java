@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,12 +51,15 @@ public class AddressActivity extends AppCompatActivity {
     private LinearLayoutManager mManager;
     ProgressDialog mProgressDialog;
     Address mAddress = new Address();
+    TextView mTextView_NoAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.v("wai", "AddressActivity onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
+
+        mTextView_NoAddress = (TextView) findViewById(R.id.address_noaddress);
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage("Loading...");
@@ -113,6 +117,8 @@ public class AddressActivity extends AppCompatActivity {
                 AddressViewHolder.class, resourceQuery) {
             @Override
             protected void populateViewHolder(AddressViewHolder viewHolder, final Address model, final int position) {
+                Log.v("wai"," inside populate view holder");
+                mTextView_NoAddress.setVisibility(View.GONE);
                 final DatabaseReference addressRef = getRef(position);
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -192,10 +198,10 @@ public class AddressActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(KEY_RESOURCE_KEY,mResourceKey);
-        outState.putDouble(KEY_TOTAL_AMOUNT,mTotalAmount);
-        outState.putString(KEY_ORDER_TYPE,mOrderType);
-        outState.putString(KEY_ORDER_ID,mOrderId);
+        outState.putString(KEY_RESOURCE_KEY, mResourceKey);
+        outState.putDouble(KEY_TOTAL_AMOUNT, mTotalAmount);
+        outState.putString(KEY_ORDER_TYPE, mOrderType);
+        outState.putString(KEY_ORDER_ID, mOrderId);
         super.onSaveInstanceState(outState);
     }
 
@@ -203,7 +209,7 @@ public class AddressActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         Log.v("wai", "onViewStateRestored");
-        if (savedInstanceState != null){
+        if (savedInstanceState != null) {
             mResourceKey = savedInstanceState.getString(KEY_RESOURCE_KEY);
             mTotalAmount = savedInstanceState.getDouble(KEY_TOTAL_AMOUNT);
             mOrderType = savedInstanceState.getString(KEY_ORDER_TYPE);

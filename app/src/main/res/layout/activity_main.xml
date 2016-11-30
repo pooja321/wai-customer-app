@@ -23,7 +23,6 @@
             android:id="@+id/main_bottombar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@color/colorAccent"
             android:layout_gravity="top"
             app:bb_tabXmlResource="@xml/main_bottombar_tabs" />
 

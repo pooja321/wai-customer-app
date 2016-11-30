@@ -144,6 +144,9 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
                         Toast.makeText(getActivity(), "Please Login First", Toast.LENGTH_SHORT).show();
                         listener.UserSignUpRequired();
                     }
+                }else {
+                    Log.v("wai","checkbox not selected");
+                    Toast.makeText(getActivity(), "Please accept terms and conditions", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case (R.id.wash_booking_bt_bucket_count_decrement):

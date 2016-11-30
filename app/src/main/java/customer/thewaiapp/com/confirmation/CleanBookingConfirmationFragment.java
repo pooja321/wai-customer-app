@@ -151,6 +151,7 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
         switch (id) {
             case (R.id.clean_booking_bt_confirm):
                 if (mCheckBoxTerms.isChecked()) {
+                    Log.v("wai","checkbox selected");
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if (user != null) {
                         // User is signed in
@@ -174,7 +175,11 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
                         Toast.makeText(getActivity(), "Please Login First", Toast.LENGTH_SHORT).show();
                         mListener.UserSignUpRequired();
                     }
+                }else {
+                    Log.v("wai","checkbox not selected");
+                    Toast.makeText(getActivity(), "Please accept terms and conditions", Toast.LENGTH_SHORT).show();
                 }
+
                 break;
             case (R.id.clean_booking_bt_washroom_count_decrement):
                 if (mWashroomsCount >= 1) {
