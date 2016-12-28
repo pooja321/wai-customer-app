@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -18,11 +20,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -52,7 +57,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import customer.thewaiapp.com.Model.ResourceOnline;
@@ -85,6 +92,9 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     private GeoFire mGeoFire;
     private GeoQuery mGeoQuery;
 
+    Button mbtnSearchAddress;
+    EditText mlocation_tf;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +109,26 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         mMapMarkers = new HashMap<>();
         mJobType = getJobtype();
         mGeoFire = new GeoFire(mGeoDatabaseRef);
+
+        mlocation_tf = (EditText) view.findViewById(R.id.mapview_et_search_address);
+        /*** Call signInPassword() when user taps "Done" keyboard action     */
+        mlocation_tf.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+
+                    onSearch();
+                return true;
+            }
+        });
+//        mbtnSearchAddress = (Button) view.findViewById(R.id.mapview_btn_search_address);
+//        mbtnSearchAddress.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                onSearch();
+//            }
+//        });
+
+
 
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -210,6 +240,31 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         Log.v("wai", "MapViewFragment onResume");
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
+        }
+    }
+
+    public void onSearch() {
+        String location = mlocation_tf.getText().toString();
+        List<Address> addressList = null;
+        if (location != null || !location.equals("")) {
+            Geocoder geocoder = new Geocoder(getActivity());
+            try {
+                addressList = geocoder.getFromLocationName(location, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (addressList.size() > 0) {
+                Address address = addressList.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+//                mGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+                mGoogleMap.addMarker(mCenterMarkerOptions);
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+            }
+            else {
+                Toast.makeText(getActivity(), "Not A Valid Location", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
