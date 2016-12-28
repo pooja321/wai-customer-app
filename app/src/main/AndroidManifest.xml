@@ -98,6 +98,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Profile.ProfileActivity" />
         </activity>
+        <activity android:name=".GoogleSignInActivity" />
+        <activity android:name=".AccountActivity" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity android:name=".FacebookActivity">
+
+        </activity>
+
     </application>
 
 </manifest>

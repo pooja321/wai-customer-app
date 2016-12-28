@@ -371,7 +371,11 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.v("wai", "onDataChange dataSnapshot: " + dataSnapshot.toString());
                 mMapResourceList.put(id, dataSnapshot.getValue(ResourceOnline.class));
-//                final ResourceOnline resourceOnline = dataSnapshot.getValue(ResourceOnline.class);
+//                final ResourceOnline resourceOnline = dataSnapshot.getValue(Resourc[
+// 36
+//
+//
+// eOnline.class);
 //                Log.v("wai", "onKeyEntered: resource online id: " + resourceOnline.getResourceId());
 //                Log.v("wai", "onKeyEntered: resource list size: " + String.valueOf(mMapResourceList.size()));
 //                mRealm.executeTransactionAsync(new Realm.Transaction() {

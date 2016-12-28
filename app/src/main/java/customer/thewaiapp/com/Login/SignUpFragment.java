@@ -124,7 +124,8 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
 
     private void onAuthSuccess(FirebaseUser user) {
         sendVerificationEmail(user);
-        startActivity(new Intent(getActivity(), FillDetailsActivity.class).putExtra("user", new String[]{user.getUid(), user.getEmail()}));
+        startActivity(new Intent(getActivity(), FillDetailsActivity.class));
+//                .putExtra("user", new String[]{user.getUid(), user.getEmail()}));
     }
 
     private void sendVerificationEmail(FirebaseUser user) {
