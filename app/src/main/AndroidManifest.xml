@@ -23,9 +23,10 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCsG8BUhLh2OQxih1HclXuWvsfD2jHDf-4" />
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAqjKSp4CCg51Qu2-2kvsj13euVvoUayVY"/>
 
         <activity android:name=".MainActivity" />
         <activity
@@ -98,6 +99,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Profile.ProfileActivity" />
         </activity>
+
         <activity android:name=".GoogleSignInActivity" />
         <activity android:name=".AccountActivity" />
 
@@ -108,6 +110,9 @@
         <activity android:name=".FacebookActivity">
 
         </activity>
+
+
+        <activity android:name=".TermsAndConditionsActivity"></activity>
 
     </application>
 

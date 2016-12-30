@@ -27,7 +27,7 @@ public class ExitAlertDialogFragment extends DialogFragment {
         final ExitOrderListener listener = (ExitOrderListener) getActivity();
         View view=inflater.inflate(R.layout.fragment_exit_order_booking, null);
         builder.setMessage("Do you really want to cancel? All saved data will be lost");
-        builder.setView(view);
+//        builder.setView(view);
 
         builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override

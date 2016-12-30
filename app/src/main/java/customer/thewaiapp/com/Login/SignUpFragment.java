@@ -109,6 +109,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
                             try {
                                 throw task.getException();
                             } catch(FirebaseAuthUserCollisionException e) {
+                                mEditTextEmailCreate.requestFocus();
                                 mEditTextEmailCreate.setError(getString(R.string.error_email_in_use));
                             } catch(Exception e) {
                                 Log.e(LOG_TAG, e.getMessage());
@@ -144,6 +145,7 @@ public class SignUpFragment extends Fragment implements View.OnClickListener {
         boolean isGoodEmail = (email != null && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches());
 
         if (!isGoodEmail) {
+            mEditTextEmailCreate.requestFocus();
             mEditTextEmailCreate.setError(String.format(getString(R.string.error_invalid_email_not_valid),  email));
             return false;
         }

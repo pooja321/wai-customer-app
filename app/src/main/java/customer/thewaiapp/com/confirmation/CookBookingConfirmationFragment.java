@@ -162,6 +162,9 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
                         Toast.makeText(getActivity(), "Please Login First", Toast.LENGTH_SHORT).show();
                         mListener.UserSignUpRequired();
                     }
+                }else {
+                    Log.v("wai","checkbox not selected");
+                    Toast.makeText(getActivity(), "Please accept terms and conditions", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case(R.id.cook_booking_bt_maincourse_count_decrement):

@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -18,11 +20,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,10 +39,17 @@ import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -52,13 +64,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import customer.thewaiapp.com.Model.ResourceOnline;
 import customer.thewaiapp.com.R;
 import customer.thewaiapp.com.Utility.Constants;
 import customer.thewaiapp.com.confirmation.BookingConfirmationActivity;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 public abstract class MapViewFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -85,6 +102,13 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     private GeoFire mGeoFire;
     private GeoQuery mGeoQuery;
 
+    Button mbtnSearchAddress;
+    EditText mlocation_tf;
+
+    String mplace;
+
+    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,23 +124,34 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         mJobType = getJobtype();
         mGeoFire = new GeoFire(mGeoDatabaseRef);
 
+
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             buildAlertMessageNoGps();
         }
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.main_map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.main_map_fragment);
         mapFragment.getMapAsync(this);
-        final onAddressSearchClick listener = (onAddressSearchClick) getActivity();
-//        mAddressSearchEditText = (EditText) view.findViewById(R.id.main_ed_search_address_id);
-//        mAddressSearchEditText.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                listener.startAddressSearchActivity();
-//            }
-//        });
+        mlocation_tf = (EditText) view.findViewById(R.id.mapview_et_search_address);
+        /*** Call signInPassword() when user taps "Done" keyboard action     */
+        mlocation_tf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Intent intent =
+                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                                    .build(getActivity());
+                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+                } catch (GooglePlayServicesRepairableException e) {
+                    // TODO: Handle the error.
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    // TODO: Handle the error.
+                }
+            }
+        });
+
         mCenterMarkerOptions = new MarkerOptions();
 //        mCenterMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        mCenterMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_person_pin_circle_black_36dp));
+        mCenterMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_person_pin_circle_blue_700_36dp));
         return view;
 
     }
@@ -213,6 +248,32 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         }
     }
 
+    public void onSearch() {
+        mlocation_tf.setText(mplace);
+        List<Address> addressList = null;
+        if (mplace != null || !mplace.equals("")) {
+            Geocoder geocoder = new Geocoder(getActivity());
+            try {
+                addressList = geocoder.getFromLocationName(mplace, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (addressList.size() > 0) {
+
+                Address address = addressList.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+//                mGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+                mGoogleMap.addMarker(mCenterMarkerOptions);
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+            }
+            else {
+                Toast.makeText(getActivity(), "Not A Valid Location", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -233,6 +294,25 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         }
         if (mGeoQuery != null) {
             mGeoQuery.removeAllListeners();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(getActivity(), data);
+                Log.i("wai", "Place: " + place.getName());
+                mplace = (String) place.getName();
+                onSearch();
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(getActivity(), data);
+                // TODO: Handle the error.
+                Log.i("wai", status.getStatusMessage());
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
         }
     }
 
@@ -344,13 +424,13 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         int resId = 0;
         switch (mJobType) {
             case Constants.FIREBASE_CHILD_CLEANING:
-                resId = getResources().getIdentifier("ic_person_black_24dp", "drawable", "com.waiapp");
+                resId = getResources().getIdentifier("ic_person_black_24dp", "drawable", "customer.thewaiapp.com");
                 break;
             case Constants.FIREBASE_CHILD_WASHING:
-                resId = getResources().getIdentifier("ic_hanger_black_24dp", "drawable", "com.waiapp");
+                resId = getResources().getIdentifier("ic_hanger_black_24dp", "drawable", "customer.thewaiapp.com");
                 break;
             case Constants.FIREBASE_CHILD_COOKING:
-                resId = getResources().getIdentifier("ic_local_dining_black_24dp", "drawable", "com.waiapp");
+                resId = getResources().getIdentifier("ic_local_dining_black_24dp", "drawable", "customer.thewaiapp.com");
                 break;
 
         }

@@ -23,9 +23,9 @@ import customer.thewaiapp.com.Login.LoginActivity;
 import customer.thewaiapp.com.Model.User;
 import customer.thewaiapp.com.Order.OrderHistoryActivity;
 import customer.thewaiapp.com.Profile.ProfileActivity;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
+
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -45,12 +45,15 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         FrameLayout activityContainer = (FrameLayout) drawer.findViewById(R.id.activity_content);
         getLayoutInflater().inflate(layoutResID, activityContainer, true);
         super.setContentView(drawer);
-        String UserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        Log.v("wai","Email: " + UserEmail);
+
+
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        View Nav_View =  navigationView.getHeaderView(0);
-        TextView nav_Username = (TextView)Nav_View.findViewById(R.id.navheader_userName);
-        RealmResults<User> UserResults = mRealm.where(User.class).equalTo("Email",UserEmail).findAll();
+        View Nav_View = navigationView.getHeaderView(0);
+        TextView nav_Username = (TextView) Nav_View.findViewById(R.id.navheader_userName);
+        String UserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        Log.v("wai", "<<<<<<<<<<<<<UserEmail from Base Activity>>>>>>>>" + UserEmail);
+        RealmResults<User> UserResults = mRealm.where(User.class).equalTo("Email", UserEmail).findAll();
+        Log.v("wai", "<<<<<<<<<<<<<UserResults from Base Activity>>>>>>>>>" + UserResults);
         if (UserResults.size() > 0) {
             user = UserResults.get(0);
             if (user != null) {
@@ -102,7 +105,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(this, OrderHistoryActivity.class));
         } else if (id == R.id.nav_profile) {
             startActivity(new Intent(this, ProfileActivity.class));
-
+        }
+        else if (id == R.id.nav_terms) {
+            startActivity(new Intent(this, TermsAndConditionsActivity.class));
+        }
+        else if (id == R.id.nav_newbooking) {
+            startActivity(new Intent(this, MainActivity.class));
         } else if (id == R.id.nav_logout) {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
@@ -112,15 +120,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(BaseActivity.this, "Please Login First", Toast.LENGTH_SHORT).show();
             }
         }
-//        else if (id == R.id.nav_notifications) {
-//
-//        } else if (id == R.id.nav_chat_with_us) {
-//
-//        } else if (id == R.id.nav_invite_and_earn) {
-//
-//        } else if (id == R.id.nav_about) {
-//
-//        }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer != null) {
             drawer.closeDrawer(GravityCompat.START);

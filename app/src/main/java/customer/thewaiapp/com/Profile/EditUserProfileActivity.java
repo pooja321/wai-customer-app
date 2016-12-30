@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import customer.thewaiapp.com.R;
-
 import customer.thewaiapp.com.confirmation.BookingConfirmationActivity;
 
 public class EditUserProfileActivity extends AppCompatActivity {
@@ -35,6 +34,11 @@ public class EditUserProfileActivity extends AppCompatActivity {
             case (2):
                 fragment = ChangePasswordFragment.newInstance();
                 getSupportActionBar().setTitle("Change Password");
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                break;
+            case (3):
+                fragment = ChangeEmailFragment.newInstance();
+                getSupportActionBar().setTitle("Change Email");
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 break;
 

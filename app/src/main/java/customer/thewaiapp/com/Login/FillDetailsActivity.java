@@ -134,6 +134,7 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private boolean isFNameValid(String fname) {
         if (fname.isEmpty()) {
+            mEditTextFirstName.requestFocus();
             mEditTextFirstName.setError(getResources().getString(R.string.error_invalid_name));
             return false;
         }
@@ -142,6 +143,7 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private boolean isLNameValid(String lname) {
         if (lname.isEmpty()) {
+            mEditTextLastName.requestFocus();
             mEditTextLastName.setError(getResources().getString(R.string.error_invalid_name));
             return false;
         }
@@ -150,10 +152,15 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
 
     private boolean isNumberValid(String number) {
         if (number.length() < 10) {
+            mEditTextMobile.requestFocus();
             mEditTextMobile.setError(getResources().getString(R.string.error_invalid_phone_number));
             return false;
         }
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 }

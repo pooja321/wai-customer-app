@@ -11,6 +11,8 @@
     <string name="hint_enter_password">Enter password</string>
     <string name="facebook_app_id">1188212411269974</string>
 
+
+
     <!-- Activity Titles  -->
     <string name="title_activity_create_account">Create Account</string>
     <string name="confirm_booking_activity_title">Booking Details</string>
@@ -38,16 +40,17 @@
     <!-- Google Errors -->
 
     <!-- navigation Drawer Strings -->
-    <string name="history">HISTORY</string>
+    <string name="history">BOOKING HISTORY</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="logout">LOGOUT</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hint_enter_last_name">Last Name : Not Set</string>
-    <string name="hint_enter_mobile">Mobile Number : Not Set</string>
-    <string name="hint_enter_first_name">First Name : Not Set</string>
+
+    <string name="hint_enter_last_name">Last Name </string>
+    <string name="hint_enter_mobile">Mobile Number </string>
+    <string name="hint_enter_first_name">First Name </string>
     <string name="action_add">Add</string>
     <string name="hint_enter_address_name">Address Title*</string>
     <string name="hint_enter_house_no">Flat No/House No*</string>
@@ -76,4 +79,48 @@
     <string name="provide_necessary_details">Please provide the necessary details.</string>
     <string name="less_than_6_character">This cannot be less than 6 characters.</string>
 
+
+    <!-- Terms and conditions Strings -->
+
+    <string name="terms_and_conditions_tittle">THE FOLLOWING SHALL APPLY TO CUSTOMERS OR USERS UTILIZING THE SERVICES OFFERED BY THE COMPANY</string>
+    <string name="terms_and_conditions">
+\n 1.	We are a platform providing only service at your doorstep
+        \n
+\n 2.	The cooks and maids are not supposed to carry any extra equipment and they will make do with whatever is available at the premises
+        \n
+\n 3.	No extra requests will be entertained by the maids and Wai can cancel the order in case of discrepancy
+        \n
+\n 4.	Since a lot of services are subjective, in case of any discrepancy from maid or customer end, the decision taken by Wai representatives will be final and acceptable to all stakeholders
+        \n
+\n 5.	We do not encourage child labor of any kind. In case of any such findings we request you to raise it immediately
+        \n
+\n 6.	All moves and actions of maids are tracked, any misbehavior on the part of either cook or customer, may call for legal action
+        \n
+\n 7.	We expect the premises to be in timely manner
+        \n
+\n 8.	The customer shall pay the fees as displayed on the websiteorapp, labor charges and expenses for any additional spare parts or material or items that might be required to complete the job at hand.
+        \n
+\n 9.	The customer agrees and accepts that the use of the services provided by the company is at the sole risk of the customer, and further acknowledges that the company disclaims all representations and warranties of any kind, whether express or implied.
+        \n
+\n 10.	The customer shall ensure that heorshe will not indulge in illegal activities including but not limited to smoking or consuming intoxicants, damaging equipments, forcing service professional to break any law while using the service
+        \n
+\n 11.	The company will not be liable for any damages of any kind arising from the use of the service offered by the company, including, but not limited to direct, indirect, incidental, punitive, and consequential damages.
+        \n
+\n 12.	The company is hereby authorized to use the location based information provided by any of the telecommunication companies when the customer uses the mobile phone to make a booking. The location based information will be used only to facilitate and improve services for the customer.
+        \n
+\n 13.	The company shall be entitled to disclose to all companies within its group, or any government body as so required by the law or by directive or request from any government body, the particulars of the customer in the possession of company in any way as company, in its absolute discretion, deems fit or if it considers it in its interests to do so.
+        \n
+\n 14.	The company shall be entitled at any time without giving any reason to terminate the booking of services done by the customer.
+        \n
+\n 15.	The company shall not be liable for any conduct or behavior or actions of service person. However, the company encourages you to notify it of any complaints that you may have against the service provider that you may have hired using the company\'s services.
+        \n
+\n 16.	To the fullest extent permitted by applicable law, the website and app is provided on an "as is" basis without warranties of any kind, either express or implied, including, but not limited to, warranties of merchantability, fitness for a particular purpose and non-infringement. Without limiting the foregoing, the company does not warrant that the website, app and service will be uninterrupted or error-free; nor does it make any warranty as to any content available; nor does it make any warranty as to any professional\'s registration, professional accreditation or license; nor does it make any warranty as to the results that may be obtained from the use of the service, or as to the timeliness, accuracy, reliability, quality, suitability, safety, completeness or content of the services, or any products, merchandise, content, information or materials provided through or in connection with the use of the website or app or this agreement. Neither the company nor its affiliates or licensor are responsible for the conduct, whether online or offline, of any user (including but not limited to the conduct of any requesters or professionals).
+        \n
+\n 17.	You agree not to hold the company, its affiliates, its licensors, or any of such parties\' agents, employees, officers, directors, corporate partners, or participants liable for any damages, expenses, losses, suits, claims, andoror controversies ("liabilities") that have arisen or may arise, whether known or unknown, relating to your use of or inability to use the service, including without limitation any liabilities arising in connection with the conduct, act or omission of any user (including without limitation stalking, harassment, acts of physical violence, and loss or destruction of personal property), services, any dispute with any user, any instruction, advice, act, or service, and any destruction of your information. Under no circumstances will handy or members be liable for any direct, indirect, incidental, consequential, special or exemplary damages arising in connection with your use of or inability to use the service. Handy and members do not accept any liability with respect to the quality or fitness of any work performed in connection with the services or this agreement.
+        \n
+\n 18.	You accept that, the company has an interest in limiting the personal liability of its officers, directors and employees. You agree that you will not bring any claim personally against handy\'s officers, directors or employees in connection with any dispute, loss or damage. Without prejudice to the foregoing, you agree that the limitations of warranties and liability set out in this agreement will protect the hardy\'s officers, directors, employees, agents, licensors, parents, subsidiaries, affiliates, successors, assigns and sub-contractors as well as handy.
+        \n
+\n 19.	Each party acknowledges that the other party has entered into this agreement relying on the limitations of liability stated herein and that those limitations are an essential basis of the bargain between the parties.
+         \n
+</string>
 </resources>
