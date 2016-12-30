@@ -8,12 +8,140 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:1052443407518:android:c13d675e7321d306",
+        "android_client_info": {
+          "package_name": "supply.thewaiapp.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052443407518-bohf5bvf715t6pbn4tm8l1aj0cqu3cf4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "supply.thewaiapp.com",
+            "certificate_hash": "A7E96898E3C9F81554885A3E1D1B379FECE2AC13"
+          }
+        },
+        {
+          "client_id": "1052443407518-rnfeohs70dkkuk7mj2a46s843ait9l8n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIxfTbUqeOwvvowPQvSKppx6uFeyUWnxU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1052443407518-rnfeohs70dkkuk7mj2a46s843ait9l8n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052443407518:android:4d5b7d8a8dc7ecbd",
+        "android_client_info": {
+          "package_name": "admin.thewaiapp.com"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052443407518-4p5dd4kq43hjpeuuv0a6elcbtgqa4qap.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "admin.thewaiapp.com",
+            "certificate_hash": "377E9DFE2648BCBB4235987D790831BACA59961F"
+          }
+        },
+        {
+          "client_id": "1052443407518-fmv9n982fe0smov87olit130l5s19sr4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "admin.thewaiapp.com",
+            "certificate_hash": "90CE8E05EF1468A5686277C52CAD598CBC976B0B"
+          }
+        },
+        {
+          "client_id": "1052443407518-3e2qvuvjrej738de2ncsdu8as605hd4u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "admin.thewaiapp.com",
+            "certificate_hash": "1DC69EAEA88F46ACF32F3051D7ED7458D72F7C40"
+          }
+        },
+        {
+          "client_id": "1052443407518-ojcfsgof0la00j36ttnppjr0opakiq7p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "admin.thewaiapp.com",
+            "certificate_hash": "A7E96898E3C9F81554885A3E1D1B379FECE2AC13"
+          }
+        },
+        {
+          "client_id": "1052443407518-rnfeohs70dkkuk7mj2a46s843ait9l8n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIxfTbUqeOwvvowPQvSKppx6uFeyUWnxU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1052443407518-rnfeohs70dkkuk7mj2a46s843ait9l8n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:1052443407518:android:c3fdf11ab1435409",
         "android_client_info": {
           "package_name": "customer.thewaiapp.com"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1052443407518-ein46abk95b1fofl62g0q6d9b9kskfqd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "customer.thewaiapp.com",
+            "certificate_hash": "1DC69EAEA88F46ACF32F3051D7ED7458D72F7C40"
+          }
+        },
+        {
+          "client_id": "1052443407518-p418h6hq8ougdj0gob7t9p63361esvlf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "customer.thewaiapp.com",
+            "certificate_hash": "90CE8E05EF1468A5686277C52CAD598CBC976B0B"
+          }
+        },
         {
           "client_id": "1052443407518-2tn8su7m15831e30fuc4svdciev023i7.apps.googleusercontent.com",
           "client_type": 1,
@@ -29,7 +157,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCsG8BUhLh2OQxih1HclXuWvsfD2jHDf-4"
+          "current_key": "AIzaSyBIxfTbUqeOwvvowPQvSKppx6uFeyUWnxU"
         }
       ],
       "services": {
