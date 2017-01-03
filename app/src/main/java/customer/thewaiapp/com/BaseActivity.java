@@ -109,6 +109,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         else if (id == R.id.nav_terms) {
             startActivity(new Intent(this, TermsAndConditionsActivity.class));
         }
+        else if (id == R.id.nav_feedback) {
+            startActivity(new Intent(this, FeedBackFormActivity.class));
+        }
         else if (id == R.id.nav_newbooking) {
             startActivity(new Intent(this, MainActivity.class));
         } else if (id == R.id.nav_logout) {

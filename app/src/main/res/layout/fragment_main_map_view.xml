@@ -63,14 +63,14 @@
         android:padding="10dp"
         android:singleLine="true" />
 
-    <!--<Button-->
-    <!--android:id="@+id/map_bt_quick_button"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="QUICK BOOK"-->
-    <!--android:background="@color/colorAccent"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:layout_alignParentRight="true"/>-->
+    <Button
+        android:id="@+id/map_bt_quick_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:background="@color/colorAccent"
+        android:text="QUICK BOOK" />
 
 
 </RelativeLayout>

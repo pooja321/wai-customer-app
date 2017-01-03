@@ -23,10 +23,9 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAqjKSp4CCg51Qu2-2kvsj13euVvoUayVY"/>
+            android:value="AIzaSyAqjKSp4CCg51Qu2-2kvsj13euVvoUayVY" />
 
         <activity android:name=".MainActivity" />
         <activity
@@ -99,7 +98,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Profile.ProfileActivity" />
         </activity>
-        <activity android:name=".TermsAndConditionsActivity"></activity>
+        <activity android:name=".TermsAndConditionsActivity" />
+        <activity android:name=".FeedBackFormActivity"></activity>
     </application>
 
 </manifest>

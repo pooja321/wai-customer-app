@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="vertical">
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/feedbacktoolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+<ScrollView
+
+    android:id="@+id/ScrollView01"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="2dp"
+    android:scrollbars="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+        
+        <EditText
+            android:id="@+id/EditTextName"
+            android:layout_height="wrap_content"
+            android:hint="Your Name"
+            android:inputType="textPersonName"
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp">
+        </EditText>
+
+        <EditText
+            android:id="@+id/EditTextEmail"
+            android:layout_height="wrap_content"
+            android:hint="Your Email"
+            android:inputType="textEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp">
+        </EditText>
+
+
+        <Spinner
+            android:id="@+id/SpinnerFeedbackType"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            style="@style/SpinnerItem"
+            />
+
+        <EditText
+            android:id="@+id/EditTextFeedbackBody"
+            android:layout_height="wrap_content"
+            android:hint="Feedback details..."
+            android:inputType="textMultiLine"
+            android:lines="5"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:background="@drawable/bg_stroke_rectangle_black_1">
+        </EditText>
+
+        <CheckBox
+            android:id="@+id/CheckBoxResponse"
+            android:layout_height="wrap_content"
+            android:text="Would you like an email response?"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp">
+        </CheckBox>
+
+        <Button
+            android:id="@+id/ButtonSendFeedback"
+            android:layout_height="wrap_content"
+            android:text="Send Feedback"
+            android:onClick="sendFeedback"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp">
+        </Button>
+
+    </LinearLayout>
+</ScrollView>
+</LinearLayout>
