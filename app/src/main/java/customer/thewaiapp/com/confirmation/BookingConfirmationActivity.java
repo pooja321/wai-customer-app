@@ -87,6 +87,8 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
         fragmentTransaction.commit();
     }
 
+
+
 //    @Override
 //    public void onSaveInstanceState(Bundle outState) {
 //        Log.v("wai","savedinstancestate: " + callingFragment);

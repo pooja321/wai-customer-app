@@ -1,8 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/grey">
+    android:background="@color/grey"
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -308,13 +308,6 @@
                     android:layout_height="36dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:padding="4dp"
-                        android:text="Distance(If more than 2 km)" />
-
-                    <TextView
                         android:id="@+id/clean_booking_tv_distance_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -322,6 +315,17 @@
                         android:gravity="center"
                         android:padding="4dp"
                         android:text="0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="Distance(If more than 2 km)"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:id="@+id/textView" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -350,6 +354,35 @@
                         android:gravity="center"
                         android:padding="4dp"
                         android:text="18.75" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp">
+
+                    <Button
+                        android:id="@+id/clean_booking_btn_applycode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Apply"
+                        android:layout_marginTop="8dp"
+                        style="@style/buttonStyle"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center"
+                       />
+
+                    <EditText
+                        android:id="@+id/clean_booking_et_promocode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Have a promocode?"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:textSize="16sp"
+                        android:inputType="textCapCharacters"/>
+
+
                 </RelativeLayout>
             </LinearLayout>
 

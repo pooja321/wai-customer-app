@@ -208,25 +208,54 @@
                     android:background="@color/grey" />
 
                 <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="Service Tax" />
+
+                <TextView
+                    android:id="@+id/wash_booking_tv_service_tax_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="18.75" />
+            </RelativeLayout>
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="36dp">
+                    android:layout_height="40dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:padding="4dp"
-                        android:text="Service Tax" />
 
-                    <TextView
-                        android:id="@+id/wash_booking_tv_service_tax_amount"
+                    <Button
+                        android:id="@+id/wash_booking_btn_applycode"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Apply"
+                        android:layout_marginTop="8dp"
+                        style="@style/buttonStyle"
                         android:layout_alignParentRight="true"
                         android:gravity="center"
-                        android:padding="4dp"
-                        android:text="18.75" />
+                        />
+
+                    <EditText
+                        android:id="@+id/wash_booking_et_promocode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Have a promocode?"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:textSize="16sp" />
+
+
                 </RelativeLayout>
+
             </LinearLayout>
 
             <TextView

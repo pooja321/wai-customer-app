@@ -12,7 +12,6 @@
     <string name="facebook_app_id">1188212411269974</string>
 
 
-
     <!-- Activity Titles  -->
     <string name="title_activity_create_account">Create Account</string>
     <string name="confirm_booking_activity_title">Booking Details</string>
@@ -123,4 +122,7 @@
 \n 19.	Each party acknowledges that the other party has entered into this agreement relying on the limitations of liability stated herein and that those limitations are an essential basis of the bargain between the parties.
          \n
 </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

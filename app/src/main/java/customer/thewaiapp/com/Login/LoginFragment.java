@@ -111,7 +111,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                 if (user != null) {
                     // User is signed in
                     Log.d("FACEBOOK", "onAuthStateChanged:signed_in");
-                    Intent intent = new Intent(getActivity(), FillDetailsActivity.class);
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
 
                 } else {
@@ -336,6 +336,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                             Log.w("FACEBOOK", "signInWithCredential", task.getException());
 
                         }
+                        else{
+                            Intent intent = new Intent(getActivity(), FillDetailsActivity.class);
+                            startActivity(intent);
+                        }
 
 
                     }
@@ -376,9 +380,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                                 Toast.makeText(getActivity(), "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
                             }
-//                            else {
-//                                startActivity(new Intent(getActivity(),MainActivity.class));
-//                            }
+                            else {
+                                startActivity(new Intent(getActivity(),FillDetailsActivity.class));
+                            }
                         }
                     });
        }
