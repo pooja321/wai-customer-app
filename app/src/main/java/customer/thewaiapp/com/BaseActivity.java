@@ -110,7 +110,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(this, TermsAndConditionsActivity.class));
         }
         else if (id == R.id.nav_feedback) {
-            startActivity(new Intent(this, FeedBackFormActivity.class));
+            startActivity(new Intent(this, WeightChartWashing.class));
         }
         else if (id == R.id.nav_newbooking) {
             startActivity(new Intent(this, MainActivity.class));

@@ -24,6 +24,8 @@ import customer.thewaiapp.com.Model.WashingOrderAmountValues;
 import customer.thewaiapp.com.R;
 import customer.thewaiapp.com.Realm.RealmController;
 
+import customer.thewaiapp.com.WeightChartUtensilsActivity;
+import customer.thewaiapp.com.WeightChartWashing;
 import io.realm.Realm;
 
 /**
@@ -42,6 +44,7 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
     CheckBox mCheckBoxTerms;
     private OnUserSignUpRequired listener;
     Realm realm;
+    Button mbtnweightchart;
 
     // callback interface to implement on item list click listener
     public interface OnUserSignUpRequired {
@@ -91,6 +94,7 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mbtnweightchart= (Button) view.findViewById(R.id.wash_booking_btn_weightchart);
         mCheckBoxTerms = (CheckBox) view.findViewById(R.id.wash_booking_cb_terms);
         mTextViewResourceName = (TextView) view.findViewById(R.id.wash_booking_tv_resource_name);
         mTextViewBucketCount = (TextView) view.findViewById(R.id.wash_booking_tv_bucket_count);
@@ -113,6 +117,7 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
         mButtonIncrementBucket.setOnClickListener(this);
         mButtonDecrementBucket.setOnClickListener(this);
         mButtonConfirm.setOnClickListener(this);
+        mbtnweightchart.setOnClickListener(this);
         calculateAmount();
     }
 
@@ -157,6 +162,9 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
                 mTextViewBucketCount.setText(String.valueOf(mBucketCount));
                 mTextViewBucketAmount.setText(String.valueOf(mBucketAmount));
                 calculateAmount();
+                break;
+            case(R.id.wash_booking_btn_weightchart):
+                startActivity(new Intent(getActivity(), WeightChartWashing.class));
                 break;
             case (R.id.wash_booking_bt_bucket_count_increment):
                 mBucketCount = mBucketCount + 1;

@@ -99,7 +99,13 @@
                 android:value=".Profile.ProfileActivity" />
         </activity>
         <activity android:name=".TermsAndConditionsActivity" />
-        <activity android:name=".FeedBackFormActivity"></activity>
+        <activity android:name=".FeedBack.FeedBackFormActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity android:name=".WeightChartWashing" />
+        <activity android:name=".WeightChartUtensilsActivity"></activity>
     </application>
 
 </manifest>

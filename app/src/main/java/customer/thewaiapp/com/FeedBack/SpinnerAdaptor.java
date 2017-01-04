@@ -1,4 +1,4 @@
-package customer.thewaiapp.com;
+package customer.thewaiapp.com.FeedBack;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
+
+import customer.thewaiapp.com.R;
 
 /**
  * Created by KRISHNA on 09-12-2016.
