@@ -104,8 +104,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-        <activity android:name=".WeightChartWashing" />
-        <activity android:name=".WeightChartUtensilsActivity"></activity>
+        <activity android:name=".confirmation.WeightChartWashing" />
+        <activity android:name=".confirmation.WeightChartUtensilsActivity"></activity>
     </application>
 
 </manifest>

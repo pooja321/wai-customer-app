@@ -27,7 +27,6 @@ import customer.thewaiapp.com.Address.AddressActivity;
 import customer.thewaiapp.com.R;
 import customer.thewaiapp.com.Realm.RealmController;
 
-import customer.thewaiapp.com.WeightChartUtensilsActivity;
 import io.realm.Realm;
 
 import static customer.thewaiapp.com.Utility.Utilities.generateOrderId;

@@ -119,13 +119,14 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("wai", "MapViewFragment onCreate");
+//        Log.v("wai", "MapViewFragment onCreate");
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_map_view, container, false);
-        Log.v("wai", "MapViewFragment onCreateView");
+//        Log.v("wai", "MapViewFragment onCreateView");
         mGeoDatabaseRef = getGeoDatabaseReference();
         mMapMarkers = new HashMap<>();
         mJobType = getJobtype();
@@ -170,8 +171,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
                 List<String> keys = new ArrayList<String>(mMapResourceList.keySet());
                 if (keys.size() > 0) {
                     String randomKey = keys.get(random.nextInt(keys.size()));
-                    Log.v("wai", "<<<<<<<<Resource key>>>>" + randomKey);
-
                     ResourceOnline resourceOnline = mMapResourceList.get(randomKey);
                     startActivity(new Intent(getActivity(), BookingConfirmationActivity.class)
                             .putExtra("resourceName", resourceOnline.getName())
@@ -201,7 +200,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     public abstract String getJobtype();
 
     private void buildAlertMessageNoGps() {
-        Log.v("wai", "MapViewFragment buildAlertMessageNoGps");
+//        Log.v("wai", "MapViewFragment buildAlertMessageNoGps");
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
@@ -220,13 +219,13 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     }
 
     private boolean checkPermission() {
-        Log.v("wai", "MapViewFragment checkPermission");
+//        Log.v("wai", "MapViewFragment checkPermission");
         int result = ContextCompat.checkSelfPermission(getContext().getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
         return result == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermission() {
-        Log.v("wai", "MapViewFragment requestPermission");
+//        Log.v("wai", "MapViewFragment requestPermission");
         if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)) {
             Toast.makeText(getActivity().getApplicationContext(), "GPS permission allows us to access location data. Please allow in App Settings for additional functionality.", Toast.LENGTH_LONG).show();
         }
@@ -238,7 +237,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.v("wai", "Permission Granted");
+//                    Log.v("wai", "Permission Granted");
                     if (ContextCompat.checkSelfPermission(getActivity(),
                             android.Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
@@ -259,7 +258,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
      * LocationServices API.
      */
     protected synchronized void buildGoogleApiClient() {
-        Log.v("wai", "MapViewFragment buildGoogleApiClient");
+//        Log.v("wai", "MapViewFragment buildGoogleApiClient");
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -308,9 +307,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
                 mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
             }
-            else {
-                Toast.makeText(getActivity(), "Not A Valid Location", Toast.LENGTH_SHORT).show();
-            }
         }
     }
 
@@ -342,7 +338,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(getActivity(), data);
-                Log.i("wai", "Place: " + place.getName());
                 mplace = (String) place.getName();
                 onSearch();
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
@@ -418,10 +413,9 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.v("wai", "MapViewFragment onLocationChanged");
+//        Log.v("wai", "MapViewFragment onLocationChanged");
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        Log.v("wai", String.valueOf(latLng));
 
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
@@ -448,7 +442,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onGeoQueryError(DatabaseError error) {
-        Log.v("wai", "MapViewFragment GeoQueryError");
         new AlertDialog.Builder(getActivity())
                 .setTitle("Error")
                 .setMessage("There was an unexpected error querying GeoFire: " + error.getMessage())
@@ -459,7 +452,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onGeoQueryReady() {
-        Log.v("wai", "MapViewFragment GeoQueryReady");
+
     }
 
     @Override
@@ -495,11 +488,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.v("wai", "onDataChange dataSnapshot: " + dataSnapshot.toString());
                 mMapResourceList.put(id, dataSnapshot.getValue(ResourceOnline.class));
-                List<String> keys = new ArrayList<String>(mMapResourceList.keySet());
-                if (keys.size() == 0) {
-                    Log.v("wai", "<<<<<<<No data>>>>>> ");
-                    Toast.makeText(getActivity(), "No available resources", Toast.LENGTH_SHORT).show();
-                }
+
 
 //                final ResourceOnline resourceOnline = dataSnapshot.getValue(ResourceOnline.class);
 //                Log.v("wai", "onKeyEntered: resource online id: " + resourceOnline.getResourceId());
@@ -579,7 +568,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Log.v("wai", "MapViewFragment onInfowindow clicked");
         String id = marker.getId();
         ResourceOnline resourceOnline = mMapResourceList.get(id);
         startActivity(new Intent(getActivity(), BookingConfirmationActivity.class)

@@ -51,9 +51,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         View Nav_View = navigationView.getHeaderView(0);
         TextView nav_Username = (TextView) Nav_View.findViewById(R.id.navheader_userName);
         String UserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        Log.v("wai", "<<<<<<<<<<<<<UserEmail from Base Activity>>>>>>>>" + UserEmail);
+        Log.v("wai", "UserEmail from Base Activity:" + UserEmail);
         RealmResults<User> UserResults = mRealm.where(User.class).equalTo("Email", UserEmail).findAll();
-        Log.v("wai", "<<<<<<<<<<<<<UserResults from Base Activity>>>>>>>>>" + UserResults);
+        Log.v("wai","UserResults from Base Activity" + UserResults);
         if (UserResults.size() > 0) {
             user = UserResults.get(0);
             if (user != null) {

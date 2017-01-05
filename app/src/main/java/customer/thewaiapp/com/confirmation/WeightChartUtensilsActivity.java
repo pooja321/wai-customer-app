@@ -1,7 +1,9 @@
-package customer.thewaiapp.com;
+package customer.thewaiapp.com.confirmation;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import customer.thewaiapp.com.R;
 
 public class WeightChartUtensilsActivity extends AppCompatActivity {
 

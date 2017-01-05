@@ -24,8 +24,6 @@ import customer.thewaiapp.com.Model.WashingOrderAmountValues;
 import customer.thewaiapp.com.R;
 import customer.thewaiapp.com.Realm.RealmController;
 
-import customer.thewaiapp.com.WeightChartUtensilsActivity;
-import customer.thewaiapp.com.WeightChartWashing;
 import io.realm.Realm;
 
 /**
