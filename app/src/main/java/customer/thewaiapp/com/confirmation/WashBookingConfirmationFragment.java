@@ -118,6 +118,7 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
         mButtonDecrementBucket.setOnClickListener(this);
         mButtonConfirm.setOnClickListener(this);
         mbtnweightchart.setOnClickListener(this);
+
         calculateAmount();
     }
 
