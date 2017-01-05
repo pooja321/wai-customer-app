@@ -5,7 +5,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ public class CookingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.v("wai","CookingFragment onCreateView");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cooking, container, false);
 
@@ -31,10 +29,8 @@ public class CookingFragment extends Fragment {
             @Override
             public Fragment getItem(int position) {
                 if (position == 0){
-                    Log.v("wai","new CookMapChildFragment");
                     return new CookMapChildFragment();
                 }else{
-                    Log.v("wai","new CookListChildFragment");
                     return new CookListChildFragment();
                 }
             }

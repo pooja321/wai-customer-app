@@ -5,86 +5,74 @@ package customer.thewaiapp.com.Model;
  */
 
 public class Coupon {
-    private String CouponCode,DiscountType,Categories,Status,UsesType;
-    private float Discount;
-    private String Lastdatefrom,Lastdateto;
-
+    private String couponCode,discountType,categories,status,usesType;
+    private float discount;
+    private String lastDateFrom,lastDateTo;
 
     public Coupon() {
     }
 
-    public Coupon(String couponCode, String discountType, String categories, String status, String usesType, float discount, String lastdatefrom, String lastdateto) {
-        CouponCode = couponCode;
-        DiscountType = discountType;
-        Categories = categories;
-        Status = status;
-        UsesType = usesType;
-        Discount = discount;
-        Lastdatefrom = lastdatefrom;
-        Lastdateto = lastdateto;
-    }
-
     public String getCouponCode() {
-        return CouponCode;
+        return couponCode;
     }
 
     public void setCouponCode(String couponCode) {
-        CouponCode = couponCode;
+        this.couponCode = couponCode;
     }
 
     public String getDiscountType() {
-        return DiscountType;
+        return discountType;
     }
 
     public void setDiscountType(String discountType) {
-        DiscountType = discountType;
+        this.discountType = discountType;
     }
 
     public String getCategories() {
-        return Categories;
+        return categories;
     }
 
     public void setCategories(String categories) {
-        Categories = categories;
+        this.categories = categories;
     }
 
     public String getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(String status) {
-        Status = status;
+        this.status = status;
     }
 
     public String getUsesType() {
-        return UsesType;
+        return usesType;
     }
 
     public void setUsesType(String usesType) {
-        UsesType = usesType;
+        this.usesType = usesType;
     }
 
     public float getDiscount() {
-        return Discount;
+        return discount;
     }
 
     public void setDiscount(float discount) {
-        Discount = discount;
+        this.discount = discount;
     }
 
-    public String getLastdatefrom() {
-        return Lastdatefrom;
+    public String getLastDateFrom() {
+        return lastDateFrom;
     }
 
-    public void setLastdatefrom(String lastdatefrom) {
-        Lastdatefrom = lastdatefrom;
+    public void setLastDateFrom(String lastDateFrom) {
+        this.lastDateFrom = lastDateFrom;
     }
 
-    public String getLastdateto() {
-        return Lastdateto;
+    public String getLastDateTo() {
+        return lastDateTo;
     }
 
-    public void setLastdateto(String lastdateto) {
-        Lastdateto = lastdateto;
+    public void setLastDateTo(String lastDateTo) {
+        this.lastDateTo = lastDateTo;
     }
 }

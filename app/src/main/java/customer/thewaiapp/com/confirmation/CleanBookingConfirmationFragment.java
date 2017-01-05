@@ -311,9 +311,9 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
         String category = coupon.getCategories();
         String status = coupon.getStatus();
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        Date lastdatefrom = dateFormat.parse(coupon.getLastdatefrom());
+        Date lastdatefrom = dateFormat.parse(coupon.getLastDateFrom());
         Log.v("FIREBASE", "lastdatefrom is  : " + lastdatefrom);
-        Date lastdateto = dateFormat.parse(coupon.getLastdateto());
+        Date lastdateto = dateFormat.parse(coupon.getLastDateTo());
         String date = dateFormat.format(new Date());
         Log.v("FIREBASE", "current date is: " + date);
         Date currentDate = dateFormat.parse(date);

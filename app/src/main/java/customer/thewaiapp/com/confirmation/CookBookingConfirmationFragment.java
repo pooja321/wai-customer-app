@@ -232,11 +232,11 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     }
 
     private void couponcode() {
-        final String checkcoupon = mEdittextApplyCoupon.getText().toString();
+        final String checkcoupon = mEdittextApplyCoupon.getText().toString().toUpperCase();
         mDatabase.child(Constants.FIREBASE_CHILD_COUPONCODE).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.v("FIREBASE", "value is: " + dataSnapshot.getValue().toString());
+                Log.v("wai", "value is: " + dataSnapshot.getValue().toString());
                 boolean isCouponexist = false;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Coupon coupon = ds.getValue(Coupon.class);
@@ -275,13 +275,13 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         String category = coupon.getCategories();
         String status = coupon.getStatus();
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        Date lastdatefrom = dateFormat.parse(coupon.getLastdatefrom());
-        Log.v("FIREBASE", "lastdatefrom is  : " + lastdatefrom);
-        Date lastdateto = dateFormat.parse(coupon.getLastdateto());
+        Date lastdatefrom = dateFormat.parse(coupon.getLastDateFrom());
+        Log.v("wai", "lastdatefrom is  : " + lastdatefrom);
+        Date lastdateto = dateFormat.parse(coupon.getLastDateTo());
         String date = dateFormat.format(new Date());
-        Log.v("FIREBASE", "current date is: " + date);
+        Log.v("wai", "current date is: " + date);
         Date currentDate = dateFormat.parse(date);
-        Log.v("FIREBASE", "current date in date format is: " + currentDate);
+        Log.v("wai", "current date in date format is: " + currentDate);
 
         if (currentDate.after(lastdatefrom) && (currentDate.before(lastdateto))
                 && (category.equals("Cooking") || (category.equals("All")))
@@ -294,10 +294,10 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     }
 
     private void calculateDiscountedAmount(Coupon coupon) {
-        Log.v("FIREBASE", "calculateDiscountedAmount");
+        Log.v("wai", "calculateDiscountedAmount");
         float tempAmount = mBaseAmount + mMembersAmount + mMainCourseAmount;
         float totalDiscount = (mBaseAmount + mMembersAmount + mMainCourseAmount) * coupon.getDiscount() / 100;
-        Log.v("FIREBASE", "discount :" + coupon.getDiscount());
+        Log.v("wai", "discount :" + coupon.getDiscount());
         float discountedAmount = tempAmount - totalDiscount;
 
         mServiceTaxAmount = discountedAmount * .125;

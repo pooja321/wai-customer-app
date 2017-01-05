@@ -192,7 +192,7 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
     }
 
     private void couponcode() {
-        final String checkcoupon = mEdittextApplyCoupon.getText().toString();
+        final String checkcoupon = mEdittextApplyCoupon.getText().toString().toUpperCase();
         mDatabase.child(Constants.FIREBASE_CHILD_COUPONCODE).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -235,9 +235,9 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
         String category = coupon.getCategories();
         String status = coupon.getStatus();
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        Date lastdatefrom = dateFormat.parse(coupon.getLastdatefrom());
+        Date lastdatefrom = dateFormat.parse(coupon.getLastDateFrom());
         Log.v("FIREBASE", "lastdatefrom is  : " + lastdatefrom);
-        Date lastdateto = dateFormat.parse(coupon.getLastdateto());
+        Date lastdateto = dateFormat.parse(coupon.getLastDateTo());
         String date = dateFormat.format(new Date());
         Log.v("FIREBASE", "current date is: " + date);
         Date currentDate = dateFormat.parse(date);

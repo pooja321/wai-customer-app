@@ -33,7 +33,6 @@ public abstract class ListViewFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("wai","ListViewFragment oncreate");
     }
 
     // callback interface to implement on item list click listener
@@ -44,7 +43,6 @@ public abstract class ListViewFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.v("wai","ListViewFragment onCreateView");
         View view = inflater.inflate(R.layout.fragment_main_listview, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.main_rv_list_view);
@@ -59,7 +57,6 @@ public abstract class ListViewFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.v("wai","ListViewFragment onActivityCreated");
         mManager = new LinearLayoutManager(getActivity());
         mManager.setReverseLayout(true);
         mManager.setStackFromEnd(true);
@@ -70,7 +67,6 @@ public abstract class ListViewFragment extends Fragment {
         mResourceQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.v("wai","ListViewFragment onDataChange");
                 if (mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }

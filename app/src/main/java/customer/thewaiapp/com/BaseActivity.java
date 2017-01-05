@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -34,7 +35,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     ActionBarDrawerToggle actionBarDrawerToggle;
     Realm mRealm;
-
     User user;
 
     @Override
@@ -46,14 +46,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         getLayoutInflater().inflate(layoutResID, activityContainer, true);
         super.setContentView(drawer);
 
-
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         View Nav_View = navigationView.getHeaderView(0);
         TextView nav_Username = (TextView) Nav_View.findViewById(R.id.navheader_userName);
         String UserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        Log.v("wai", "<<<<<<<<<<<<<UserEmail from Base Activity>>>>>>>>" + UserEmail);
+        Log.v("wai", "BaseActivity UserEmail: " + UserEmail);
         RealmResults<User> UserResults = mRealm.where(User.class).equalTo("Email", UserEmail).findAll();
-        Log.v("wai", "<<<<<<<<<<<<<UserResults from Base Activity>>>>>>>>>" + UserResults);
         if (UserResults.size() > 0) {
             user = UserResults.get(0);
             if (user != null) {
@@ -115,6 +113,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (user != null) {
                 FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
                 startActivity(new Intent(this, LoginActivity.class));
             } else {
                 Toast.makeText(BaseActivity.this, "Please Login First", Toast.LENGTH_SHORT).show();
