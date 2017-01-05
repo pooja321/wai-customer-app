@@ -25,7 +25,6 @@ import customer.thewaiapp.com.Address.AddressActivity;
 import customer.thewaiapp.com.R;
 import customer.thewaiapp.com.Realm.RealmController;
 
-import customer.thewaiapp.com.WeightChartUtensilsActivity;
 import io.realm.Realm;
 
 /**
@@ -48,8 +47,6 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
     CheckBox mCheckBoxTerms;
     Realm realm;
     private OnUserSignUpRequired mListener;
-
-    Button mbtnweightchart;
 
     // callback interface to implement on item list click mListener
     public interface OnUserSignUpRequired {
@@ -100,7 +97,7 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mbtnweightchart= (Button) view.findViewById(R.id.cook_booking_btn_weightchart);
+
         mCheckBoxTerms = (CheckBox) view.findViewById(R.id.clean_booking_cb_terms);
         mTextViewResourceName = (TextView) view.findViewById(R.id.clean_booking_tv_resource_name);
         mTextViewRoomsCount = (TextView) view.findViewById(R.id.clean_booking_tv_rooms_count);
@@ -128,7 +125,7 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
         mButtonIncrementUtensilBucket.setOnClickListener(this);
         mButtonDecrementUtensilBucket.setOnClickListener(this);
         mButtonConfirm.setOnClickListener(this);
-        mbtnweightchart.setOnClickListener(this);
+
         mTextViewResourceName.setText(mParamResourceName);
         mTextViewRoomsCount.setText(String.valueOf(mRoomsCount));
         mTextViewWashroomsCount.setText(String.valueOf(mWashroomsCount));
@@ -220,15 +217,11 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
                 mTextViewRoomsAmount.setText(String.valueOf(mRoomsAmount));
                 calculateAmount();
                 break;
-            case(R.id.cook_booking_btn_weightchart):
-                startActivity(new Intent(getActivity(), WeightChartUtensilsActivity.class));
-                break;
             case (R.id.clean_booking_bt_utensilbucket_count_decrement):
                 if (mUtensilBucketCount >= 1) {
                     mUtensilBucketCount = mUtensilBucketCount - 1;
                     mUtensilBucketAmount = mUtensilBucketCount * 50;
                 }
-
 
                 mTextViewUtensilBucketCount.setText(String.valueOf(mUtensilBucketCount));
                 mTextViewUtensilBucketAmount.setText(String.valueOf(mUtensilBucketAmount));

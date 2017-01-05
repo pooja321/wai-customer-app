@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import customer.thewaiapp.com.FeedBack.FeedBackFormActivity;
 import customer.thewaiapp.com.Login.LoginActivity;
 import customer.thewaiapp.com.Model.User;
 import customer.thewaiapp.com.Order.OrderHistoryActivity;
@@ -111,7 +110,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(this, TermsAndConditionsActivity.class));
         }
         else if (id == R.id.nav_feedback) {
-            startActivity(new Intent(this, FeedBackFormActivity.class));
+            startActivity(new Intent(this, WeightChartWashing.class));
         }
         else if (id == R.id.nav_newbooking) {
             startActivity(new Intent(this, MainActivity.class));

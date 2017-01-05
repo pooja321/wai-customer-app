@@ -52,7 +52,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     private DatabaseReference mDatabase;
     private ResourceOnline mParamResource;
     Realm realm;
-
+    Button mbtnweightchart;
 
     // callback interface to implement on item list click mListener
     public interface OnUserSignUpRequired{
@@ -104,7 +104,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Log.v("wai","CookBookingConfirmationFragment onViewCreated");
-
+        mbtnweightchart= (Button) view.findViewById(R.id.cook_booking_btn_weightchart);
         mCheckBoxTerms = (CheckBox) view.findViewById(R.id.cook_booking_cb_terms);
         mTextViewResourceName = (TextView) view.findViewById(R.id.cook_booking_tv_resource_name);
         mTextViewMembersCount = (TextView) view.findViewById(R.id.cook_booking_tv_members_count);
@@ -126,7 +126,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         mButtonDecrementMainCourse.setOnClickListener(this);
         mButtonDecrementMembers.setOnClickListener(this);
         mButtonConfirm.setOnClickListener(this);
-
+        mbtnweightchart.setOnClickListener(this);
 
         mTextViewResourceName.setText(mParamResourceName);
         mTextViewMembersCount.setText(String.valueOf(mMembersCount));
@@ -203,7 +203,9 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
                 mTextViewMembersAmount.setText(String.valueOf(mMembersAmount));
                 calculateAmount();
                 break;
-
+            case(R.id.cook_booking_btn_weightchart):
+               startActivity(new Intent(getActivity(), WeightChartUtensilsActivity.class));
+                break;
             case(R.id.cook_booking_bt_members_count_increment):
                 mMembersCount = mMembersCount + 1;
                 mTextViewMembersCount.setText(String.valueOf(mMembersCount));
