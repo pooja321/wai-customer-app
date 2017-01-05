@@ -108,15 +108,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
+                Log.d("wai", "currentuser: "+user);
                 if (user != null) {
                     // User is signed in
-                    Log.d("FACEBOOK", "onAuthStateChanged:signed_in");
+                    Log.d("wai", "onAuthStateChanged:signed_in");
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
 
                 } else {
                     // User is signed out
-                    Log.d("FACEBOOK", "onAuthStateChanged:signed_out");
+                    Log.d("wai", "onAuthStateChanged:signed_out");
                 }
             }
         };
@@ -223,7 +224,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(LOG_TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+                Log.d("wai", "signInWithEmail:onComplete:" + task.isSuccessful());
 
                 if (!task.isSuccessful()) {
                     Log.v("wai", "exception ", task.getException());
@@ -242,7 +243,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                 } else {
                     FirebaseUser user = task.getResult().getUser();
                     getUserData(user);
-                    Toast.makeText(getActivity(), "Authentication Successful.", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -252,28 +252,41 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     private void getUserData(final FirebaseUser user) {
         String UserKey = user.getUid();
         Log.v("wai", "Userkey: " + UserKey);
-        mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(UserKey).addValueEventListener(new ValueEventListener() {
+        mDatabase.child(Constants.FIREBASE_CHILD_USERS);
+        mDatabase.child(UserKey);
+        mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 Log.v("wai", "Value from ondata change" + dataSnapshot.getValue().toString());
 
-                mrealm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        User user = dataSnapshot.getValue(User.class);
-                        realm.copyToRealmOrUpdate(user);
+
+                    mrealm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            User user = dataSnapshot.getValue(User.class);
+                            realm.copyToRealmOrUpdate(user);
+
+
                         startActivity(new Intent(getActivity(), MainActivity.class));
                         mAuthProgressDialog.dismiss();
-                    }
-                });
+                        }
+
+                    });
+
+
+
             }
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 mAuthProgressDialog.dismiss();
             }
         });
+
     }
+
+
 
     private boolean isEmailValid(String email) {
 
@@ -298,45 +311,48 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
 
     }
     public void onSignInFacebookPressed(View view){
-        Log.d("FACEBOOK", "onSignInFacebookPressed");
+        Log.d("wai", "onSignInFacebookPressed");
         mButtonFacebookSignin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d("FACEBOOK", "facebook:onSuccess:" + loginResult);
+                Log.d("wai", "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
 
             }
 
             @Override
             public void onCancel() {
-                Log.d("FACEBOOK", "onCancel");
+                Log.d("wai", "onCancel");
             }
 
             @Override
             public void onError(FacebookException error) {
-                Log.d("FACEBOOK", "onError");
+                Log.d("wai", "onError");
             }
         });
 
     }
     private void handleFacebookAccessToken(AccessToken token) {
-        Log.d("FACEBOOK", "handleFacebookAccessToken:" + token);
+        Log.d("wai", "handleFacebookAccessToken:" + token);
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(getActivity(),new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("FACEBOOK", "signInWithCredential:onComplete:" + task.isSuccessful());
+                        Log.d("wai", "signInWithCredential:onComplete:" + task.isSuccessful());
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Log.w("FACEBOOK", "signInWithCredential", task.getException());
+                            Log.w("wai", "signInWithCredential", task.getException());
 
                         }
                         else{
+                            FirebaseUser user = task.getResult().getUser();
+                            String key=user.getUid();
+                            Log.w("wai", "current user with facebook : "+ key);
                             Intent intent = new Intent(getActivity(), FillDetailsActivity.class);
                             startActivity(intent);
                         }
@@ -352,7 +368,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.v("onActivityResult","request code: " + requestCode);
+        Log.v("wai","request code: " + requestCode);
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
         /* Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...); */
@@ -365,7 +381,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
-        Log.d(LOG_TAG, "handleSignInResult:" + result.isSuccess());
+        Log.d("wai", "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
             mGoogleAccount = result.getSignInAccount();
             AuthCredential credential = GoogleAuthProvider.getCredential(mGoogleAccount.getIdToken(), null);
@@ -373,10 +389,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                     .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            Log.d(LOG_TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+                            Log.d("wai", "signInWithCredential:onComplete:" + task.isSuccessful());
 
                             if (!task.isSuccessful()) {
-                                Log.w(LOG_TAG, "signInWithCredential", task.getException());
+                                Log.w("wai", "signInWithCredential", task.getException());
                                 Toast.makeText(getActivity(), "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
                             }
