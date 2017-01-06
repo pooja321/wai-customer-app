@@ -35,7 +35,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:padding="10dp"
             android:text="Price Details"
             android:textColor="@color/colorPrimaryDark"/>
@@ -58,28 +57,33 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sub Total"
+                    android:padding="1dp"
                     />
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Base amount" />
+                    android:text="Base amount"
+                    android:padding="1dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Service Tax" />
+                    android:text="Service Tax"
+                    android:padding="1dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Coupon Discount" />
+                    android:text="Coupon Discount"
+                    android:padding="1dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Total Payable"
+                    android:padding="1dp"
                     android:layout_marginTop="20dp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -95,25 +99,29 @@
                     android:id="@+id/paymenttotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rs 274" />
+                    android:text="Rs 274"
+                    android:padding="1dp"/>
 
 
                 <TextView
                     android:id="@+id/paymentbaseamount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Rs 274" />
+                    android:text="Rs 274"
+                    android:padding="1dp"/>
 
                 <TextView
                     android:id="@+id/paymentservicetax"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="31.25" />
+                    android:text="31.25"
+                    android:padding="1dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="0" />
+                    android:text="0"
+                    android:padding="1dp"/>
 
                 <TextView
                     android:id="@+id/paymenttotalPayable"
@@ -121,7 +129,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="Rs 305.25"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:padding="1dp"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -140,9 +149,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_rectangle_solid_white_corner"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/feed_item_padding_top_bottom"
-            android:paddingLeft="@dimen/feed_item_padding_left_right"
-            android:paddingTop="@dimen/feed_item_padding_top_bottom">
+            android:padding="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -156,6 +163,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.9"
+                    android:padding="1dp"
                     android:text="Address Name"
                     android:textColor="#000000"
                     android:textSize="@dimen/text_size_medium" />
@@ -171,6 +179,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
+                    android:padding="1dp"
                     android:text="House/Flat No"
                     android:textSize="@dimen/text_size_normal" />
 
@@ -179,6 +188,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Area Name"
+                    android:padding="1dp"
                     android:textSize="@dimen/text_size_normal" />
             </LinearLayout>
 
@@ -187,6 +197,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Landmark"
+                android:padding="1dp"
                 android:textSize="@dimen/text_size_normal" />
 
             <LinearLayout
@@ -200,6 +211,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:text="City"
+                    android:padding="1dp"
                     android:textSize="@dimen/text_size_normal" />
 
                 <TextView
@@ -208,6 +220,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:text="State"
+                    android:padding="1dp"
                     android:textSize="@dimen/text_size_normal" />
 
                 <TextView
@@ -215,6 +228,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Pincode"
+                    android:padding="1dp"
                     android:textSize="@dimen/text_size_normal" />
             </LinearLayout>
         </LinearLayout>
@@ -222,7 +236,7 @@
             android:id="@+id/payment_radiogroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:orientation="horizontal">
 
             <RadioButton
