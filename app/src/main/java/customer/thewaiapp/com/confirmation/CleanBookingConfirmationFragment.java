@@ -84,7 +84,6 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("wai", "onCreate");
         if (getArguments() != null) {
             mParamResourceKey = getArguments().getString(ARG_KEY);
 //            mParamResource = (ResourceOnline) getArguments().getSerializable(ARG_RESOURCE);
@@ -172,7 +171,6 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
         switch (id) {
             case (R.id.clean_booking_bt_confirm):
                 if (mCheckBoxTerms.isChecked()) {
-                    Log.v("wai", "checkbox selected");
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                     if (user != null) {
                         // User is signed in
@@ -197,7 +195,6 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
                         mListener.UserSignUpRequired();
                     }
                 } else {
-                    Log.v("wai", "checkbox not selected");
                     Toast.makeText(getActivity(), "Please accept terms and conditions", Toast.LENGTH_SHORT).show();
                 }
 
@@ -272,7 +269,6 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
         mDatabase.child(Constants.FIREBASE_CHILD_COUPONCODE).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.v("FIREBASE", "value is: " + dataSnapshot.getValue().toString());
                 boolean isCouponexist = false;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Coupon coupon = ds.getValue(Coupon.class);
@@ -312,12 +308,10 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
         String status = coupon.getStatus();
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date lastdatefrom = dateFormat.parse(coupon.getLastDateFrom());
-        Log.v("FIREBASE", "lastdatefrom is  : " + lastdatefrom);
         Date lastdateto = dateFormat.parse(coupon.getLastDateTo());
         String date = dateFormat.format(new Date());
-        Log.v("FIREBASE", "current date is: " + date);
         Date currentDate = dateFormat.parse(date);
-        Log.v("FIREBASE", "current date in date format is: " + currentDate);
+
 
         if (currentDate.after(lastdatefrom) && (currentDate.before(lastdateto))
                 && (category.equals("Cleaning") || (category.equals("All")))
@@ -330,10 +324,8 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
     }
 
     private void calculateDiscountedAmount(Coupon coupon) {
-        Log.v("FIREBASE", "calculateDiscountedAmount");
         float tempAmount = mBaseAmount + mRoomsAmount + mWashroomsAmount + mUtensilBucketAmount;
         float totalDiscount = (mBaseAmount + mRoomsAmount + mWashroomsAmount + mUtensilBucketAmount) * coupon.getDiscount() / 100;
-        Log.v("FIREBASE", "discount :" + coupon.getDiscount());
         float discountedAmount = tempAmount - totalDiscount;
 
         mServiceTaxAmount = discountedAmount * .125;
@@ -346,7 +338,6 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.v("wai", "onSaveInstanceState data saved");
         outState.putInt("roomscount", mRoomsCount);
         outState.putInt("roomsamount", mRoomsAmount);
         outState.putInt("washroomcount", mWashroomsCount);
@@ -359,9 +350,7 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        Log.v("wai", "onViewStateRestored");
         if (savedInstanceState != null) {
-            Log.v("wai", "if");
             mRoomsCount = savedInstanceState.getInt("roomscount");
             mWashroomsCount = savedInstanceState.getInt("washroomcount");
             mUtensilBucketCount = savedInstanceState.getInt("utensilcount");
@@ -369,7 +358,6 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
             mWashroomsAmount = savedInstanceState.getInt("Washroomamount");
             mUtensilBucketAmount = savedInstanceState.getInt("utensilamount");
         } else {
-            Log.v("wai", "else");
             mRoomsCount = 1;
             mWashroomsCount = 0;
             mUtensilBucketCount = 0;

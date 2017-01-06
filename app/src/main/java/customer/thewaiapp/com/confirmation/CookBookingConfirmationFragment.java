@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,15 +27,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import customer.thewaiapp.com.Address.AddressActivity;
 import customer.thewaiapp.com.Model.CookingOrderAmountValues;
 import customer.thewaiapp.com.Model.Coupon;
 import customer.thewaiapp.com.Model.ResourceOnline;
-import customer.thewaiapp.com.Utility.Constants;
-import customer.thewaiapp.com.Address.AddressActivity;
-
 import customer.thewaiapp.com.R;
 import customer.thewaiapp.com.Realm.RealmController;
-
+import customer.thewaiapp.com.Utility.Constants;
 import io.realm.Realm;
 
 import static customer.thewaiapp.com.Utility.Utilities.generateOrderId;
@@ -84,7 +81,6 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("wai", "CookBookingConfirmationFragment onCreate");
         if (getArguments() != null) {
             mParamResourceKey = getArguments().getString(ARG_KEY);
             mParamResourceName = getArguments().getString(ARG_RESOURCE);
@@ -102,7 +98,6 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Log.v("wai", "CookBookingConfirmationFragment oncreateView");
         View view = inflater.inflate(R.layout.fragment_cook_booking_confirmation, container, false);
         mListener = (OnUserSignUpRequired) getActivity();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -112,7 +107,6 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.v("wai", "CookBookingConfirmationFragment onViewCreated");
         mCheckBoxTerms = (CheckBox) view.findViewById(R.id.cook_booking_cb_terms);
         mTextViewResourceName = (TextView) view.findViewById(R.id.cook_booking_tv_resource_name);
         mTextViewMembersCount = (TextView) view.findViewById(R.id.cook_booking_tv_members_count);
@@ -159,7 +153,6 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
                     if (user != null) {
                         // User is signed in
                         mOrderId = generateOrderId();
-                        Log.v("wai", "Order Id: " + mOrderId);
                         final CookingOrderAmountValues cookingOrderAmountValues = new CookingOrderAmountValues(mOrderId, mBaseAmount, mMainCourseAmount, mMainCourseCount, mMembersAmount, mMembersCount, mServiceTaxAmount, mTotalAmount);
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
@@ -179,7 +172,6 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
                         mListener.UserSignUpRequired();
                     }
                 } else {
-                    Log.v("wai", "checkbox not selected");
                     Toast.makeText(getActivity(), "Please accept terms and conditions", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -236,7 +228,6 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         mDatabase.child(Constants.FIREBASE_CHILD_COUPONCODE).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.v("wai", "value is: " + dataSnapshot.getValue().toString());
                 boolean isCouponexist = false;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Coupon coupon = ds.getValue(Coupon.class);
@@ -276,12 +267,9 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         String status = coupon.getStatus();
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date lastdatefrom = dateFormat.parse(coupon.getLastDateFrom());
-        Log.v("wai", "lastdatefrom is  : " + lastdatefrom);
         Date lastdateto = dateFormat.parse(coupon.getLastDateTo());
         String date = dateFormat.format(new Date());
-        Log.v("wai", "current date is: " + date);
         Date currentDate = dateFormat.parse(date);
-        Log.v("wai", "current date in date format is: " + currentDate);
 
         if (currentDate.after(lastdatefrom) && (currentDate.before(lastdateto))
                 && (category.equals("Cooking") || (category.equals("All")))
@@ -294,10 +282,8 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     }
 
     private void calculateDiscountedAmount(Coupon coupon) {
-        Log.v("wai", "calculateDiscountedAmount");
         float tempAmount = mBaseAmount + mMembersAmount + mMainCourseAmount;
         float totalDiscount = (mBaseAmount + mMembersAmount + mMainCourseAmount) * coupon.getDiscount() / 100;
-        Log.v("wai", "discount :" + coupon.getDiscount());
         float discountedAmount = tempAmount - totalDiscount;
 
         mServiceTaxAmount = discountedAmount * .125;
@@ -318,32 +304,27 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
 
     @Override
     public void onPause() {
-
         super.onPause();
-        Log.v("wai", "onPause");
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.v("wai", "onResume");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.v("wai", "onStart");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.v("wai", "onStop");
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        Log.v("wai", "onSaveInstanceState data saved");
         outState.putInt("membercount", mMembersCount);
         outState.putInt("memberamount", mMembersAmount);
         outState.putInt("maincoursecount", mMainCourseCount);
@@ -354,15 +335,12 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        Log.v("wai", "onViewStateRestored");
         if (savedInstanceState != null) {
-            Log.v("wai", "if");
             mMembersCount = savedInstanceState.getInt("membercount");
             mMainCourseCount = savedInstanceState.getInt("maincoursecount");
             mMembersAmount = savedInstanceState.getInt("memberamount");
             mMainCourseAmount = savedInstanceState.getInt("maincourseamount");
         } else {
-            Log.v("wai", "else");
             mMembersCount = 2;
             mMainCourseCount = 2;
             mMembersAmount = 100;

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,14 +27,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import customer.thewaiapp.com.Model.Coupon;
-import customer.thewaiapp.com.Utility.Constants;
-import customer.thewaiapp.com.Utility.Utilities;
 import customer.thewaiapp.com.Address.AddressActivity;
+import customer.thewaiapp.com.Model.Coupon;
 import customer.thewaiapp.com.Model.WashingOrderAmountValues;
 import customer.thewaiapp.com.R;
 import customer.thewaiapp.com.Realm.RealmController;
-
+import customer.thewaiapp.com.Utility.Constants;
+import customer.thewaiapp.com.Utility.Utilities;
 import io.realm.Realm;
 
 /**
@@ -78,7 +76,6 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("wai", "onCreate");
         if (getArguments() != null) {
             mParamResourceKey = getArguments().getString(ARG_KEY);
 //            mParamResource = (ResourceOnline) getArguments().getSerializable(ARG_RESOURCE);
@@ -165,7 +162,6 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
                         listener.UserSignUpRequired();
                     }
                 } else {
-                    Log.v("wai", "checkbox not selected");
                     Toast.makeText(getActivity(), "Please accept terms and conditions", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -196,7 +192,6 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
         mDatabase.child(Constants.FIREBASE_CHILD_COUPONCODE).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.v("FIREBASE", "value is: " + dataSnapshot.getValue().toString());
                 boolean isCouponexist = false;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Coupon coupon = ds.getValue(Coupon.class);
@@ -236,12 +231,9 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
         String status = coupon.getStatus();
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         Date lastdatefrom = dateFormat.parse(coupon.getLastDateFrom());
-        Log.v("FIREBASE", "lastdatefrom is  : " + lastdatefrom);
         Date lastdateto = dateFormat.parse(coupon.getLastDateTo());
         String date = dateFormat.format(new Date());
-        Log.v("FIREBASE", "current date is: " + date);
         Date currentDate = dateFormat.parse(date);
-        Log.v("FIREBASE", "current date in date format is: " + currentDate);
 
         if (currentDate.after(lastdatefrom) && (currentDate.before(lastdateto))
                 && (category.equals("Washing") || (category.equals("All")))
@@ -254,10 +246,8 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
     }
 
     private void calculateDiscountedAmount(Coupon coupon) {
-        Log.v("FIREBASE", "calculateDiscountedAmount");
         float tempAmount = mBaseAmount + mBucketAmount;
         float totalDiscount = (mBaseAmount + mBucketAmount) * coupon.getDiscount() / 100;
-        Log.v("FIREBASE", "discount :" + coupon.getDiscount());
         float discountedAmount = tempAmount - totalDiscount;
 
         mServiceTaxAmount = discountedAmount * .125;
@@ -278,9 +268,7 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        Log.v("wai", "onViewStateRestored");
         if (savedInstanceState != null) {
-            Log.v("wai", "if");
             mBucketCount = savedInstanceState.getInt("bucketcount");
             mBucketAmount = savedInstanceState.getInt("bucketamount");
         } else {
