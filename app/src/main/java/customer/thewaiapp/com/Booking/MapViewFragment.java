@@ -1,5 +1,6 @@
 package customer.thewaiapp.com.Booking;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,6 +37,7 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
+import com.firebase.geofire.LocationCallback;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -61,15 +63,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import customer.thewaiapp.com.Model.ResourceOnline;
 import customer.thewaiapp.com.R;
 import customer.thewaiapp.com.Utility.Constants;
 import customer.thewaiapp.com.confirmation.BookingConfirmationActivity;
 
+import static android.R.attr.x;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
@@ -100,6 +105,8 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     Button mbtnSearchAddress;
     EditText mlocation_tf;
+    Button mQuickBook;
+    ProgressDialog mProgressDialog;
 
     String mplace;
 
@@ -110,6 +117,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         super.onCreate(savedInstanceState);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_map_view, container, false);
@@ -118,6 +126,11 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         mJobType = getJobtype();
         mGeoFire = new GeoFire(mGeoDatabaseRef);
 
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setTitle("Please Wait");
+        mProgressDialog.setCancelable(false);
+
+        List<String> keys = new ArrayList<String>(mMapResourceList.keySet());
 
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -143,12 +156,38 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
             }
         });
 
+        mQuickBook = (Button) view.findViewById(R.id.map_bt_quick_button);
+        mQuickBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mProgressDialog.show();
+                Random random = new Random();
+                List<String> keys = new ArrayList<String>(mMapResourceList.keySet());
+                if (keys.size() > 0) {
+                    String randomKey = keys.get(random.nextInt(keys.size()));
+                    ResourceOnline resourceOnline = mMapResourceList.get(randomKey);
+                    startActivity(new Intent(getActivity(), BookingConfirmationActivity.class)
+                            .putExtra("resourceName", resourceOnline.getName())
+                            .putExtra("fragment_name", mJobType)
+                            .putExtra("resourceKey", resourceOnline.getResourceId()));
+                    mProgressDialog.dismiss();
+                    Toast.makeText(getActivity(), resourceOnline.getName(), Toast.LENGTH_SHORT).show();
+
+                }
+                else{
+                    mProgressDialog.dismiss();
+                    Toast.makeText(getActivity(), "No available resources", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         mCenterMarkerOptions = new MarkerOptions();
 //        mCenterMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mCenterMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_person_pin_circle_blue_700_36dp));
         return view;
 
     }
+
 
     public abstract DatabaseReference getGeoDatabaseReference();
 
@@ -255,9 +294,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
                 mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 
             }
-            else {
-                Toast.makeText(getActivity(), "Not A Valid Location", Toast.LENGTH_SHORT).show();
-            }
         }
     }
 
@@ -287,7 +323,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(getActivity(), data);
-                Log.i("wai", "Place: " + place.getName());
                 mplace = (String) place.getName();
                 onSearch();
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
@@ -364,12 +399,13 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
+
     }
+
 
     @Override
     public void onCameraMove() {
@@ -377,6 +413,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         mCenterMarker.setPosition(centerOfMap);
         mGeoQuery.setCenter(new GeoLocation(centerOfMap.latitude, centerOfMap.longitude));
         mGeoQuery.setRadius(3);
+
 //        LatLng centermarkerposition = mCenterMarker.getPosition();
 //        String position = String.format("%.2f %.2f", centermarkerposition.latitude, centermarkerposition.longitude );
 //        Log.v("wai", "onCameraMove center marker position: " + position);
@@ -427,11 +464,8 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mMapResourceList.put(id, dataSnapshot.getValue(ResourceOnline.class));
-//                final ResourceOnline resourceOnline = dataSnapshot.getValue(Resourc[
-// 36
-//
-//
-// eOnline.class);
+//                final ResourceOnline resourceOnline = dataSnapshot.getValue(ResourceOnline.class);
+//                final ResourceOnline resourceOnline = dataSnapshot.getValue(ResourceOnline.class);
 //                Log.v("wai", "onKeyEntered: resource online id: " + resourceOnline.getResourceId());
 //                Log.v("wai", "onKeyEntered: resource list size: " + String.valueOf(mMapResourceList.size()));
 //                mRealm.executeTransactionAsync(new Realm.Transaction() {

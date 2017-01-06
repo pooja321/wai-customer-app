@@ -60,6 +60,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     private ResourceOnline mParamResource;
     Realm realm;
 
+
     // callback interface to implement on item list click mListener
     public interface OnUserSignUpRequired {
         void UserSignUpRequired();
@@ -107,6 +108,8 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+//        Log.v("wai","CookBookingConfirmationFragment onViewCreated");
+
         mCheckBoxTerms = (CheckBox) view.findViewById(R.id.cook_booking_cb_terms);
         mTextViewResourceName = (TextView) view.findViewById(R.id.cook_booking_tv_resource_name);
         mTextViewMembersCount = (TextView) view.findViewById(R.id.cook_booking_tv_members_count);
@@ -132,6 +135,7 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         mButtonDecrementMembers.setOnClickListener(this);
         mButtonConfirm.setOnClickListener(this);
         mButtonApplycoupon.setOnClickListener(this);
+
 
 
         mTextViewResourceName.setText(mParamResourceName);
@@ -207,7 +211,8 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
                 mTextViewMembersAmount.setText(String.valueOf(mMembersAmount));
                 calculateAmount();
                 break;
-            case (R.id.cook_booking_bt_members_count_increment):
+
+            case(R.id.cook_booking_bt_members_count_increment):
                 mMembersCount = mMembersCount + 1;
                 mTextViewMembersCount.setText(String.valueOf(mMembersCount));
                 if (mMembersCount >= 2) {

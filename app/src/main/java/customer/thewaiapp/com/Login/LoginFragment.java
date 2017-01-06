@@ -114,9 +114,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in1
-                    Log.v("wai", "user is signed in");
                     if (sharedPreferences.getBoolean("isSavedInRealm", false)) {
-                        Log.v("MyLoginForm", "isLogedIn value True");
                         getUserData(user);
                     }
                     else {
@@ -232,7 +230,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (!task.isSuccessful()) {
-                    Log.v("wai", "signInPassword exception ", task.getException());
                     try {
                         throw task.getException();
                     } catch (FirebaseAuthInvalidCredentialsException e) {
@@ -252,18 +249,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
 
     private void getUserData(final FirebaseUser user) {
         String UserKey = user.getUid();
-        Log.v("wai", "getUserData Userkey: " + UserKey + " UserEmail: " + user.getEmail());
         mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(UserKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
-                Log.v("wai", "getUserData onDataChange datasnapshot" + dataSnapshot.getValue().toString());
                 final User user = dataSnapshot.getValue(User.class);
                 if (user != null) {
-                    Log.v("wai", "user is not null: " + user.getFirstName());
                     mrealm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
-                            Log.v("wai", "saving user data in realm, opening main activity");
                             realm.copyToRealmOrUpdate(user);
                             startActivity(new Intent(getActivity(), MainActivity.class));
                              isSavedInRealm=true;
@@ -271,7 +264,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                     });
 
                 } else {
-                    Log.v("wai", "user data not saved, opening fill detail activity");
                     startActivity(new Intent(getActivity(), FillDetailsActivity.class));
                 }
                 if (mAuthProgressDialog.isShowing()) {
@@ -317,7 +309,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
         mButtonFacebookSignin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d("wai", "onSignInFacebookPressed onSuccess " + loginResult);
                 mButtonFacebookSignin.setVisibility(View.GONE);
                 mAuthProgressDialog.show();
                 handleFacebookAccessToken(loginResult.getAccessToken());
@@ -326,12 +317,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
 
             @Override
             public void onCancel() {
-                Log.d("wai", "onSignInFacebookPressed onCancel");
+
             }
 
             @Override
             public void onError(FacebookException error) {
-                Log.d("wai", "onSignInFacebookPressed onError");
             }
         });
 
@@ -344,13 +334,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("wai", "handleFacebookAccessToken onComplete:" + task.isSuccessful());
 
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Log.w("wai", "handleFacebookAccessToken task result", task.getException());
                             //PUT FACEBOOK LOGOUT CODE HERE
                             LoginManager.getInstance().logOut();
                             mAuthProgressDialog.dismiss();
@@ -386,13 +374,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
                             if (!task.isSuccessful()) {
-                                Log.w("wai", "signInWithCredential", task.getException());
                                 Toast.makeText(getActivity(), "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
-                            } else {
-                                Log.v("wai", "google sign in successful");
-                                startActivity(new Intent(getActivity(), FillDetailsActivity.class));
+                                mAuthProgressDialog.dismiss();
                             }
+
                         }
                     });
         }
@@ -433,7 +419,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     @Override
     public void onStop() {
         super.onStop();
-        Log.v("wai", "onStop");
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }

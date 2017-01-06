@@ -67,6 +67,7 @@ public abstract class ListViewFragment extends Fragment {
         mResourceQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+//                Log.v("wai","ListViewFragment onDataChange");
                 if (mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }
