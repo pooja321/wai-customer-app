@@ -31,181 +31,190 @@
                     app:popupTheme="@style/AppTheme.PopupOverlay" />
 
             </android.support.design.widget.AppBarLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_address_title"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/textinputlayout_margin">
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/addaddress_et_address_name"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_address_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_enter_address_name"
-                    android:inputType="textCapWords"
-                    android:padding="@dimen/edit_text_padding"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/colordarkgrey"
-                    android:textSize="@dimen/text_size_normal" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_marginBottom="@dimen/textinputlayout_margin">
 
-            <Spinner
-                android:id="@+id/addaddress_spinner_address_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#fff"
-                android:spinnerMode="dropdown" />
+                    <EditText
+                        android:id="@+id/addaddress_et_address_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_enter_address_name"
+                        android:inputType="textCapWords"
+                        android:padding="@dimen/edit_text_padding"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/colordarkgrey"
+                        android:textSize="@dimen/text_size_normal" />
+                </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_house_no"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/textinputlayout_margin">
-
-                <EditText
-                    android:id="@+id/addaddress_et_houseno"
+                <Spinner
+                    android:id="@+id/addaddress_spinner_address_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_enter_house_no"
-                    android:inputType="textCapWords"
-                    android:padding="@dimen/edit_text_padding"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/colordarkgrey"
-                    android:textSize="@dimen/text_size_normal" />
-            </android.support.design.widget.TextInputLayout>
+                    android:background="#fff"
+                    android:spinnerMode="dropdown" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_area_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/textinputlayout_margin">
-
-                <EditText
-                    android:id="@+id/addaddress_et_areaname"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_house_no"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_enter_area_name"
-                    android:inputType="textCapWords"
-                    android:padding="@dimen/edit_text_padding"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/colordarkgrey"
-                    android:textSize="@dimen/text_size_normal" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_marginBottom="@dimen/textinputlayout_margin">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_landmark"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/textinputlayout_margin">
+                    <EditText
+                        android:id="@+id/addaddress_et_houseno"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_enter_house_no"
+                        android:inputType="textCapWords"
+                        android:padding="@dimen/edit_text_padding"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/colordarkgrey"
+                        android:textSize="@dimen/text_size_normal" />
+                </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/addaddress_et_landmark"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_area_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_enter_landmark"
-                    android:inputType="textCapWords"
-                    android:padding="@dimen/edit_text_padding"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/colordarkgrey"
-                    android:textSize="@dimen/text_size_normal" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_marginBottom="@dimen/textinputlayout_margin">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_city"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/textinputlayout_margin">
+                    <EditText
+                        android:id="@+id/addaddress_et_areaname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_enter_area_name"
+                        android:inputType="textCapWords"
+                        android:padding="@dimen/edit_text_padding"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/colordarkgrey"
+                        android:textSize="@dimen/text_size_normal" />
+                </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/addaddress_et_city"
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_enter_cityname"
-                    android:inputType="textCapWords"
-                    android:maxLength="10"
-                    android:padding="@dimen/edit_text_padding"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/colordarkgrey"
-                    android:textSize="@dimen/text_size_normal" />
-            </android.support.design.widget.TextInputLayout>
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_State"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/textinputlayout_margin">
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/til_city"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/textinputlayout_margin"
+                        android:layout_weight="1">
 
-                <EditText
-                    android:id="@+id/addaddress_et_state"
+                        <EditText
+                            android:id="@+id/addaddress_et_city"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_enter_cityname"
+                            android:inputType="textCapWords"
+                            android:maxLength="10"
+                            android:padding="@dimen/edit_text_padding"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/colordarkgrey"
+                            android:textSize="@dimen/text_size_normal" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/til_State"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/textinputlayout_margin"
+                        android:layout_weight="1">
+
+                        <EditText
+                            android:id="@+id/addaddress_et_state"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/hint_enter_statename"
+                            android:inputType="textCapWords"
+                            android:maxLength="10"
+                            android:padding="@dimen/edit_text_padding"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/colordarkgrey"
+                            android:textSize="@dimen/text_size_normal" />
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_pincode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_enter_statename"
-                    android:inputType="textCapWords"
-                    android:maxLength="10"
-                    android:padding="@dimen/edit_text_padding"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/colordarkgrey"
-                    android:textSize="@dimen/text_size_normal" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_marginBottom="@dimen/textinputlayout_margin">
 
+                    <EditText
+                        android:id="@+id/addaddress_et_pincode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_enter_pincode"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:padding="@dimen/edit_text_padding"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/colordarkgrey"
+                        android:textSize="@dimen/text_size_normal" />
+                </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_pincode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/textinputlayout_margin">
-
-                <EditText
-                    android:id="@+id/addaddress_et_pincode"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_landmark"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/hint_enter_pincode"
-                    android:inputType="number"
-                    android:maxLength="10"
-                    android:padding="@dimen/edit_text_padding"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/colordarkgrey"
+                    android:layout_marginBottom="@dimen/textinputlayout_margin">
+
+                    <EditText
+                        android:id="@+id/addaddress_et_landmark"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_enter_landmark"
+                        android:inputType="textCapWords"
+                        android:padding="@dimen/edit_text_padding"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/colordarkgrey"
+                        android:textSize="@dimen/text_size_normal" />
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/addaddress_button_submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/colorAccent"
+                    android:text="SUBMIT"
                     android:textSize="@dimen/text_size_normal" />
-            </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="fields marked with * are mandatory"
-                android:textAlignment="center"
-                android:textColor="@color/Red" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp">
-
-            <Button
-                android:id="@+id/addaddress_button_submit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
-                android:text="SUBMIT"
-                android:textSize="@dimen/text_size_normal" />
-            <TextView
-                android:id="@+id/addaddress_textview_displaymessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="*Your address is updated please press Back button to go to the Address screen"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textColor="#000000"/>
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/addaddress_textview_displaymessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="*Your address is added please press Back button to go to the Address screen"
+                    android:textColor="#000000"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
