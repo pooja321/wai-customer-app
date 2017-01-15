@@ -50,7 +50,6 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         mEditDetail = (Button) findViewById(R.id.user_profile_editdetail);
         mEditDetail.setOnClickListener(this);
         RealmResults<User> UserResults = mRealm.where(User.class).equalTo("Email", UserEmail).findAll();
-        Log.v("wai","<<<<<<<<<<<<<UserEmail>>>>>>>>>>"+UserEmail);
         if (UserResults.size() > 0) {
             user = UserResults.get(0);
             if (user != null) {

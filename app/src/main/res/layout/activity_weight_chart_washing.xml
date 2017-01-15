@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_stroke_rectangle_black_1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="8dip"
+            android:text="Weight Chart Washing"
+            android:background="@drawable/bg_stroke_rectangle_black_1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
+
+
+        <TableRow>
+
+            <TextView
+                android:gravity="center"
+                android:padding="8dip"
+                android:text="Categorie"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
+                android:background="@drawable/bg_stroke_rectangle_black_1"/>
+
+            <TextView
+                android:gravity="center"
+                android:padding="8dip"
+                android:text="Weight"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
+                android:background="@drawable/bg_stroke_rectangle_black_1"/>
+
+            <TextView
+                android:gravity="center"
+                android:padding="8dip"
+                android:text="Example"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:textColor="@color/colorPrimaryDark"
+                android:background="@drawable/bg_stroke_rectangle_black_1"/>
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="Light"
+                android:layout_height="match_parent"
+                android:textStyle="bold"
+                android:background="@drawable/bg_stroke_rectangle_black_1"/>
+
+            <TextView
+                android:gravity="left"
+                android:padding="8dip"
+                android:layout_height="match_parent"
+                android:text="100gm"
+                android:background="@drawable/bg_stroke_rectangle_black_1"/>
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:padding="8dip"
+                android:background="@drawable/bg_stroke_rectangle_black_1"
+                android:text="Lingerie, Socks(a pair), Handkerchiefs, Underwear, Tie, Spaghetti/Spaghetti Tops, Vests, Boxers, Hand towels, Stoles, Scarves, Dupattas" />
+        </TableRow>
+
+        <TableRow android:layout_width="match_parent">
+
+            <TextView
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="Medium"
+                android:textStyle="bold"
+                android:background="@drawable/bg_stroke_rectangle_black_1"/>
+
+            <TextView
+                android:gravity="left"
+                android:padding="8dip"
+                android:layout_height="match_parent"
+                android:text="250gm"
+                android:background="@drawable/bg_stroke_rectangle_black_1"/>
+
+            <TextView
+                android:gravity="left"
+                android:padding="8dip"
+                android:layout_weight="1"
+                android:background="@drawable/bg_stroke_rectangle_black_1"
+                android:text="T-shirts, Tops, Shorts, Short skirt, Jeggings, Short Dress, Kurti, Leggings, Blouses, Trousers, Shirts, Bath towels, Skirts, Pajamas, Long skirts, Cargo, Long dress, Night gowns, Bath robes" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_height="match_parent"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="Heavy"
+                android:textStyle="bold"
+                android:background="@drawable/bg_stroke_rectangle_black_1"/>
+
+            <TextView
+                android:gravity="left"
+                android:padding="8dip"
+                android:layout_height="match_parent"
+                android:text="750gm"
+                android:background="@drawable/bg_stroke_rectangle_black_1"/>
+
+            <TextView
+                android:gravity="left"
+                android:padding="8dip"
+                android:layout_weight="1"
+                android:background="@drawable/bg_stroke_rectangle_black_1"
+                android:text="Jeans, Shawls, Sweaters, Bedsheets(With Pillow covers), Wind sheets, Denim jacket, Cardigans, Suits, Saree, Blazers" />
+        </TableRow>
+
+
+    </TableLayout>
+</RelativeLayout>

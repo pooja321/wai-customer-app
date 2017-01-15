@@ -22,6 +22,7 @@ public class Constants {
     public static final String FIREBASE_CHILD_RESOURCE_ORDER_DETAIL = "Resource-Order-Detail";
     public static final String FIREBASE_CHILD_USER_ORDER_DETAIL = "User-Order-Detail";
     public static final String FIREBASE_CHILD_ORDER_DETAILS = "Order-Details";
+    public static final String FIREBASE_CHILD_COUPONCODE = "CouponCode";
 
     //firebase properties
     public static final String FIREBASE_PROPERTY_TIMESTAMP = "timestamp";

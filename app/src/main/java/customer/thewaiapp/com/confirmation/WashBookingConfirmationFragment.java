@@ -5,25 +5,35 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import customer.thewaiapp.com.Utility.Constants;
-import customer.thewaiapp.com.Utility.Utilities;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import customer.thewaiapp.com.Address.AddressActivity;
+import customer.thewaiapp.com.Model.Coupon;
 import customer.thewaiapp.com.Model.WashingOrderAmountValues;
 import customer.thewaiapp.com.R;
 import customer.thewaiapp.com.Realm.RealmController;
-
+import customer.thewaiapp.com.Utility.Constants;
+import customer.thewaiapp.com.Utility.Utilities;
 import io.realm.Realm;
 
 /**
@@ -38,10 +48,13 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
     double mTotalAmount, mServiceTaxAmount;
 
     TextView mTextViewResourceName, mTextViewBucketCount, mTextViewBucketAmount, mTextViewBaseAmount, mTextViewServiceTaxAmount, mTextViewTotalAmount;
-    Button mButtonIncrementBucket, mButtonDecrementBucket, mButtonConfirm;
+    Button mButtonIncrementBucket, mButtonDecrementBucket, mButtonConfirm, mButtonApplycoupon;
+    EditText mEdittextApplyCoupon;
     CheckBox mCheckBoxTerms;
     private OnUserSignUpRequired listener;
     Realm realm;
+    private DatabaseReference mDatabase;
+    Button mbtnweightchart;
 
     // callback interface to implement on item list click listener
     public interface OnUserSignUpRequired {
@@ -64,17 +77,17 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("wai", "onCreate");
         if (getArguments() != null) {
             mParamResourceKey = getArguments().getString(ARG_KEY);
 //            mParamResource = (ResourceOnline) getArguments().getSerializable(ARG_RESOURCE);
             mParamResourceName = getArguments().getString(ARG_RESOURCE);
         }
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             mBucketCount = 1;
             mBucketAmount = 100;
         }
         this.realm = RealmController.with(this).getRealm();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -91,6 +104,7 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mbtnweightchart= (Button) view.findViewById(R.id.wash_booking_btn_weightchart);
         mCheckBoxTerms = (CheckBox) view.findViewById(R.id.wash_booking_cb_terms);
         mTextViewResourceName = (TextView) view.findViewById(R.id.wash_booking_tv_resource_name);
         mTextViewBucketCount = (TextView) view.findViewById(R.id.wash_booking_tv_bucket_count);
@@ -98,10 +112,13 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
         mTextViewBaseAmount = (TextView) view.findViewById(R.id.wash_booking_tv_base_price);
         mTextViewServiceTaxAmount = (TextView) view.findViewById(R.id.wash_booking_tv_service_tax_amount);
         mTextViewTotalAmount = (TextView) view.findViewById(R.id.wash_booking_tv_total_amount);
+        mEdittextApplyCoupon = (EditText) view.findViewById(R.id.wash_booking_et_promocode);
 
         mButtonIncrementBucket = (Button) view.findViewById(R.id.wash_booking_bt_bucket_count_increment);
         mButtonDecrementBucket = (Button) view.findViewById(R.id.wash_booking_bt_bucket_count_decrement);
         mButtonConfirm = (Button) view.findViewById(R.id.wash_booking_bt_confirm);
+        mButtonApplycoupon = (Button) view.findViewById(R.id.wash_booking_btn_applycode);
+
 
         mTextViewResourceName.setText(mParamResourceName);
         mTextViewBaseAmount.setText(String.valueOf(50));
@@ -113,6 +130,8 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
         mButtonIncrementBucket.setOnClickListener(this);
         mButtonDecrementBucket.setOnClickListener(this);
         mButtonConfirm.setOnClickListener(this);
+        mButtonApplycoupon.setOnClickListener(this);
+        mbtnweightchart.setOnClickListener(this);
         calculateAmount();
     }
 
@@ -144,8 +163,7 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
                         Toast.makeText(getActivity(), "Please Login First", Toast.LENGTH_SHORT).show();
                         listener.UserSignUpRequired();
                     }
-                }else {
-                    Log.v("wai","checkbox not selected");
+                } else {
                     Toast.makeText(getActivity(), "Please accept terms and conditions", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -158,6 +176,9 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
                 mTextViewBucketAmount.setText(String.valueOf(mBucketAmount));
                 calculateAmount();
                 break;
+            case(R.id.wash_booking_btn_weightchart):
+                startActivity(new Intent(getActivity(), WeightChartWashing.class));
+                break;
             case (R.id.wash_booking_bt_bucket_count_increment):
                 mBucketCount = mBucketCount + 1;
                 mBucketAmount = mBucketCount * 100;
@@ -165,8 +186,82 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
                 mTextViewBucketAmount.setText(String.valueOf(mBucketAmount));
                 calculateAmount();
                 break;
+            case (R.id.wash_booking_btn_applycode):
+                couponcode();
+                break;
         }
     }
+
+    private void couponcode() {
+        final String checkcoupon = mEdittextApplyCoupon.getText().toString().toUpperCase();
+        mDatabase.child(Constants.FIREBASE_CHILD_COUPONCODE).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean isCouponexist = false;
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Coupon coupon = ds.getValue(Coupon.class);
+
+                    if (coupon.getCouponCode().equals(checkcoupon)) {
+
+                        try {
+                            verifyCoupon(coupon);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        isCouponexist = true;
+                        break;
+                    }
+
+
+                }
+                if (isCouponexist == false) {
+                    Toast.makeText(getActivity(), "Not a valid coupon", Toast.LENGTH_LONG).show();
+
+                }
+
+
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void verifyCoupon(Coupon coupon) throws ParseException {
+        String category = coupon.getCategories();
+        String status = coupon.getStatus();
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Date lastdatefrom = dateFormat.parse(coupon.getLastDateFrom());
+        Date lastdateto = dateFormat.parse(coupon.getLastDateTo());
+        String date = dateFormat.format(new Date());
+        Date currentDate = dateFormat.parse(date);
+
+        if (currentDate.after(lastdatefrom) && (currentDate.before(lastdateto))
+                && (category.equals("Washing") || (category.equals("All")))
+                && (status.equals("Active"))) {
+            calculateDiscountedAmount(coupon);
+            Toast.makeText(getActivity(), "coupon is valid", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "coupon not valid", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void calculateDiscountedAmount(Coupon coupon) {
+        float tempAmount = mBaseAmount + mBucketAmount;
+        float totalDiscount = (mBaseAmount + mBucketAmount) * coupon.getDiscount() / 100;
+        float discountedAmount = tempAmount - totalDiscount;
+
+        mServiceTaxAmount = discountedAmount * .125;
+        mTextViewServiceTaxAmount.setText(String.valueOf(mServiceTaxAmount));
+        mTotalAmount = (mServiceTaxAmount + discountedAmount);
+        mTextViewTotalAmount.setText(String.valueOf(mTotalAmount));
+
+    }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -178,12 +273,10 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        Log.v("wai","onViewStateRestored");
-        if(savedInstanceState != null){
-            Log.v("wai","if");
+        if (savedInstanceState != null) {
             mBucketCount = savedInstanceState.getInt("bucketcount");
             mBucketAmount = savedInstanceState.getInt("bucketamount");
-        }else {
+        } else {
             mBucketCount = 1;
             mBucketAmount = 100;
         }

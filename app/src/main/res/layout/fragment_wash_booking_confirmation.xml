@@ -136,7 +136,7 @@
                         android:orientation="horizontal">
 
                         <Button
-                            android:id="@+id/wash_booking_bt_bucket_count_increment"
+                            android:id="@+id/wash_booking_bt_bucket_count_decrement"
                             android:layout_width="36dp"
                             android:layout_height="match_parent"
                             android:background="@color/white"
@@ -154,7 +154,7 @@
                             android:textAlignment="center" />
 
                         <Button
-                            android:id="@+id/wash_booking_bt_bucket_count_decrement"
+                            android:id="@+id/wash_booking_bt_bucket_count_increment"
                             android:layout_width="36dp"
                             android:layout_height="match_parent"
                             android:background="@color/white"
@@ -208,25 +208,54 @@
                     android:background="@color/grey" />
 
                 <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="36dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="Service Tax" />
+
+                <TextView
+                    android:id="@+id/wash_booking_tv_service_tax_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    android:padding="4dp"
+                    android:text="18.75" />
+            </RelativeLayout>
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="36dp">
+                    android:layout_height="40dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:padding="4dp"
-                        android:text="Service Tax" />
 
-                    <TextView
-                        android:id="@+id/wash_booking_tv_service_tax_amount"
+                    <Button
+                        android:id="@+id/wash_booking_btn_applycode"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Apply"
+                        android:layout_marginTop="8dp"
+                        style="@style/buttonStyle"
                         android:layout_alignParentRight="true"
                         android:gravity="center"
-                        android:padding="4dp"
-                        android:text="18.75" />
+                        />
+
+                    <EditText
+                        android:id="@+id/wash_booking_et_promocode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Have a promocode?"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:textSize="16sp" />
+
+
                 </RelativeLayout>
+
             </LinearLayout>
 
             <TextView
@@ -239,6 +268,16 @@
                 android:text="172.5"
                 android:textSize="14sp"
                 android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/wash_booking_btn_weightchart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Weight Chart"
+                android:layout_gravity="right"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/colorAccent"
+                android:background="#0000"/>
 
             <CheckBox
                 android:id="@+id/wash_booking_cb_terms"
