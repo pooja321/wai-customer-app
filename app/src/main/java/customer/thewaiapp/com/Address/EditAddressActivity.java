@@ -44,7 +44,7 @@ public class EditAddressActivity extends AppCompatActivity {
 
     boolean failFlag = false;
     public static final String selectAddressTypeLabel = "Select Address Type*";
-    
+
     Toolbar mtoolbar;
 
     @Override

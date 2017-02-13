@@ -15,7 +15,7 @@ import customer.thewaiapp.com.Login.SignUpFragment;
 import customer.thewaiapp.com.R;
 
 public class BookingConfirmationActivity extends AppCompatActivity implements WashBookingConfirmationFragment.OnUserSignUpRequired,
-        CookBookingConfirmationFragment.OnUserSignUpRequired,SignUpFragment.OnSignInButtonClickedInterface,
+        CookBookingConfirmationFragment.OnUserSignUpRequired, SignUpFragment.OnSignInButtonClickedInterface,
         LoginFragment.OnSignUpButtonClickedInterface {
 
     FragmentManager fragmentManager;
@@ -32,7 +32,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
         setContentView(R.layout.activity_booking_confirmation);
         Log.v("wai", "confirmation oncreate");
         mtoolbar = (Toolbar) findViewById(R.id.booking_toolbar);
-        mtoolbar.setTitleTextColor(getResources().getColor( R.color.white));
+        mtoolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(mtoolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -40,16 +40,16 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
         callingFragment = getIntent().getStringExtra("fragment_name");
         mResourceKey = getIntent().getStringExtra("resourceKey");
         Fragment fragment = null;
-        switch(callingFragment){
-            case(Constants.FIREBASE_CHILD_COOKING):
+        switch (callingFragment) {
+            case (Constants.FIREBASE_CHILD_COOKING):
                 Toast.makeText(BookingConfirmationActivity.this, "cook fragment called", Toast.LENGTH_SHORT).show();
-                fragment = CookBookingConfirmationFragment.newInstance(mResourceKey,mResourceName);
+                fragment = CookBookingConfirmationFragment.newInstance(mResourceKey, mResourceName);
                 break;
-            case(Constants.FIREBASE_CHILD_CLEANING):
+            case (Constants.FIREBASE_CHILD_CLEANING):
                 Toast.makeText(BookingConfirmationActivity.this, "Clean is the Calling Fragment ", Toast.LENGTH_SHORT).show();
                 fragment = CleanBookingConfirmationFragment.newInstance(mResourceKey, mResourceName);
                 break;
-            case(Constants.FIREBASE_CHILD_WASHING):
+            case (Constants.FIREBASE_CHILD_WASHING):
                 fragment = WashBookingConfirmationFragment.newInstance(mResourceKey, mResourceName);
                 break;
         }
@@ -87,12 +87,5 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
         fragmentTransaction.commit();
     }
 
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        Log.v("wai","savedinstancestate: " + callingFragment);
-//        Toast.makeText(BookingConfirmationActivity.this, callingFragment , Toast.LENGTH_SHORT).show();
-//        outState.putString(KEY_CALLING_FRAGMENT,callingFragment);
-//        super.onSaveInstanceState(outState);
-//    }
 
 }

@@ -37,4 +37,8 @@
         <item name="android:textSize">@dimen/text_size_medium</item>
     </style>
 
+    <style name="SpinnerItem">
+        <item name="android:background">@drawable/bg_stroke_rectangle_coloraccent_1</item>
+    </style>
+
 </resources>

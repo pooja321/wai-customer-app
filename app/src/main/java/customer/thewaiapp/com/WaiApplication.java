@@ -2,6 +2,8 @@ package customer.thewaiapp.com;
 
 import android.app.Application;
 
+import com.facebook.FacebookSdk;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
@@ -22,6 +24,7 @@ public class WaiApplication extends Application {
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(realmConfiguration);
+        FacebookSdk.sdkInitialize(getApplicationContext());
     }
 
     public Boolean getOrderPending() {

@@ -1,10 +1,13 @@
 package customer.thewaiapp.com.Booking;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -23,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,11 +37,17 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
+import com.firebase.geofire.LocationCallback;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -52,13 +62,21 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import customer.thewaiapp.com.Model.ResourceOnline;
 import customer.thewaiapp.com.R;
 import customer.thewaiapp.com.Utility.Constants;
 import customer.thewaiapp.com.confirmation.BookingConfirmationActivity;
+
+import static android.R.attr.x;
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 public abstract class MapViewFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -85,20 +103,34 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     private GeoFire mGeoFire;
     private GeoQuery mGeoQuery;
 
+    Button mbtnSearchAddress;
+    EditText mlocation_tf;
+    Button mQuickBook;
+    ProgressDialog mProgressDialog;
+
+    String mplace;
+
+    int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v("wai", "MapViewFragment onCreate");
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main_map_view, container, false);
-        Log.v("wai", "MapViewFragment onCreateView");
         mGeoDatabaseRef = getGeoDatabaseReference();
         mMapMarkers = new HashMap<>();
         mJobType = getJobtype();
         mGeoFire = new GeoFire(mGeoDatabaseRef);
+
+        mProgressDialog = new ProgressDialog(getActivity());
+        mProgressDialog.setTitle("Please Wait");
+        mProgressDialog.setCancelable(false);
+
+        List<String> keys = new ArrayList<String>(mMapResourceList.keySet());
 
         mLocationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -106,14 +138,49 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         }
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.main_map_fragment);
         mapFragment.getMapAsync(this);
-        final onAddressSearchClick listener = (onAddressSearchClick) getActivity();
-//        mAddressSearchEditText = (EditText) view.findViewById(R.id.main_ed_search_address_id);
-//        mAddressSearchEditText.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                listener.startAddressSearchActivity();
-//            }
-//        });
+        mlocation_tf = (EditText) view.findViewById(R.id.mapview_et_search_address);
+        /*** Call signInPassword() when user taps "Done" keyboard action     */
+        mlocation_tf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Intent intent =
+                            new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY)
+                                    .build(getActivity());
+                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
+                } catch (GooglePlayServicesRepairableException e) {
+                    // TODO: Handle the error.
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    // TODO: Handle the error.
+                }
+            }
+        });
+
+        mQuickBook = (Button) view.findViewById(R.id.map_bt_quick_button);
+        mQuickBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mProgressDialog.show();
+                Random random = new Random();
+                List<String> keys = new ArrayList<String>(mMapResourceList.keySet());
+                if (keys.size() > 0) {
+                    String randomKey = keys.get(random.nextInt(keys.size()));
+                    ResourceOnline resourceOnline = mMapResourceList.get(randomKey);
+                    startActivity(new Intent(getActivity(), BookingConfirmationActivity.class)
+                            .putExtra("resourceName", resourceOnline.getName())
+                            .putExtra("fragment_name", mJobType)
+                            .putExtra("resourceKey", resourceOnline.getResourceId()));
+                    mProgressDialog.dismiss();
+                    Toast.makeText(getActivity(), resourceOnline.getName(), Toast.LENGTH_SHORT).show();
+
+                }
+                else{
+                    mProgressDialog.dismiss();
+                    Toast.makeText(getActivity(), "No available resources", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         mCenterMarkerOptions = new MarkerOptions();
 //        mCenterMarkerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mCenterMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_person_pin_circle_blue_700_36dp));
@@ -121,12 +188,12 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     }
 
+
     public abstract DatabaseReference getGeoDatabaseReference();
 
     public abstract String getJobtype();
 
     private void buildAlertMessageNoGps() {
-        Log.v("wai", "MapViewFragment buildAlertMessageNoGps");
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                 .setCancelable(false)
@@ -145,13 +212,11 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     }
 
     private boolean checkPermission() {
-        Log.v("wai", "MapViewFragment checkPermission");
         int result = ContextCompat.checkSelfPermission(getContext().getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION);
         return result == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermission() {
-        Log.v("wai", "MapViewFragment requestPermission");
         if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION)) {
             Toast.makeText(getActivity().getApplicationContext(), "GPS permission allows us to access location data. Please allow in App Settings for additional functionality.", Toast.LENGTH_LONG).show();
         }
@@ -163,7 +228,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.v("wai", "Permission Granted");
                     if (ContextCompat.checkSelfPermission(getActivity(),
                             android.Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
@@ -184,7 +248,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
      * LocationServices API.
      */
     protected synchronized void buildGoogleApiClient() {
-        Log.v("wai", "MapViewFragment buildGoogleApiClient");
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -201,22 +264,42 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     @Override
     public void onPause() {
         super.onPause();
-        Log.v("wai", "MapViewFragment onPause");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.v("wai", "MapViewFragment onResume");
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
+        }
+    }
+
+    public void onSearch() {
+        mlocation_tf.setText(mplace);
+        List<Address> addressList = null;
+        if (mplace != null || !mplace.equals("")) {
+            Geocoder geocoder = new Geocoder(getActivity());
+            try {
+                addressList = geocoder.getFromLocationName(mplace, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (addressList.size() > 0) {
+
+                Address address = addressList.get(0);
+                LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+//                mGoogleMap.addMarker(new MarkerOptions().position(latLng).title("Marker"));
+                mGoogleMap.addMarker(mCenterMarkerOptions);
+                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+            }
         }
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.v("wai", "MapViewFragment onStart");
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }
@@ -225,7 +308,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     @Override
     public void onStop() {
         super.onStop();
-        Log.v("wai", "MapViewFragment onStop");
         if (mGoogleApiClient != null) {
             if (mGoogleApiClient.isConnected()) {
                 mGoogleApiClient.disconnect();
@@ -237,13 +319,30 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(getActivity(), data);
+                mplace = (String) place.getName();
+                onSearch();
+            } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
+                Status status = PlaceAutocomplete.getStatus(getActivity(), data);
+                // TODO: Handle the error.
+                Log.i("wai", status.getStatusMessage());
+
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        Log.v("wai", "MapViewFragment onMapReady");
         mGoogleMap = googleMap;
         mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mGoogleMap.setOnCameraMoveListener(this);
@@ -255,10 +354,8 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         mCenterMarkerOptions.position(centerOfMap);
         mCenterMarker = mGoogleMap.addMarker(mCenterMarkerOptions);
         if (!checkPermission()) {
-            Log.v("wai", "no location permission");
             requestPermission();
         } else {
-            Log.v("wai", "location permission granted");
             buildGoogleApiClient();
             mGoogleMap.setMyLocationEnabled(true);
         }
@@ -269,7 +366,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.v("wai", "MapViewFragment onConnected");
         LocationRequest mLocationRequest = new LocationRequest();
         int UPDATE_INTERVAL = 10000;
         mLocationRequest.setInterval(UPDATE_INTERVAL);
@@ -298,18 +394,18 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.v("wai", "MapViewFragment onLocationChanged");
         //Place current location marker
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mGoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
         //stop location updates
         if (mGoogleApiClient != null) {
             LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
         }
+
     }
+
 
     @Override
     public void onCameraMove() {
@@ -317,6 +413,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         mCenterMarker.setPosition(centerOfMap);
         mGeoQuery.setCenter(new GeoLocation(centerOfMap.latitude, centerOfMap.longitude));
         mGeoQuery.setRadius(3);
+
 //        LatLng centermarkerposition = mCenterMarker.getPosition();
 //        String position = String.format("%.2f %.2f", centermarkerposition.latitude, centermarkerposition.longitude );
 //        Log.v("wai", "onCameraMove center marker position: " + position);
@@ -340,7 +437,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onKeyEntered(String key, GeoLocation location) {
-        Log.v("wai", "onKeyEntered location: " + String.format("%.2f %.2f", location.latitude, location.longitude));
         int resId = 0;
         switch (mJobType) {
             case Constants.FIREBASE_CHILD_CLEANING:
@@ -357,20 +453,18 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(new LatLng(location.latitude, location.longitude))
                 .icon(BitmapDescriptorFactory.fromResource(resId)));
         this.mMapMarkers.put(key, marker);
-        Log.v("wai", "onKeyEntered marker key: " + key);
         getResourceData(key, marker.getId());
     }
 
     private void getResourceData(final String key, final String id) {
 //        final Realm mRealm = Realm.getDefaultInstance();
-        Log.v("wai", "getResourceData marker id: " + id);
         mOnlineResourceDatabaseRef = FirebaseDatabase.getInstance().getReference().child(Constants.FIREBASE_CHILD_ONLINE_RESOURCE).child(mJobType).child(key);
         mOnlineResourceDatabaseRef.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.v("wai", "onDataChange dataSnapshot: " + dataSnapshot.toString());
                 mMapResourceList.put(id, dataSnapshot.getValue(ResourceOnline.class));
+//                final ResourceOnline resourceOnline = dataSnapshot.getValue(ResourceOnline.class);
 //                final ResourceOnline resourceOnline = dataSnapshot.getValue(ResourceOnline.class);
 //                Log.v("wai", "onKeyEntered: resource online id: " + resourceOnline.getResourceId());
 //                Log.v("wai", "onKeyEntered: resource list size: " + String.valueOf(mMapResourceList.size()));
@@ -403,7 +497,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     @Override
     public void onKeyExited(String key) {
-        Log.v("wai", "onKeyExited marker key: " + key);
 //        Realm realm = Realm.getDefaultInstance();
         // Remove any old marker
         Marker marker = this.mMapMarkers.get(key);

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_stroke_rectangle_black_1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_stroke_rectangle_black_1"
+            android:gravity="center"
+            android:padding="8dip"
+            android:text="Weight Chart Utensils"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
+
+
+        <TableRow>
+
+            <TextView
+                android:background="@drawable/bg_stroke_rectangle_black_1"
+                android:gravity="center"
+                android:padding="8dip"
+                android:text="Categorie"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"/>
+
+            <TextView
+                android:background="@drawable/bg_stroke_rectangle_black_1"
+                android:gravity="center"
+                android:padding="8dip"
+                android:text="Weight"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:background="@drawable/bg_stroke_rectangle_black_1"
+                android:gravity="center"
+                android:padding="8dip"
+                android:text="Example"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"/>
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_stroke_rectangle_black_1"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="Light"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_stroke_rectangle_black_1"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="100gm" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_weight="1"
+                android:background="@drawable/bg_stroke_rectangle_black_1"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="Spoons, Bowls, Glasses" />
+        </TableRow>
+
+        <TableRow android:layout_width="match_parent">
+
+            <TextView
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_stroke_rectangle_black_1"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="Medium"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_stroke_rectangle_black_1"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="250gm" />
+
+            <TextView
+                android:layout_weight="1"
+                android:background="@drawable/bg_stroke_rectangle_black_1"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="Plates, Casserole, Plastic bowls, Bottles (Plastic/metal), Tiffins, Tumblers" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_stroke_rectangle_black_1"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="Heavy"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_stroke_rectangle_black_1"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="1000gm" />
+
+            <TextView
+                android:layout_weight="1"
+                android:background="@drawable/bg_stroke_rectangle_black_1"
+                android:gravity="left"
+                android:padding="8dip"
+                android:text="Cookers, Kadhai, Pans" />
+        </TableRow>
+
+
+    </TableLayout>
+</RelativeLayout>

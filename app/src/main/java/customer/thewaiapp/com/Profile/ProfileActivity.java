@@ -3,18 +3,15 @@ package customer.thewaiapp.com.Profile;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import customer.thewaiapp.com.Model.User;
 import customer.thewaiapp.com.BaseActivity;
-
+import customer.thewaiapp.com.Model.User;
 import customer.thewaiapp.com.R;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -50,7 +47,6 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         mEditDetail = (Button) findViewById(R.id.user_profile_editdetail);
         mEditDetail.setOnClickListener(this);
         RealmResults<User> UserResults = mRealm.where(User.class).equalTo("Email", UserEmail).findAll();
-        Log.v("wai","<<<<<<<<<<<<<UserEmail>>>>>>>>>>"+UserEmail);
         if (UserResults.size() > 0) {
             user = UserResults.get(0);
             if (user != null) {
