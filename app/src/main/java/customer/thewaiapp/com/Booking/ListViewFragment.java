@@ -102,7 +102,7 @@ public abstract class ListViewFragment extends Fragment {
                     public void onClick(View v) {
                         OnResourceSelectedInterface listener = (OnResourceSelectedInterface) getActivity();
                         mCallingFragment = getCallingFragmentName();
-                        Log.v("wai", mCallingFragment);
+                        Log.v("List123", mCallingFragment);
                         listener.onListResourceSelected(model.getResourceId(), model.getName(), mCallingFragment);
                     }
                 });
