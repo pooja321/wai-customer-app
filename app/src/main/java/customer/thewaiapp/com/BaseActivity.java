@@ -1,6 +1,7 @@
 package customer.thewaiapp.com;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -24,6 +25,7 @@ import customer.thewaiapp.com.Login.LoginActivity;
 import customer.thewaiapp.com.Model.User;
 import customer.thewaiapp.com.Order.OrderHistoryActivity;
 import customer.thewaiapp.com.Profile.ProfileActivity;
+import customer.thewaiapp.com.Utility.NetworkChangeReceiver;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -36,11 +38,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     ActionBarDrawerToggle actionBarDrawerToggle;
     Realm mRealm;
     User user;
-
+    NetworkChangeReceiver networkChangeReceiver;
     @Override
     public void setContentView(int layoutResID) {
 
         mRealm = Realm.getDefaultInstance();
+        networkChangeReceiver = new NetworkChangeReceiver();
         drawer = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_base, null);
         FrameLayout activityContainer = (FrameLayout) drawer.findViewById(R.id.activity_content);
         getLayoutInflater().inflate(layoutResID, activityContainer, true);
@@ -130,6 +133,21 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         actionBarDrawerToggle.syncState();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(networkChangeReceiver, new IntentFilter(
+                "android.net.conn.CONNECTIVITY_CHANGE"));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mRealm != null) {
+            mRealm.close();
+        }
+        unregisterReceiver(networkChangeReceiver);
     }
 
     @Override
