@@ -70,6 +70,8 @@ import java.util.Map;
 import java.util.Random;
 
 import customer.thewaiapp.com.Model.ResourceOnline;
+import customer.thewaiapp.com.Profile.ProfileActivity;
+import customer.thewaiapp.com.ProfileUserActivity;
 import customer.thewaiapp.com.R;
 import customer.thewaiapp.com.Utility.Constants;
 import customer.thewaiapp.com.confirmation.BookingConfirmationActivity;
@@ -545,10 +547,11 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     public void onInfoWindowClick(Marker marker) {
         String id = marker.getId();
         ResourceOnline resourceOnline = mMapResourceList.get(id);
-        startActivity(new Intent(getActivity(), BookingConfirmationActivity.class)
+        Log.v("List123","JobType: "+mJobType);
+        startActivity(new Intent(getActivity(), ProfileUserActivity.class)
                 .putExtra("resourceName",resourceOnline.getName())
-                .putExtra("fragment_name",mJobType)
-                .putExtra("resourceKey",resourceOnline.getResourceId()));
+                .putExtra("mCallingFragment",mJobType)
+                .putExtra("resourceId",resourceOnline.getResourceId()));
         Toast.makeText(getActivity(), resourceOnline.getName(), Toast.LENGTH_SHORT).show();
     }
 

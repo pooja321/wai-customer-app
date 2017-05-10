@@ -38,6 +38,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
 
         mResourceName = getIntent().getStringExtra("resourceName");
         callingFragment = getIntent().getStringExtra("fragment_name");
+        Log.v("List123","CallingFragment: "+callingFragment);
         mResourceKey = getIntent().getStringExtra("resourceKey");
         Fragment fragment = null;
         switch (callingFragment) {

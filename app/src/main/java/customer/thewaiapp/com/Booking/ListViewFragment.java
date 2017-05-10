@@ -88,22 +88,20 @@ public abstract class ListViewFragment extends Fragment {
                 ResourceViewHolder.class, mResourceQuery) {
             @Override
             protected void populateViewHolder(ResourceViewHolder viewHolder, final ResourceOnline model, final int position) {
+                mCallingFragment = getCallingFragmentName();
                 CircleImageView cr = (CircleImageView) viewHolder.itemView.findViewById(R.id.list_item_profilePic);
-                cr.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        startActivity(new Intent(getActivity(), ProfileUserActivity.class)
-                                .putExtra("resourceName", model.getName())
-                                .putExtra("resourceRate", model.getRating()));
-                    }
-                });
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        OnResourceSelectedInterface listener = (OnResourceSelectedInterface) getActivity();
-                        mCallingFragment = getCallingFragmentName();
-                        Log.v("List123", mCallingFragment);
-                        listener.onListResourceSelected(model.getResourceId(), model.getName(), mCallingFragment);
+                        startActivity(new Intent(getActivity(), ProfileUserActivity.class)
+                                .putExtra("resourceName", model.getName())
+                                .putExtra("resourceRate", model.getRating())
+                                .putExtra("mCallingFragment", mCallingFragment)
+                                .putExtra("resourceId",model.getResourceId()));
+//                        OnResourceSelectedInterface listener = (OnResourceSelectedInterface) getActivity();
+//                        mCallingFragment = getCallingFragmentName();
+//                        Log.v("List123", mCallingFragment);
+//                        listener.onListResourceSelected(model.getResourceId(), model.getName(), mCallingFragment);
                     }
                 });
                 viewHolder.bindView(model);
