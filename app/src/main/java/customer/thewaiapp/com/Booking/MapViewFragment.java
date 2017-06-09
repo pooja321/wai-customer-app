@@ -70,9 +70,12 @@ import java.util.Map;
 import java.util.Random;
 
 import customer.thewaiapp.com.Model.ResourceOnline;
+import customer.thewaiapp.com.Profile.ProfileActivity;
+import customer.thewaiapp.com.ProfileUserActivity;
 import customer.thewaiapp.com.R;
 import customer.thewaiapp.com.Utility.Constants;
 import customer.thewaiapp.com.confirmation.BookingConfirmationActivity;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.R.attr.x;
 import static android.app.Activity.RESULT_CANCELED;
@@ -544,10 +547,11 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     public void onInfoWindowClick(Marker marker) {
         String id = marker.getId();
         ResourceOnline resourceOnline = mMapResourceList.get(id);
-        startActivity(new Intent(getActivity(), BookingConfirmationActivity.class)
+        Log.v("List123","JobType: "+mJobType);
+        startActivity(new Intent(getActivity(), ProfileUserActivity.class)
                 .putExtra("resourceName",resourceOnline.getName())
-                .putExtra("fragment_name",mJobType)
-                .putExtra("resourceKey",resourceOnline.getResourceId()));
+                .putExtra("mCallingFragment",mJobType)
+                .putExtra("resourceId",resourceOnline.getResourceId()));
         Toast.makeText(getActivity(), resourceOnline.getName(), Toast.LENGTH_SHORT).show();
     }
 
@@ -592,14 +596,21 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
         private void render(Marker marker, View view) {
             TextView mTextViewName, mTextViewResourceRating;
-            ImageView mImageViewResourcePic, mImageViewGenderIcon;
+            ImageView mImageViewGenderIcon;
+            CircleImageView mImageViewResourcePic;
             Uri profilePicUri = null;
 
             mTextViewName = (TextView) view.findViewById(R.id.list_item_name);
             mTextViewResourceRating = (TextView) view.findViewById(R.id.list_item_rating);
-            mImageViewResourcePic = (ImageView) view.findViewById(R.id.list_item_profilePic);
+            mImageViewResourcePic = (CircleImageView) view.findViewById(R.id.list_item_profilePic);
             mImageViewGenderIcon = (ImageView) view.findViewById(R.id.list_item_gender);
 
+            mImageViewResourcePic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getActivity(), "dhfkshd", Toast.LENGTH_SHORT).show();
+                }
+            });
             String id = marker.getId();
             Log.v("wai", "render id: " + id);
             ResourceOnline resource = mMapResourceList.get(id);

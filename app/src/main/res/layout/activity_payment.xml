@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
 
             android:padding="10dp"
-            android:text="Price Details"
+            android:text="Price Calculator"
             android:textColor="@color/colorPrimaryDark"/>
 
         <LinearLayout
@@ -84,7 +84,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total Payable"
+                    android:text="Total Payable(approx)"
                     android:padding="1dp"
                     android:layout_marginTop="20dp"
                     android:textStyle="bold" />
@@ -239,7 +239,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <RadioButton
                 android:id="@+id/payment_rb_mode_COD"
