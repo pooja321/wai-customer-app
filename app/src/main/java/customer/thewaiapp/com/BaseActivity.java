@@ -19,14 +19,19 @@ import android.widget.Toast;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import customer.thewaiapp.com.Login.LoginActivity;
 import customer.thewaiapp.com.Model.User;
 import customer.thewaiapp.com.Order.OrderHistoryActivity;
 import customer.thewaiapp.com.Profile.ProfileActivity;
+import customer.thewaiapp.com.Utility.Constants;
 import customer.thewaiapp.com.Utility.NetworkChangeReceiver;
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -37,6 +42,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     ActionBarDrawerToggle actionBarDrawerToggle;
     Realm mRealm;
     User user;
+    String UID;
+    private DatabaseReference mDatabase;
     NetworkChangeReceiver networkChangeReceiver;
     @Override
     public void setContentView(int layoutResID) {
@@ -50,17 +57,25 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         View Nav_View = navigationView.getHeaderView(0);
-        TextView nav_Username = (TextView) Nav_View.findViewById(R.id.navheader_userName);
+        final TextView nav_Username = (TextView) Nav_View.findViewById(R.id.navheader_userName);
         String UserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        RealmResults<User> UserResults = mRealm.where(User.class).equalTo("Email", UserEmail).findAll();
-        if (UserResults.size() > 0) {
-            user = UserResults.get(0);
-            if (user != null) {
-                String firstname = user.getFirstName();
-                String lastname = user.getLastName();
-                nav_Username.setText(String.format("%s %s", firstname, lastname));
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(UID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
+                nav_Username.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
+                mRealm.beginTransaction();
+                mRealm.copyToRealmOrUpdate(user);
+                mRealm.commitTransaction();
             }
-        }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         toolbar = (Toolbar) findViewById(R.id.toolbar_base);
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));

@@ -20,7 +20,6 @@ public class LoginActivity extends AppCompatActivity implements LoginFragment.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         LoginFragment savedLoginFragment = (LoginFragment) getSupportFragmentManager().findFragmentByTag(LOGIN_FRAGMENT);
         if (savedLoginFragment == null) {
             LoginFragment loginFragment = new LoginFragment();

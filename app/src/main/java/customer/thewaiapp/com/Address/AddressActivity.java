@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -55,7 +54,6 @@ public class AddressActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.v("wai", "AddressActivity onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address);
 
@@ -71,8 +69,6 @@ public class AddressActivity extends AppCompatActivity {
         mTotalAmount = getIntent().getDoubleExtra(KEY_TOTAL_AMOUNT, 0);
         mOrderType = getIntent().getStringExtra(KEY_ORDER_TYPE);
         mOrderId = getIntent().getStringExtra(KEY_ORDER_ID);
-        Log.v("wai", "Order Id: " + mOrderId);
-        Log.v("wai", "Order type: " + mOrderType);
         mToolbar = (Toolbar) findViewById(R.id.address_toolbar);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
 
@@ -117,7 +113,6 @@ public class AddressActivity extends AppCompatActivity {
                 AddressViewHolder.class, resourceQuery) {
             @Override
             protected void populateViewHolder(AddressViewHolder viewHolder, final Address model, final int position) {
-                Log.v("wai"," inside populate view holder");
                 mTextView_NoAddress.setVisibility(View.GONE);
                 final DatabaseReference addressRef = getRef(position);
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -175,25 +170,21 @@ public class AddressActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.v("wai", "AddressActivity onPause");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.v("wai", "AddressActivity onStop");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.v("wai", "AddressActivity onResume");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        Log.v("wai", "AddressActivity onStart");
     }
 
     @Override
@@ -208,7 +199,6 @@ public class AddressActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Log.v("wai", "onViewStateRestored");
         if (savedInstanceState != null) {
             mResourceKey = savedInstanceState.getString(KEY_RESOURCE_KEY);
             mTotalAmount = savedInstanceState.getDouble(KEY_TOTAL_AMOUNT);

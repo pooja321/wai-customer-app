@@ -23,7 +23,6 @@ import java.util.HashMap;
 import customer.thewaiapp.com.MainActivity;
 import customer.thewaiapp.com.Model.User;
 import customer.thewaiapp.com.R;
-import customer.thewaiapp.com.SubscriptionActvity;
 import customer.thewaiapp.com.Utility.Constants;
 import customer.thewaiapp.com.Utility.Utilities;
 import io.realm.Realm;
@@ -117,7 +116,7 @@ public class FillDetailsActivity extends AppCompatActivity implements AdapterVie
 }
         });
         mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(_userUID).setValue(user);
-        startActivity(new Intent(FillDetailsActivity.this, SubscriptionActvity.class));
+        startActivity(new Intent(FillDetailsActivity.this, MainActivity.class));
     }
 
     @Override

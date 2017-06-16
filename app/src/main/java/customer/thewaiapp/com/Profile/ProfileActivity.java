@@ -8,12 +8,18 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import customer.thewaiapp.com.BaseActivity;
+import customer.thewaiapp.com.MainActivity;
 import customer.thewaiapp.com.Model.User;
 import customer.thewaiapp.com.R;
+import customer.thewaiapp.com.Utility.Constants;
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class ProfileActivity extends BaseActivity implements View.OnClickListener {
 
@@ -25,7 +31,8 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
     Realm mRealm;
 
     User user;
-
+    String UID;
+    private DatabaseReference mDatabase;
     public static final String UserKey = "user_key";
 
     @Override
@@ -35,7 +42,8 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         setTitle("My Profile");
 
         mRealm = Realm.getDefaultInstance();
-
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String UserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
 
         mTextViewEmail = (TextView) findViewById(R.id.user_profile_email);
@@ -46,23 +54,25 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
         mTextViewChangePassword = (TextView) findViewById(R.id.user_profile_changepassword);
         mEditDetail = (Button) findViewById(R.id.user_profile_editdetail);
         mEditDetail.setOnClickListener(this);
-        RealmResults<User> UserResults = mRealm.where(User.class).equalTo("Email", UserEmail).findAll();
-        if (UserResults.size() > 0) {
-            user = UserResults.get(0);
-            if (user != null) {
-                String firstname = user.getFirstName();
-                String lastname = user.getLastName();
-                String Email = user.getEmail();
-                String Gender = user.getGender();
-                long Mobile = user.getMobileNumber();
-                String UserId = user.getUserId();
-                mTextViewEmail.setText(Email);
-                mTextViewGender.setText(Gender);
-                mTextViewMobileNum.setText(String.valueOf(Mobile));
-                mTextViewName.setText(String.format("%s %s", firstname, lastname));
-                mTextViewUserId.setText(UserId);
+        mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(UID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
+                mTextViewName.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
+                mTextViewEmail.setText(user.getEmail());
+                mTextViewGender.setText(user.getGender());
+                mTextViewMobileNum.setText(String.valueOf(user.getMobileNumber()));
+                mTextViewUserId.setText(user.getUserId());
+                mRealm.beginTransaction();
+                mRealm.copyToRealmOrUpdate(user);
+                mRealm.commitTransaction();
             }
-        }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         mTextViewChangePassword.setOnClickListener(this);
         mTextViewEmail.setOnClickListener(this);
@@ -86,6 +96,12 @@ public class ProfileActivity extends BaseActivity implements View.OnClickListene
                 break;
 
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(ProfileActivity.this, MainActivity.class));
     }
 }
 

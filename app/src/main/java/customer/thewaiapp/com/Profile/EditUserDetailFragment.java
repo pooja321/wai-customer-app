@@ -1,5 +1,6 @@
 package customer.thewaiapp.com.Profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -29,7 +31,7 @@ public class EditUserDetailFragment extends Fragment {
     Toolbar mActionBarToolbar;
     Realm mRealm;
     User user;
-    String UID;
+    String UID,FirstName;
     String UpdateFirstName,UpdateLastName;
     Long UpdateMobile;
     private DatabaseReference mDatabase;
@@ -47,7 +49,7 @@ public class EditUserDetailFragment extends Fragment {
         mRealm = Realm.getDefaultInstance();
 
         String UserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-
+        FirstName = getActivity().getIntent().getStringExtra("FirstName");
         View view = inflater.inflate(R.layout.fragment_edit_user_detail, container, false);
         mEditTextFirstName= (EditText) view.findViewById(R.id.edit_userdetail_firstname);
         mEditTextLastName= (EditText) view.findViewById(R.id.edit_userdetail_lastname);
@@ -73,7 +75,9 @@ public class EditUserDetailFragment extends Fragment {
         mButtonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getActivity(), "Profile Updated Successfully", Toast.LENGTH_SHORT).show();
                 updateUserData();
+                startActivity(new Intent(getActivity(),ProfileActivity.class));
             }
 
         });
@@ -104,5 +108,6 @@ public class EditUserDetailFragment extends Fragment {
         mRealm.commitTransaction();
 
     }
+
 }
 

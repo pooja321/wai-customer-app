@@ -37,7 +37,6 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
-import com.firebase.geofire.LocationCallback;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -70,14 +69,12 @@ import java.util.Map;
 import java.util.Random;
 
 import customer.thewaiapp.com.Model.ResourceOnline;
-import customer.thewaiapp.com.Profile.ProfileActivity;
 import customer.thewaiapp.com.ProfileUserActivity;
 import customer.thewaiapp.com.R;
 import customer.thewaiapp.com.Utility.Constants;
 import customer.thewaiapp.com.confirmation.BookingConfirmationActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static android.R.attr.x;
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
@@ -91,8 +88,6 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
     private String mJobType;
     private static final int PERMISSION_REQUEST_CODE = 1;
-
-    EditText mAddressSearchEditText;
 
     // Google client to interact with Google API
     public LocationManager mLocationManager;

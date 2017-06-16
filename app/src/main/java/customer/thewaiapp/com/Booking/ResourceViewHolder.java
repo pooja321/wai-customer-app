@@ -17,7 +17,7 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder {
 
     private TextView mTextViewName, mTextViewResourceRating;
     private ImageView mImageViewResourcePic, mImageViewGenderIcon;
-    Uri profilePicUri;
+    private Uri profilePicUri;
 
     public ResourceViewHolder(View itemView) {
         super(itemView);

@@ -22,7 +22,6 @@ public class CleaningFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.v("wai","CleaningFragment onCreateView");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cleaning, container, false);
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.cleaning_viewPager);
