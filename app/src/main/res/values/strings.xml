@@ -122,5 +122,14 @@
 \n 19.	Each party acknowledges that the other party has entered into this agreement relying on the limitations of liability stated herein and that those limitations are an essential basis of the bargain between the parties.
          \n
 </string>
+    <string name="Resource_Description">Responsible for cleaning houses. Vacuums, washes dishes, sweeps floors, launders clothes, cleans and scrubs counters, and dusts surfaces.</string>
+    <string name="Resource_Expertise">•Sanitize rooms, hallways, and other living or work areas
+        \n • Change sheets and towels; make beds; clean, fold, and iron clothes
+        \n • Empty trash bins and take garbage to disposal areas
+        \n • Vacuum carpets, and upholstered furniture
+        \n • Brush and polish floors by means of brooms, mops and other tools
+        \n • Clean and polish windows, walls, and furnishings
+        \n • Replenish bathroom supplies such as soap and toilet paper
+        \n • Dust and buff furniture and utensils</string>
 
 </resources>

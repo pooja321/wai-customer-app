@@ -62,6 +62,15 @@
         android:inputType="none"
         android:padding="10dp"
         android:singleLine="true" />
+    <ImageView
+        android:id="@+id/mapview_btn_currentLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/circular_mylocation"
+        android:layout_below="@+id/mapview_et_search_address"
+        android:layout_alignParentRight="true"
+        android:layout_margin="20dp"
+        android:elevation="10dp"/>
 
     <Button
         android:id="@+id/map_bt_quick_button"

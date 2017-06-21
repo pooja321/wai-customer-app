@@ -22,6 +22,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
     FragmentTransaction fragmentTransaction;
     private Toolbar mtoolbar;
     String callingFragment, mResourceKey, mResourceName;
+    Long mResourceMobile;
     public static final String LOGIN_FRAGMENT = "login_fragment";
     public static final String SIGNUP_FRAGMENT = "SignUp_fragment";
     public static final String SAVED_FRAGMENT = "saved_fragment";
@@ -38,20 +39,21 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
 
         mResourceName = getIntent().getStringExtra("resourceName");
         callingFragment = getIntent().getStringExtra("fragment_name");
-        Log.v("List123","CallingFragment: "+callingFragment);
         mResourceKey = getIntent().getStringExtra("resourceKey");
+        mResourceMobile = getIntent().getLongExtra("resourceMobile",0);
+        Log.v("Profile123","Mobile: "+mResourceMobile);
         Fragment fragment = null;
         switch (callingFragment) {
             case (Constants.FIREBASE_CHILD_COOKING):
                 Toast.makeText(BookingConfirmationActivity.this, "cook fragment called", Toast.LENGTH_SHORT).show();
-                fragment = CookBookingConfirmationFragment.newInstance(mResourceKey, mResourceName);
+                fragment = CookBookingConfirmationFragment.newInstance(mResourceKey, mResourceName,mResourceMobile);
                 break;
             case (Constants.FIREBASE_CHILD_CLEANING):
                 Toast.makeText(BookingConfirmationActivity.this, "Clean is the Calling Fragment ", Toast.LENGTH_SHORT).show();
-                fragment = CleanBookingConfirmationFragment.newInstance(mResourceKey, mResourceName);
+                fragment = CleanBookingConfirmationFragment.newInstance(mResourceKey, mResourceName,mResourceMobile);
                 break;
             case (Constants.FIREBASE_CHILD_WASHING):
-                fragment = WashBookingConfirmationFragment.newInstance(mResourceKey, mResourceName);
+                fragment = WashBookingConfirmationFragment.newInstance(mResourceKey, mResourceName,mResourceMobile);
                 break;
         }
 

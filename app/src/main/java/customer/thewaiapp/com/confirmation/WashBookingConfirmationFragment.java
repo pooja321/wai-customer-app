@@ -43,6 +43,7 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
 
     private static final String ARG_KEY = "ResourceKey";
     private static final String ARG_RESOURCE = "ResourceName";
+    private static final String ARG_RESOURCE_MOBILE = "ResourceMobile";
     int mBucketCount, mBucketAmount, mBaseAmount = 50;
     private String mParamResourceName, mParamResourceKey, mOrderId;
     double mTotalAmount, mServiceTaxAmount;
@@ -51,6 +52,7 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
     Button mButtonIncrementBucket, mButtonDecrementBucket, mButtonConfirm, mButtonApplycoupon;
     EditText mEdittextApplyCoupon;
     CheckBox mCheckBoxTerms;
+    private Long mParamResourceMobile;
     private OnUserSignUpRequired listener;
     Realm realm;
     private DatabaseReference mDatabase;
@@ -65,11 +67,12 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
         // Required empty public constructor
     }
 
-    public static WashBookingConfirmationFragment newInstance(String key, String resourceName) {
+    public static WashBookingConfirmationFragment newInstance(String key, String resourceName, Long mResourceMobile) {
         WashBookingConfirmationFragment fragment = new WashBookingConfirmationFragment();
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
         args.putString(ARG_RESOURCE, resourceName);
+        args.putLong(ARG_RESOURCE_MOBILE, mResourceMobile);
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,6 +84,7 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
             mParamResourceKey = getArguments().getString(ARG_KEY);
 //            mParamResource = (ResourceOnline) getArguments().getSerializable(ARG_RESOURCE);
             mParamResourceName = getArguments().getString(ARG_RESOURCE);
+            mParamResourceMobile = getArguments().getLong(ARG_RESOURCE_MOBILE);
         }
         if (savedInstanceState == null) {
             mBucketCount = 1;
@@ -157,6 +161,7 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
                         intent.putExtra("totalAmount", mTotalAmount);
                         intent.putExtra("orderType", Constants.ORDER_TYPE_WASHING);
                         intent.putExtra("orderId", mOrderId);
+                        intent.putExtra("ResourceMobile", mParamResourceMobile);
                         startActivity(intent);
                     } else {
                         // User is signed out

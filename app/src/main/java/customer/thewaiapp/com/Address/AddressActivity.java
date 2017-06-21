@@ -36,10 +36,12 @@ import customer.thewaiapp.com.payment.PaymentActivity;
 public class AddressActivity extends AppCompatActivity {
 
     public static final String KEY_RESOURCE_KEY = "resourceKey";
+    public static final String RESOURCE_MOBILE = "ResourceMobile";
     public static final String KEY_TOTAL_AMOUNT = "totalAmount";
     public static final String KEY_ORDER_TYPE = "orderType";
     public static final String KEY_ORDER_ID = "orderId";
     String mOrderType, mResourceKey, mOrderId, UID;
+    Long ResourceMobile;
     double mTotalAmount;
 
     private DatabaseReference mDatabase;
@@ -69,6 +71,7 @@ public class AddressActivity extends AppCompatActivity {
         mTotalAmount = getIntent().getDoubleExtra(KEY_TOTAL_AMOUNT, 0);
         mOrderType = getIntent().getStringExtra(KEY_ORDER_TYPE);
         mOrderId = getIntent().getStringExtra(KEY_ORDER_ID);
+        ResourceMobile = getIntent().getLongExtra(RESOURCE_MOBILE,0);
         mToolbar = (Toolbar) findViewById(R.id.address_toolbar);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
 
@@ -135,7 +138,10 @@ public class AddressActivity extends AppCompatActivity {
         final Order order = new Order(mOrderId, mOrderType, _UID, mResourceKey, addressKey, Constants.ORDER_STATUS_INCOMPLETE,
                 Constants.ORDER_PROGRESS_STATUS_PAYMENT_PENDING, null, mTotalAmount, orderCreationTime, null, null, null, false);
         startActivity(new Intent(AddressActivity.this, PaymentActivity.class)
-                .putExtra("order", order).putExtra("Address", mAddress));
+                .putExtra("order", order)
+                .putExtra("Address", mAddress)
+                .putExtra("ResourceMobileNumber",ResourceMobile )
+        );
 
     }
 

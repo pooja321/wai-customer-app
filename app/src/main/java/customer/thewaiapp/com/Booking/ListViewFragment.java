@@ -7,11 +7,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -20,7 +18,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import customer.thewaiapp.com.Model.ResourceOnline;
-
 import customer.thewaiapp.com.ProfileUserActivity;
 import customer.thewaiapp.com.R;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -98,9 +95,9 @@ public abstract class ListViewFragment extends Fragment {
                                 .putExtra("resourceRate", model.getRating())
                                 .putExtra("mCallingFragment", mCallingFragment)
                                 .putExtra("resourceId",model.getResourceId()));
+
 //                        OnResourceSelectedInterface listener = (OnResourceSelectedInterface) getActivity();
 //                        mCallingFragment = getCallingFragmentName();
-//                        Log.v("List123", mCallingFragment);
 //                        listener.onListResourceSelected(model.getResourceId(), model.getName(), mCallingFragment);
                     }
                 });

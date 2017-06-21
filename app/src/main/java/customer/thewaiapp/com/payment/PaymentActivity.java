@@ -3,9 +3,11 @@ package customer.thewaiapp.com.payment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +22,21 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import customer.thewaiapp.com.MainActivity;
@@ -28,9 +44,7 @@ import customer.thewaiapp.com.Model.Address;
 import customer.thewaiapp.com.Model.CleaningOrderAmountValues;
 import customer.thewaiapp.com.Model.CookingOrderAmountValues;
 import customer.thewaiapp.com.Model.Order;
-import customer.thewaiapp.com.Model.OrderAmount;
 import customer.thewaiapp.com.Model.OrderKey;
-import customer.thewaiapp.com.Model.User;
 import customer.thewaiapp.com.Model.WashingOrderAmountValues;
 import customer.thewaiapp.com.Order.OrderConfirmActivity;
 import customer.thewaiapp.com.R;
@@ -57,16 +71,24 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     Button mButtonSubmit;
     private ProgressDialog mProgressDialog;
     TextView mTextviewTotal,mmTextviewBaseamount,mTextviewServicetax,mTextviewTotalpayable,mTextviewAddressname,mTextviewHousenum,mTextviewAreaname,mTextviewLandmark,mTextviewCity,mTextviewState,mTextviewPincode;
-
+    Long ResourceMobileNumber;
+    HttpClient httpclient = new DefaultHttpClient();
+    private static final String ACCOUNT_SID = "ACa5ff1aeb91ffc0f7247b6651680df2f2" ;
+    private static final String AUTH_TOKEN = "300b72a74d60918828f99bc423b9e9db";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
         realm = Realm.getDefaultInstance();
         UID = Utilities.getUid();
         mOrder = (Order) getIntent().getSerializableExtra("order");
+        ResourceMobileNumber = getIntent().getLongExtra("ResourceMobileNumber",0);
         Log.v("wai", "Order id: " + mOrder.getOrderId());
-        Log.v("wai", "Order type: " + mOrder.getOrderType());
+        Log.v("Profile123", "Order type: " + ResourceMobileNumber);
         mAddress = (Address) getIntent().getSerializableExtra("Address");
         Log.v("wai", "Address id : " + mAddress.getAddressId());
         mOrderType = mOrder.getOrderType();
@@ -183,6 +205,44 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.payment_bt_submit:
                 showProgressDialog();
                 saveOrder();
+                SendConfirmationMessage(ResourceMobileNumber);
+        }
+    }
+
+    private void SendConfirmationMessage(Long resourceMobileNumber) {
+        HttpPost httppost = new HttpPost(
+                "https://api.twilio.com/2010-04-01/Accounts/ACa5ff1aeb91ffc0f7247b6651680df2f2/SMS/Messages");
+        String base64EncodedCredentials = "Basic "
+                + Base64.encodeToString(
+                (ACCOUNT_SID + ":" + AUTH_TOKEN).getBytes(),
+                Base64.NO_WRAP);
+
+        httppost.setHeader("Authorization",
+                base64EncodedCredentials);
+        try {
+
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+            nameValuePairs.add(new BasicNameValuePair("From",
+                    "+14158552534"));
+            nameValuePairs.add(new BasicNameValuePair("To",
+                    "+919650654885"));
+            nameValuePairs.add(new BasicNameValuePair("Body",
+                    "Your are booked"));
+
+            httppost.setEntity(new UrlEncodedFormEntity(
+                    nameValuePairs));
+
+            // Execute HTTP Post Request
+            HttpResponse response = httpclient.execute(httppost);
+            HttpEntity entity = response.getEntity();
+            System.out.println("Entity post is: "
+                    + EntityUtils.toString(entity));
+
+
+        } catch (ClientProtocolException e) {
+
+        } catch (IOException e) {
+
         }
     }
 

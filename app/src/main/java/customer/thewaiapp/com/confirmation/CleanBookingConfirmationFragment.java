@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +43,7 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
 
     private static final String ARG_KEY = "ResourceKey";
     private static final String ARG_RESOURCE = "ResourceName";
+    private static final String ARG_RESOURCE_MOBILE = "ResourceMobile";
     int mBaseAmount = 50;
     int mRoomsCount, mWashroomsCount, mUtensilBucketCount, mRoomsAmount, mWashroomsAmount, mUtensilBucketAmount;
     double mTotalAmount, mServiceTaxAmount = 0;
@@ -57,6 +57,7 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
     CheckBox mCheckBoxTerms;
     EditText mEdittextApplyCoupon;
     Realm realm;
+    private Long mParamResourceMobile;
     private OnUserSignUpRequired mListener;
     private DatabaseReference mDatabase;
 
@@ -72,12 +73,13 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
         // Required empty public constructor
     }
 
-    public static CleanBookingConfirmationFragment newInstance(String key, String resourceName) {
+    public static CleanBookingConfirmationFragment newInstance(String key, String resourceName, Long mResourceMobile) {
         CleanBookingConfirmationFragment fragment = new CleanBookingConfirmationFragment();
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
 //        args.putSerializable(ARG_RESOURCE, resourceName);
         args.putString(ARG_RESOURCE, resourceName);
+        args.putLong(ARG_RESOURCE_MOBILE, mResourceMobile);
         fragment.setArguments(args);
         return fragment;
     }
@@ -90,6 +92,7 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
             mParamResourceKey = getArguments().getString(ARG_KEY);
 //            mParamResource = (ResourceOnline) getArguments().getSerializable(ARG_RESOURCE);
             mParamResourceName = getArguments().getString(ARG_RESOURCE);
+            mParamResourceMobile = getArguments().getLong(ARG_RESOURCE_MOBILE);
         }
         if (savedInstanceState == null) {
             mRoomsCount = 1;
@@ -191,6 +194,7 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
                         intent.putExtra("totalAmount", mTotalAmount);
                         intent.putExtra("orderType", Constants.ORDER_TYPE_CLEANING);
                         intent.putExtra("orderId", mOrderId);
+                        intent.putExtra("ResourceMobile", mParamResourceMobile);
                         startActivity(intent);
                     } else {
                         // User is signed out

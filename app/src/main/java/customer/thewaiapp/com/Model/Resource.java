@@ -7,8 +7,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.realm.RealmObject;
+
 @IgnoreExtraProperties
-public class Resource implements Serializable {
+public class Resource extends RealmObject implements Serializable {
 
     private String firstName, lastName, Email, gender,status;
     private long mobileNumber;

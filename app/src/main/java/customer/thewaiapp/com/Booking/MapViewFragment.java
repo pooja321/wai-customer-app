@@ -1,5 +1,6 @@
 package customer.thewaiapp.com.Booking;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -105,7 +106,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     EditText mlocation_tf;
     Button mQuickBook;
     ProgressDialog mProgressDialog;
-
+    ImageView mImageviewCurrentLocation;
     String mplace;
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -137,6 +138,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.main_map_fragment);
         mapFragment.getMapAsync(this);
         mlocation_tf = (EditText) view.findViewById(R.id.mapview_et_search_address);
+        mImageviewCurrentLocation = (ImageView) view.findViewById(R.id.mapview_btn_currentLocation);
         /*** Call signInPassword() when user taps "Done" keyboard action     */
         mlocation_tf.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,8 +173,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
                     mProgressDialog.dismiss();
                     Toast.makeText(getActivity(), resourceOnline.getName(), Toast.LENGTH_SHORT).show();
 
-                }
-                else{
+                } else {
                     mProgressDialog.dismiss();
                     Toast.makeText(getActivity(), "No available resources", Toast.LENGTH_SHORT).show();
                 }
@@ -357,6 +358,23 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
             buildGoogleApiClient();
             mGoogleMap.setMyLocationEnabled(true);
         }
+        mImageviewCurrentLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buildGoogleApiClient();
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                mGoogleMap.setMyLocationEnabled(true);
+            }
+        });
         GeoLocation mGeoLocation = new GeoLocation(centerOfMap.latitude, centerOfMap.longitude);
         mGeoQuery = mGeoFire.queryAtLocation(mGeoLocation, 3);
         mGeoQuery.addGeoQueryEventListener(this);

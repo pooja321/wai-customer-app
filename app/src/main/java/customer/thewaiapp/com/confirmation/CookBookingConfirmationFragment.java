@@ -42,13 +42,14 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
 
     private static final String ARG_KEY = "ResourceKey";
     private static final String ARG_RESOURCE = "ResourceName";
+    private static final String ARG_RESOURCE_MOBILE = "ResourceMobile";
     int mBaseAmount = 50;
     int mMembersCount, mMainCourseCount;
     int mMembersAmount, mMainCourseAmount;
     double mTotalAmount;
     double mServiceTaxAmount = 0;
     private String mParamResourceKey, mParamResourceName, mOrderId;
-
+    private Long mParamResourceMobile;
     TextView mTextViewMembersCount, mTextViewMainCourseCount, mTextViewMembersAmount, mTextViewMainCourseAmount,
             mTextViewBaseAmount, mTextViewServiceTaxAmount, mTextViewTotalAmount, mTextViewResourceName;
     Button mButtonIncrementMembers, mButtonDecrementMembers, mButtonIncrementMainCourse, mButtonDecrementMainCourse,
@@ -60,7 +61,6 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     private ResourceOnline mParamResource;
     Realm realm;
 
-
     // callback interface to implement on item list click mListener
     public interface OnUserSignUpRequired {
         void UserSignUpRequired();
@@ -70,11 +70,12 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         // Required empty public constructor
     }
 
-    public static CookBookingConfirmationFragment newInstance(String key, String resourceName) {
+    public static CookBookingConfirmationFragment newInstance(String key, String resourceName, Long mResourceMobile) {
         CookBookingConfirmationFragment fragment = new CookBookingConfirmationFragment();
         Bundle args = new Bundle();
         args.putString(ARG_KEY, key);
         args.putString(ARG_RESOURCE, resourceName);
+        args.putLong(ARG_RESOURCE_MOBILE, mResourceMobile);
         fragment.setArguments(args);
         return fragment;
     }
@@ -82,9 +83,11 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParamResourceKey = getArguments().getString(ARG_KEY);
             mParamResourceName = getArguments().getString(ARG_RESOURCE);
+            mParamResourceMobile = getArguments().getLong(ARG_RESOURCE_MOBILE);
         }
         if (savedInstanceState == null) {
             mMembersCount = 2;
@@ -169,7 +172,9 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
                         intent.putExtra("totalAmount", mTotalAmount);
                         intent.putExtra("orderType", Constants.ORDER_TYPE_COOKING);
                         intent.putExtra("orderId", mOrderId);
+                        intent.putExtra("ResourceMobile", mParamResourceMobile);
                         startActivity(intent);
+//                        sendconfirmationmessage(mParamResourceMobile);
                     } else {
                         // User is signed out
                         Toast.makeText(getActivity(), "Please Login First", Toast.LENGTH_SHORT).show();
@@ -227,6 +232,11 @@ public class CookBookingConfirmationFragment extends Fragment implements View.On
         }
 
     }
+
+    private void sendconfirmationmessage(String mParamResourceMobile) {
+
+    }
+
 
     private void couponcode() {
         final String checkcoupon = mEdittextApplyCoupon.getText().toString().toUpperCase();
