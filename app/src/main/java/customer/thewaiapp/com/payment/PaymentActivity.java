@@ -225,7 +225,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             nameValuePairs.add(new BasicNameValuePair("From",
                     "+14158552534"));
             nameValuePairs.add(new BasicNameValuePair("To",
-                    "+919650654885"));
+                    "+918930200380"));
             nameValuePairs.add(new BasicNameValuePair("Body",
                     "Your are booked"));
 

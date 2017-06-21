@@ -3,6 +3,7 @@ package customer.thewaiapp.com;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,35 +21,35 @@ import customer.thewaiapp.com.confirmation.BookingConfirmationActivity;
 import io.realm.Realm;
 
 
-public class ProfileUserActivity extends AppCompatActivity {
+public class ProfileResourceActivity extends AppCompatActivity {
 
 
-    String name,rating,key,callingFragment,Resource_id;
-    TextView TextviewResourceName1;
+    String name,key,callingFragment,Resource_id;
+    TextView TextviewResourceName1,mTextviewResourceNameToolbar;
     Button btnbook;
     private Realm mRealm;
     private DatabaseReference mDatabase;
-    String Resourcekey;
     Resource resource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_resourcedetails);
+        name = getIntent().getStringExtra("resourceName");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.activity_profileuser_toolbar);
+        toolbar.setTitle(name);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mRealm = Realm.getDefaultInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        name = getIntent().getStringExtra("resourceName");
         Resource_id = getIntent().getStringExtra("resourceId");
-//        Resourcekey = mDatabase.child(Constants.FIREBASE_CHILD_RESOURCES).getKey();
         Log.v("Profile123","Resource_id: "+Resource_id);
         key = getIntent().getStringExtra("resourceId");
         callingFragment = getIntent().getStringExtra("mCallingFragment");
-//        TextviewResourceName = (TextView) findViewById(R.id.profile_tv_firstName_id);
-//        TextviewResourceRate = (TextView) findViewById(R.id.profile_tv_rating);
         TextviewResourceName1 = (TextView) findViewById(R.id.profile_tv_upperusername);
+        mTextviewResourceNameToolbar = (TextView) findViewById(R.id.profile_resource_resourcename);
         btnbook =(Button) findViewById(R.id.profile_btn_book);
-//        TextviewResourceName.setText(name);
         TextviewResourceName1.setText(name);
-//        TextviewResourceRate.setText(rating);
 
         mDatabase.child(Constants.FIREBASE_CHILD_RESOURCES).child(Resource_id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -65,7 +66,7 @@ public class ProfileUserActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.v("Profile123","Resource_id: "+resource.getMobileNumber());
-                Intent intent = new Intent(ProfileUserActivity.this, BookingConfirmationActivity.class);
+                Intent intent = new Intent(ProfileResourceActivity.this, BookingConfirmationActivity.class);
                 intent.putExtra("resourceKey",key);
                 intent.putExtra("resourceName",name);
                 intent.putExtra("resourceMobile",resource.getMobileNumber());

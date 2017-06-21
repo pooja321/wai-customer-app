@@ -111,8 +111,11 @@
         </activity>
         <activity android:name=".confirmation.WeightChartWashing" />
         <activity android:name=".confirmation.WeightChartUtensilsActivity" />
-        >>>>>>> dd30bc7f2da768e15e299a9650c60c44c52e511e
-        <activity android:name=".ProfileUserActivity" />
+        <activity android:name=".ProfileResourceActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity android:name=".SubscriptionActvity"></activity>
     </application>
 
