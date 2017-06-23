@@ -73,7 +73,6 @@ import customer.thewaiapp.com.Model.ResourceOnline;
 import customer.thewaiapp.com.ProfileResourceActivity;
 import customer.thewaiapp.com.R;
 import customer.thewaiapp.com.Utility.Constants;
-import customer.thewaiapp.com.confirmation.BookingConfirmationActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_CANCELED;
@@ -166,10 +165,11 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
                 if (keys.size() > 0) {
                     String randomKey = keys.get(random.nextInt(keys.size()));
                     ResourceOnline resourceOnline = mMapResourceList.get(randomKey);
-                    startActivity(new Intent(getActivity(), BookingConfirmationActivity.class)
+                    startActivity(new Intent(getActivity(), ProfileResourceActivity.class)
                             .putExtra("resourceName", resourceOnline.getName())
-                            .putExtra("fragment_name", mJobType)
-                            .putExtra("resourceKey", resourceOnline.getResourceId()));
+                            .putExtra("mCallingFragment", mJobType)
+                            .putExtra("resourceRate",resourceOnline.getRating())
+                            .putExtra("resourceId", resourceOnline.getResourceId()));
                     mProgressDialog.dismiss();
                     Toast.makeText(getActivity(), resourceOnline.getName(), Toast.LENGTH_SHORT).show();
 

@@ -194,6 +194,8 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
                         intent.putExtra("totalAmount", mTotalAmount);
                         intent.putExtra("orderType", Constants.ORDER_TYPE_CLEANING);
                         intent.putExtra("orderId", mOrderId);
+                        intent.putExtra("ResourceName", mParamResourceName);
+                        intent.putExtra("ResourceType", "Cleaning");
                         intent.putExtra("ResourceMobile", mParamResourceMobile);
                         startActivity(intent);
                     } else {

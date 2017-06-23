@@ -42,6 +42,7 @@ public class AddressActivity extends AppCompatActivity {
     public static final String KEY_ORDER_ID = "orderId";
     String mOrderType, mResourceKey, mOrderId, UID;
     Long ResourceMobile;
+    String ResourceName,ResourceType;
     double mTotalAmount;
 
     private DatabaseReference mDatabase;
@@ -72,6 +73,8 @@ public class AddressActivity extends AppCompatActivity {
         mOrderType = getIntent().getStringExtra(KEY_ORDER_TYPE);
         mOrderId = getIntent().getStringExtra(KEY_ORDER_ID);
         ResourceMobile = getIntent().getLongExtra(RESOURCE_MOBILE,0);
+        ResourceName = getIntent().getStringExtra("ResourceName");
+        ResourceType = getIntent().getStringExtra("ResourceType");
         mToolbar = (Toolbar) findViewById(R.id.address_toolbar);
         mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
 
@@ -140,6 +143,8 @@ public class AddressActivity extends AppCompatActivity {
         startActivity(new Intent(AddressActivity.this, PaymentActivity.class)
                 .putExtra("order", order)
                 .putExtra("Address", mAddress)
+                .putExtra("ResourceName", ResourceName)
+                .putExtra("ResourceType",ResourceType)
                 .putExtra("ResourceMobileNumber",ResourceMobile )
         );
 

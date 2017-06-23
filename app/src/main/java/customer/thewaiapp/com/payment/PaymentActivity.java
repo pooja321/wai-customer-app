@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
@@ -45,6 +46,7 @@ import customer.thewaiapp.com.Model.CleaningOrderAmountValues;
 import customer.thewaiapp.com.Model.CookingOrderAmountValues;
 import customer.thewaiapp.com.Model.Order;
 import customer.thewaiapp.com.Model.OrderKey;
+import customer.thewaiapp.com.Model.User;
 import customer.thewaiapp.com.Model.WashingOrderAmountValues;
 import customer.thewaiapp.com.Order.OrderConfirmActivity;
 import customer.thewaiapp.com.R;
@@ -72,6 +74,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     private ProgressDialog mProgressDialog;
     TextView mTextviewTotal,mmTextviewBaseamount,mTextviewServicetax,mTextviewTotalpayable,mTextviewAddressname,mTextviewHousenum,mTextviewAreaname,mTextviewLandmark,mTextviewCity,mTextviewState,mTextviewPincode;
     Long ResourceMobileNumber;
+    String ResourceName,ResourceType;
+    User user;
     HttpClient httpclient = new DefaultHttpClient();
     private static final String ACCOUNT_SID = "ACa5ff1aeb91ffc0f7247b6651680df2f2" ;
     private static final String AUTH_TOKEN = "300b72a74d60918828f99bc423b9e9db";
@@ -87,8 +91,12 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         UID = Utilities.getUid();
         mOrder = (Order) getIntent().getSerializableExtra("order");
         ResourceMobileNumber = getIntent().getLongExtra("ResourceMobileNumber",0);
+        ResourceName = getIntent().getStringExtra("ResourceName");
+        ResourceType = getIntent().getStringExtra("ResourceType");
         Log.v("wai", "Order id: " + mOrder.getOrderId());
         Log.v("Profile123", "Order type: " + ResourceMobileNumber);
+        Log.v("Profile123", "Order type: " + ResourceName);
+
         mAddress = (Address) getIntent().getSerializableExtra("Address");
         Log.v("wai", "Address id : " + mAddress.getAddressId());
         mOrderType = mOrder.getOrderType();
@@ -118,7 +126,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mTextviewState= (TextView) findViewById(R.id.payment_item_statename);
         mTextviewPincode= (TextView) findViewById(R.id.payment_item_pincode);
         mButtonSubmit.setOnClickListener(this);
-
+        String UserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        RealmResults<User> UserResults = realm.where(User.class).equalTo("Email", UserEmail).findAll();
+        if (UserResults.size() > 0) {
+            user = UserResults.get(0);
+        }
         switch (mOrderType) {
             case Constants.ORDER_TYPE_CLEANING:
                 RealmResults<CleaningOrderAmountValues> cleaningOrderAmountValues = realm.where(CleaningOrderAmountValues.class).equalTo("OrderId", mOrderId).findAll();
@@ -205,11 +217,11 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.payment_bt_submit:
                 showProgressDialog();
                 saveOrder();
-                SendConfirmationMessage(ResourceMobileNumber);
+                SendConfirmationMessage(ResourceMobileNumber,user.getMobileNumber());
         }
     }
 
-    private void SendConfirmationMessage(Long resourceMobileNumber) {
+    private void SendDetailsMessageUser(long mobileNumber) {
         HttpPost httppost = new HttpPost(
                 "https://api.twilio.com/2010-04-01/Accounts/ACa5ff1aeb91ffc0f7247b6651680df2f2/SMS/Messages");
         String base64EncodedCredentials = "Basic "
@@ -225,9 +237,57 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             nameValuePairs.add(new BasicNameValuePair("From",
                     "+14158552534"));
             nameValuePairs.add(new BasicNameValuePair("To",
-                    "+918930200380"));
+                    "+91"+mobileNumber+""));
             nameValuePairs.add(new BasicNameValuePair("Body",
-                    "Your are booked"));
+                    "Your have succesfully booked "+ResourceName+" for "+ResourceType+".Contact at: "+ResourceMobileNumber+""));
+
+            httppost.setEntity(new UrlEncodedFormEntity(
+                    nameValuePairs));
+
+            // Execute HTTP Post Request
+            HttpResponse response = httpclient.execute(httppost);
+            HttpEntity entity = response.getEntity();
+            System.out.println("Entity post is: "
+                    + EntityUtils.toString(entity));
+
+
+        } catch (ClientProtocolException e) {
+
+        } catch (IOException e) {
+
+        }
+    }
+
+    private void SendConfirmationMessage(Long resourceMobileNumber, long mobileNumber) {
+        HttpPost httppost = new HttpPost(
+                "https://api.twilio.com/2010-04-01/Accounts/ACa5ff1aeb91ffc0f7247b6651680df2f2/SMS/Messages");
+        String base64EncodedCredentials = "Basic "
+                + Base64.encodeToString(
+                (ACCOUNT_SID + ":" + AUTH_TOKEN).getBytes(),
+                Base64.NO_WRAP);
+
+        httppost.setHeader("Authorization",
+                base64EncodedCredentials);
+        try {
+            List<NameValuePair> nameValuePairs2 = new ArrayList<NameValuePair>();
+            nameValuePairs2.add(new BasicNameValuePair("From",
+                    "+14158552534"));
+            nameValuePairs2.add(new BasicNameValuePair("To",
+                    "+91"+mobileNumber+""));
+            nameValuePairs2.add(new BasicNameValuePair("Body",
+                    "You have succesfully booked "+ResourceName+" for "+ResourceType+".Contact at: "+ResourceMobileNumber+""));
+
+            httppost.setEntity(new UrlEncodedFormEntity(
+                    nameValuePairs2));
+
+
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+            nameValuePairs.add(new BasicNameValuePair("From",
+                    "+14158552534"));
+            nameValuePairs.add(new BasicNameValuePair("To",
+                    "+91"+resourceMobileNumber+""));
+            nameValuePairs.add(new BasicNameValuePair("Body",
+                    "You have been booked by "+String.format("%s %s",user.getFirstName(),user.getLastName())+".Contact at: "+user.getMobileNumber()+""));
 
             httppost.setEntity(new UrlEncodedFormEntity(
                     nameValuePairs));

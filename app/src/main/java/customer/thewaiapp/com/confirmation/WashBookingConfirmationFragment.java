@@ -161,6 +161,8 @@ public class WashBookingConfirmationFragment extends Fragment implements View.On
                         intent.putExtra("totalAmount", mTotalAmount);
                         intent.putExtra("orderType", Constants.ORDER_TYPE_WASHING);
                         intent.putExtra("orderId", mOrderId);
+                        intent.putExtra("ResourceName", mParamResourceName);
+                        intent.putExtra("ResourceType", "Washing");
                         intent.putExtra("ResourceMobile", mParamResourceMobile);
                         startActivity(intent);
                     } else {
