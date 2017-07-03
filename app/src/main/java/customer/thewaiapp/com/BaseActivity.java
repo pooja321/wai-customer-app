@@ -1,5 +1,6 @@
 package customer.thewaiapp.com;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -8,8 +9,10 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -64,13 +67,24 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.v("Wai123", "Data: " + dataSnapshot);
+                if (dataSnapshot.getValue() != null) {
                 user = dataSnapshot.getValue(User.class);
                 nav_Username.setText(String.format("%s %s", user.getFirstName(), user.getLastName()));
                 mRealm.beginTransaction();
                 mRealm.copyToRealmOrUpdate(user);
                 mRealm.commitTransaction();
+                }
+                else {
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    if (user != null) {
+                        FirebaseAuth.getInstance().signOut();
+                        LoginManager.getInstance().logOut();
+                        startActivity(new Intent(BaseActivity.this, LoginActivity.class));
+                        Toast.makeText(BaseActivity.this, "Looks like you have not sign up. Please sign up first.", Toast.LENGTH_LONG).show();
+                    }
+                }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
 

@@ -2,12 +2,14 @@ package customer.thewaiapp.com.Login;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -309,8 +311,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
         mButtonFacebookSignin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                mButtonFacebookSignin.setVisibility(View.GONE);
-                mAuthProgressDialog.show();
                 handleFacebookAccessToken(loginResult.getAccessToken());
 
             }
@@ -340,6 +340,17 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             //PUT FACEBOOK LOGOUT CODE HERE
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                            builder.setTitle("Error");
+                            builder.setMessage("The last time you logged in through other portal. Please try logging in via same portal which you used last time");
+                            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
                             LoginManager.getInstance().logOut();
                             mAuthProgressDialog.dismiss();
                         }
