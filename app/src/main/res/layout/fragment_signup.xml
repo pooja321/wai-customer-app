@@ -26,8 +26,8 @@
             android:id="@+id/til_email_create"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/lists_title_bottom_margin"
-            android:background="@color/colorwhite">
+            android:background="@color/colorwhite"
+            android:layout_marginBottom="@dimen/lists_title_bottom_margin">
 
             <EditText
                 android:id="@+id/edit_text_email_create"
@@ -44,8 +44,8 @@
             android:id="@+id/til_password_create"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_normal"
-            android:background="@color/colorwhite">
+            android:background="@color/colorwhite"
+            android:layout_marginBottom="@dimen/margin_normal">
 
             <EditText
                 android:id="@+id/edit_text_password_create"
@@ -84,23 +84,11 @@
                 style="@style/LoginCreateTextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:clickable="true"
-                android:text="@string/button_sign_in" />
+                android:text="@string/button_sign_in"
+                android:clickable="true"/>
         </LinearLayout>
-
-        <TextView
-            style="@style/LoginCreateText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="OR" />
-
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/signup_btn_facebooksignin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
     </LinearLayout>
+
 
 
 </LinearLayout>

@@ -139,8 +139,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
 
         /* Setup the Google API object to allow Google logins */
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
+                .requestEmail().requestIdToken(getActivity().getString(R.string.default_web_client_id))
                 .build();
 
         /*** Build a GoogleApiClient with access to the Google Sign-In API and the options specified by gso.      */
@@ -414,11 +413,19 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
         /* Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...); */
         if (requestCode == RC_GOOGLE_LOGIN) {
+            Log.v("Wai123","RequestCode: "+requestCode);
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
+            Log.v("Wai123","Result: "+result.getStatus());
+            if (result.isSuccess()) {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = result.getSignInAccount();
+                firebaseAuthWithGoogle(account);
+            } else {
+                Toast.makeText(getActivity(), "Google sign in failed!!", Toast.LENGTH_LONG).show();
+            }
+//            handleSignInResult(result);
         }
 
 
@@ -443,6 +450,34 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                     });
         }
 
+    }
+    private void firebaseAuthWithGoogle(final GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if (user != null) {
+                                SharedPreferences.Editor editor = getActivity().getSharedPreferences("UserDetails", MODE_PRIVATE).edit();
+                                editor.putString("Email", account.getEmail());
+                                editor.putString("FName", account.getDisplayName());
+                                editor.putString("LName", account.getFamilyName());
+                                editor.putString("Gender", null);
+                                editor.putString("Uid", user.getUid());
+                                editor.commit();
+                            }
+                        }else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(getActivity(), "Authentication failed.",
+                                    Toast.LENGTH_LONG).show();
+                        }
+
+                        // ...
+                    }
+                });
     }
 
     private void showErrorToast(String message) {
@@ -472,6 +507,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+        FirebaseUser currentUser = mAuth.getCurrentUser();
         if (mGoogleApiClient != null)
             mGoogleApiClient.connect();
     }

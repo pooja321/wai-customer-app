@@ -19,7 +19,7 @@
           "client_type": 1,
           "android_info": {
             "package_name": "supply.thewaiapp.com",
-            "certificate_hash": "A7E96898E3C9F81554885A3E1D1B379FECE2AC13"
+            "certificate_hash": "a7e96898e3c9f81554885a3e1d1b379fece2ac13"
           }
         },
         {
@@ -59,11 +59,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "1052443407518-4p5dd4kq43hjpeuuv0a6elcbtgqa4qap.apps.googleusercontent.com",
+          "client_id": "1052443407518-o46f699sgogjs5s6o8hp9meelmmogn8u.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "admin.thewaiapp.com",
-            "certificate_hash": "377E9DFE2648BCBB4235987D790831BACA59961F"
+            "certificate_hash": "377e9dfe2648bcbb4235987d790831baca59961f"
           }
         },
         {
@@ -71,15 +71,7 @@
           "client_type": 1,
           "android_info": {
             "package_name": "admin.thewaiapp.com",
-            "certificate_hash": "90CE8E05EF1468A5686277C52CAD598CBC976B0B"
-          }
-        },
-        {
-          "client_id": "1052443407518-3e2qvuvjrej738de2ncsdu8as605hd4u.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "admin.thewaiapp.com",
-            "certificate_hash": "1DC69EAEA88F46ACF32F3051D7ED7458D72F7C40"
+            "certificate_hash": "90ce8e05ef1468a5686277c52cad598cbc976b0b"
           }
         },
         {
@@ -87,7 +79,7 @@
           "client_type": 1,
           "android_info": {
             "package_name": "admin.thewaiapp.com",
-            "certificate_hash": "A7E96898E3C9F81554885A3E1D1B379FECE2AC13"
+            "certificate_hash": "a7e96898e3c9f81554885a3e1d1b379fece2ac13"
           }
         },
         {
@@ -131,7 +123,7 @@
           "client_type": 1,
           "android_info": {
             "package_name": "customer.thewaiapp.com",
-            "certificate_hash": "1DC69EAEA88F46ACF32F3051D7ED7458D72F7C40"
+            "certificate_hash": "1dc69eaea88f46acf32f3051d7ed7458d72f7c40"
           }
         },
         {
@@ -139,7 +131,7 @@
           "client_type": 1,
           "android_info": {
             "package_name": "customer.thewaiapp.com",
-            "certificate_hash": "90CE8E05EF1468A5686277C52CAD598CBC976B0B"
+            "certificate_hash": "90ce8e05ef1468a5686277c52cad598cbc976b0b"
           }
         },
         {
@@ -147,7 +139,7 @@
           "client_type": 1,
           "android_info": {
             "package_name": "customer.thewaiapp.com",
-            "certificate_hash": "A7E96898E3C9F81554885A3E1D1B379FECE2AC13"
+            "certificate_hash": "a7e96898e3c9f81554885a3e1d1b379fece2ac13"
           }
         },
         {
