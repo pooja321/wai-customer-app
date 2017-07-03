@@ -3,6 +3,7 @@ package customer.thewaiapp.com;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -26,7 +27,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 import customer.thewaiapp.com.Login.LoginActivity;
 import customer.thewaiapp.com.Model.User;
@@ -34,6 +38,7 @@ import customer.thewaiapp.com.Order.OrderHistoryActivity;
 import customer.thewaiapp.com.Profile.ProfileActivity;
 import customer.thewaiapp.com.Utility.Constants;
 import customer.thewaiapp.com.Utility.NetworkChangeReceiver;
+import customer.thewaiapp.com.Utility.Utilities;
 import io.realm.Realm;
 
 
@@ -76,13 +81,25 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 mRealm.commitTransaction();
                 }
                 else {
-                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                    if (user != null) {
-                        FirebaseAuth.getInstance().signOut();
-                        LoginManager.getInstance().logOut();
-                        startActivity(new Intent(BaseActivity.this, LoginActivity.class));
-                        Toast.makeText(BaseActivity.this, "Looks like you have not sign up. Please sign up first.", Toast.LENGTH_LONG).show();
-                    }
+                    HashMap<String, Object> timestampJoined = new HashMap<>();
+                    timestampJoined.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+                    HashMap<String, Object> timestampChanged = new HashMap<>();
+                    timestampChanged.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
+                    String userId = Utilities.generateCustomerId();
+                    SharedPreferences prefs = getSharedPreferences("UserDetails", MODE_PRIVATE);
+                    String UserEmail = prefs.getString("Email",null);
+                    String FirstName = prefs.getString("FName",null);
+                    String LastName = prefs.getString("LName",null);
+                    String Gender = prefs.getString("Gender",null);
+                    String Uid = prefs.getString("Uid",null);
+                    final User user = new User(userId, UserEmail,FirstName,Gender, LastName,0, timestampChanged, timestampJoined);
+                    mRealm.executeTransactionAsync(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            realm.copyToRealmOrUpdate(user);
+                        }
+                    });
+                    mDatabase.child(Constants.FIREBASE_CHILD_USERS).child(Uid).setValue(user);
                 }
             }
             @Override

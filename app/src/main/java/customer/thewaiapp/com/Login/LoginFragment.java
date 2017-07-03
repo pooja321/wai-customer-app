@@ -27,6 +27,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -37,6 +39,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -53,11 +56,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import customer.thewaiapp.com.MainActivity;
 import customer.thewaiapp.com.Model.User;
 import customer.thewaiapp.com.R;
 import customer.thewaiapp.com.Utility.Constants;
 import io.realm.Realm;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class LoginFragment extends Fragment implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
 
@@ -98,7 +106,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
         FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         View view = inflater.inflate(R.layout.fragment_login, container, false);
-        sharedPreferences=getActivity().getSharedPreferences("userdatarealm", Context.MODE_PRIVATE);
+        sharedPreferences=getActivity().getSharedPreferences("userdatarealm", MODE_PRIVATE);
         sharedprefereceeditor=sharedPreferences.edit();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -120,6 +128,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                         getUserData(user);
                     }
                     else {
+                        user.getDisplayName();
                         startActivity(new Intent(getActivity(), MainActivity.class));
                     }
 
@@ -327,11 +336,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
 
     }
 
-    private void handleFacebookAccessToken(AccessToken token) {
-
+    private void handleFacebookAccessToken(final AccessToken token) {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    String UserEmail,First_Name,Last_Name,User_Gender;
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
 
@@ -353,6 +362,46 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                             alertDialog.show();
                             LoginManager.getInstance().logOut();
                             mAuthProgressDialog.dismiss();
+                        }
+                        else {
+                            final FirebaseUser user = mAuth.getCurrentUser();
+                            GraphRequest request = GraphRequest.newMeRequest(token, new GraphRequest.GraphJSONObjectCallback() {
+
+                                @Override
+                                public void onCompleted(JSONObject object, GraphResponse response) {
+                                    Log.i("LoginActivity", response.toString());
+                                    // Get facebook data from login
+//                        Bundle bFacebookData = getFacebookData(object);
+                                    try {
+                                        if (object.has("email")) {
+                                            UserEmail = object.getString("email");
+                                        }
+                                        if (object.has("first_name")) {
+                                            First_Name = object.getString("first_name");
+                                        }
+                                        if (object.has("last_name")) {
+                                            Last_Name = object.getString("last_name");
+                                        }
+                                        if (object.has("gender")) {
+                                            User_Gender = object.getString("gender");
+                                        }
+                                        SharedPreferences.Editor editor = getActivity().getSharedPreferences("UserDetails", MODE_PRIVATE).edit();
+                                        editor.putString("Email", UserEmail);
+                                        editor.putString("FName", First_Name);
+                                        editor.putString("LName", Last_Name);
+                                        editor.putString("Gender", User_Gender);
+                                        editor.putString("Uid", user.getUid());
+                                        editor.commit();
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                            Bundle parameters = new Bundle();
+                            parameters.putString("fields", "id, first_name, last_name, email,gender, birthday, location,picture.type(large)"); // Parámetros que pedimos a facebook
+                            request.setParameters(parameters);
+                            request.executeAsync();
                         }
                     }
                 });
