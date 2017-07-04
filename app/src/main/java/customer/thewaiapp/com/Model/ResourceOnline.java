@@ -10,26 +10,31 @@ public class ResourceOnline extends RealmObject {
 
     @PrimaryKey
     private String resourceId;
-    private String Name,Gender,picture;
-    private int rating;
+    private String Name,Gender,picture,placeofwork,adhar,police_verification;
+    private int rating,age,experience;
     private double Lat, Long;
     @Ignore
     private HashMap<String, Object> timestampLogin;
     @Ignore
     private HashMap<String, Object> timestampLogout;
 
-    public ResourceOnline(){
+    public ResourceOnline()
+    {
 
     }
-
-    public ResourceOnline(String resourceId, String name, String gender, int rating, String picture, double lat, double Long, HashMap<String, Object> timestampLogin, HashMap<String, Object> timestampLogout) {
-        Gender = gender;
-        Lat = lat;
-        Name = name;
+    public ResourceOnline(String resourceId, String name, String gender, String picture, String placeofwork, String adhar, String police_verification, int rating, int age, int experience, double lat, double aLong, HashMap<String, Object> timestampLogin, HashMap<String, Object> timestampLogout) {
         this.resourceId = resourceId;
-        this.Long = Long;
+        Name = name;
+        Gender = gender;
         this.picture = picture;
+        this.placeofwork = placeofwork;
+        this.adhar = adhar;
+        this.police_verification = police_verification;
         this.rating = rating;
+        this.age = age;
+        this.experience = experience;
+        Lat = lat;
+        Long = aLong;
         this.timestampLogin = timestampLogin;
         this.timestampLogout = timestampLogout;
     }
@@ -42,12 +47,76 @@ public class ResourceOnline extends RealmObject {
         this.resourceId = resourceId;
     }
 
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
     public String getGender() {
         return Gender;
     }
 
     public void setGender(String gender) {
         Gender = gender;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public String getPlaceofwork() {
+        return placeofwork;
+    }
+
+    public void setPlaceofwork(String placeofwork) {
+        this.placeofwork = placeofwork;
+    }
+
+    public String getAdhar() {
+        return adhar;
+    }
+
+    public void setAdhar(String adhar) {
+        this.adhar = adhar;
+    }
+
+    public String getPolice_verification() {
+        return police_verification;
+    }
+
+    public void setPolice_verification(String police_verification) {
+        this.police_verification = police_verification;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public void setExperience(int experience) {
+        this.experience = experience;
     }
 
     public double getLat() {
@@ -64,30 +133,6 @@ public class ResourceOnline extends RealmObject {
 
     public void setLong(double aLong) {
         Long = aLong;
-    }
-
-    public String getName() {
-        return Name;
-    }
-
-    public void setName(String name) {
-        Name = name;
-    }
-
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
-
-    public Integer getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
     }
 
     public HashMap<String, Object> getTimestampLogin() {

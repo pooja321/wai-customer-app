@@ -608,15 +608,21 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         }
 
         private void render(Marker marker, View view) {
-            TextView mTextViewName, mTextViewResourceRating;
+            TextView mTextViewName, mTextViewResourceRating,mTextviewAge,mTextviewAreaofwork,mTextviewExperience,mTextviewAdhar,mTextviewPoliceVerification;
             ImageView mImageViewGenderIcon;
             CircleImageView mImageViewResourcePic;
             Uri profilePicUri = null;
 
             mTextViewName = (TextView) view.findViewById(R.id.list_item_name);
             mTextViewResourceRating = (TextView) view.findViewById(R.id.list_item_rating);
+            mTextviewAge = (TextView) view.findViewById(R.id.textview_age);
+            mTextviewAreaofwork = (TextView) view.findViewById(R.id.textview_placeofwork);
+            mTextviewExperience = (TextView) view.findViewById(R.id.textview_experience);
+            mTextviewAdhar = (TextView) view.findViewById(R.id.textview_adhar);
+            mTextviewPoliceVerification = (TextView) view.findViewById(R.id.textview_policeverification);
             mImageViewResourcePic = (CircleImageView) view.findViewById(R.id.list_item_profilePic);
             mImageViewGenderIcon = (ImageView) view.findViewById(R.id.list_item_gender);
+
 
             mImageViewResourcePic.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -629,6 +635,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
             ResourceOnline resource = mMapResourceList.get(id);
 
             String _fullName = resource.getName();
+            Log.v("Map123","Resource: "+resource.getAge());
             if (resource.getPicture() != null) {
                 profilePicUri = Uri.parse(resource.getPicture());
                 Glide.with(view.getContext()).load(profilePicUri).placeholder(R.drawable.beforeafter).into(mImageViewResourcePic);
@@ -636,6 +643,26 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
                 Glide.with(view.getContext()).load(R.drawable.beforeafter).into(mImageViewResourcePic);
             }
             mTextViewName.setText(_fullName);
+            if (resource.getAge()!=0)
+            {
+                mTextviewAge.setText(String.valueOf(resource.getAge()));
+            }
+            if (resource.getPlaceofwork()!=null)
+            {
+                mTextviewAreaofwork.setText(resource.getPlaceofwork());
+            }
+            if (resource.getExperience()!=0)
+            {
+                mTextviewExperience.setText(String.valueOf(resource.getExperience()));
+            }
+            if (resource.getAdhar()!=null)
+            {
+                mTextviewAdhar.setText(resource.getAdhar());
+            }
+            if (resource.getPolice_verification()!=null)
+            {
+                mTextviewPoliceVerification.setText(resource.getPolice_verification());
+            }
             mTextViewResourceRating.setText(String.valueOf(resource.getRating()));
             Glide.with(view.getContext()).load(profilePicUri).placeholder(R.drawable.beforeafter).into(mImageViewResourcePic);
             switch (resource.getGender()) {

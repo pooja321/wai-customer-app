@@ -15,7 +15,7 @@ import customer.thewaiapp.com.R;
 
 public class ResourceViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView mTextViewName, mTextViewResourceRating;
+    private TextView mTextViewName, mTextViewResourceRating,mTextViewAge,mTextviewPlaceofwork,mTextviewExperience,mTextviewAdhar,mTextviewPoliceVerify;
     private ImageView mImageViewResourcePic, mImageViewGenderIcon;
     private Uri profilePicUri;
 
@@ -26,6 +26,11 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder {
         mTextViewResourceRating = (TextView) itemView.findViewById(R.id.list_item_rating);
         mImageViewResourcePic = (ImageView) itemView.findViewById(R.id.list_item_profilePic);
         mImageViewGenderIcon = (ImageView) itemView.findViewById(R.id.list_item_gender);
+        mTextViewAge = (TextView) itemView.findViewById(R.id.textview_age);
+        mTextviewPlaceofwork = (TextView) itemView.findViewById(R.id.textview_placeofwork);
+        mTextviewExperience = (TextView) itemView.findViewById(R.id.textview_experience);
+        mTextviewAdhar = (TextView) itemView.findViewById(R.id.textview_adhar);
+        mTextviewPoliceVerify = (TextView) itemView.findViewById(R.id.textview_policeverification);
     }
 
     //set what views will display
@@ -38,6 +43,26 @@ public class ResourceViewHolder extends RecyclerView.ViewHolder {
             Glide.with(itemView.getContext()).load(R.drawable.beforeafter).into(mImageViewResourcePic);
         }
         mTextViewName.setText(_fullName);
+        if (resource.getAge()!=0)
+        {
+            mTextViewAge.setText(String.valueOf(resource.getAge()));
+        }
+        if (resource.getPlaceofwork()!=null)
+        {
+            mTextviewPlaceofwork.setText(resource.getPlaceofwork());
+        }
+        if (resource.getExperience()!=0)
+        {
+            mTextviewExperience.setText(String.valueOf(resource.getExperience()));
+        }
+        if (resource.getAdhar()!=null)
+        {
+            mTextviewAdhar.setText(resource.getAdhar());
+        }
+        if (resource.getPolice_verification()!=null)
+        {
+            mTextviewPoliceVerify.setText(resource.getPolice_verification());
+        }
         mTextViewResourceRating.setText(String.valueOf(resource.getRating()));
         Glide.with(itemView.getContext()).load(profilePicUri).placeholder(R.drawable.beforeafter).into(mImageViewResourcePic);
         switch (resource.getGender()){

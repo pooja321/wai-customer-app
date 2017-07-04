@@ -40,6 +40,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.nearby.messages.Strategy;
+import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -461,9 +463,12 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user != null) {
+                                String input = account.getDisplayName();
+                                int i = input.indexOf(' ');
+                                String word = input.substring(0, i);
                                 SharedPreferences.Editor editor = getActivity().getSharedPreferences("UserDetails", MODE_PRIVATE).edit();
                                 editor.putString("Email", account.getEmail());
-                                editor.putString("FName", account.getDisplayName());
+                                editor.putString("FName", word);
                                 editor.putString("LName", account.getFamilyName());
                                 editor.putString("Gender", null);
                                 editor.putString("Uid", user.getUid());
@@ -475,7 +480,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Goo
                                     Toast.LENGTH_LONG).show();
                         }
 
-                        // ...
                     }
                 });
     }

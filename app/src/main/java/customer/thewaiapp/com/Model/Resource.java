@@ -12,7 +12,7 @@ import io.realm.RealmObject;
 @IgnoreExtraProperties
 public class Resource extends RealmObject implements Serializable {
 
-    private String firstName, lastName, Email, gender,status;
+    private String firstName, lastName, Email, gender,status,adhar,policeverification;
     private long mobileNumber;
     private int rating;
     private static final long serialVersionUID = 1L;

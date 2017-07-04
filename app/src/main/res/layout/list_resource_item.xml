@@ -26,8 +26,8 @@
                 android:id="@+id/list_item_profilePic"
                 android:layout_width="@dimen/feed_item_profile_pic"
                 android:layout_height="@dimen/feed_item_profile_pic"
-                android:src="@drawable/beforeafter"
-                android:clickable="true"/>
+                android:clickable="true"
+                android:src="@drawable/beforeafter" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -44,18 +44,122 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
-                        android:src="@drawable/human_male"  />
+                        android:src="@drawable/human_male" />
 
                     <TextView
                         android:id="@+id/list_item_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/list_item_gender"
-                        android:paddingTop="4dp"
                         android:paddingBottom="4dp"
+                        android:paddingTop="4dp"
                         android:text="Vivek Naik"
                         android:textSize="@dimen/text_size_normal" />
+
+                    <TextView
+                        android:id="@+id/list_item_separater"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/list_item_name"
+                        android:paddingBottom="4dp"
+                        android:paddingTop="4dp"
+                        android:text=","
+                        android:textSize="@dimen/text_size_normal" />
+
+                    <TextView
+                        android:id="@+id/textview_age"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/list_item_separater"
+                        android:paddingBottom="4dp"
+                        android:paddingTop="4dp"
+                        android:text="12"
+                        android:textSize="@dimen/text_size_normal" />
                 </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/textview_placeofwork"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="4dp"
+                    android:text="Sec 45,Noida"
+                    android:textSize="@dimen/text_size_normal" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingBottom="4dp"
+                        android:paddingTop="4dp"
+                        android:text="Experience(in yrs): "
+                        android:textSize="@dimen/text_size_normal" />
+
+                    <TextView
+                        android:id="@+id/textview_experience"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingBottom="4dp"
+                        android:paddingTop="4dp"
+                        android:text="4"
+                        android:textSize="@dimen/text_size_normal" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="4dp"
+                        android:paddingTop="4dp"
+                        android:text="Adhar: "
+                        android:textSize="@dimen/text_size_normal" />
+
+                    <TextView
+                        android:id="@+id/textview_adhar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:paddingBottom="4dp"
+                        android:paddingTop="4dp"
+                        android:text="Yes"
+                        android:textSize="@dimen/text_size_normal" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="4dp"
+                        android:paddingTop="4dp"
+                        android:text="Police Verification: "
+                        android:textSize="@dimen/text_size_normal" />
+
+                    <TextView
+                        android:id="@+id/textview_policeverification"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:paddingBottom="4dp"
+                        android:paddingTop="4dp"
+                        android:text="Yes"
+                        android:textSize="@dimen/text_size_normal" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -68,8 +172,8 @@
                         android:layout_width="40dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
-                        android:gravity="center"
                         android:background="@drawable/bg_rectangle_solid_yellow_corner"
+                        android:gravity="center"
                         android:padding="8dp"
                         android:text="4"
                         android:textColor="@color/white"
@@ -79,9 +183,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textColor="@color/black"
                         android:padding="4dp"
                         android:text="Click to book"
+                        android:textColor="@color/black"
                         android:textSize="@dimen/text_size_normal" />
                 </LinearLayout>
             </LinearLayout>
