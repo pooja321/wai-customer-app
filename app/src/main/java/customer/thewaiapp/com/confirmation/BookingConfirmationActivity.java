@@ -33,6 +33,7 @@ public class BookingConfirmationActivity extends AppCompatActivity implements Wa
         setContentView(R.layout.activity_booking_confirmation);
         Log.v("wai", "confirmation oncreate");
         mtoolbar = (Toolbar) findViewById(R.id.booking_toolbar);
+
         mtoolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(mtoolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

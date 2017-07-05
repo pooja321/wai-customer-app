@@ -119,6 +119,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1052443407518-vkut3l918g1ng0ftg3tvtt7605s3et2c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "customer.thewaiapp.com",
+            "certificate_hash": "377e9dfe2648bcbb4235987d790831baca59961f"
+          }
+        },
+        {
           "client_id": "1052443407518-ein46abk95b1fofl62g0q6d9b9kskfqd.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

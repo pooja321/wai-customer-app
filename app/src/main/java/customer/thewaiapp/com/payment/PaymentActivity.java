@@ -107,7 +107,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mtoolbar = (Toolbar) findViewById(R.id.payment_toolbar);
         mtoolbar.setTitleTextColor(getResources().getColor(R.color.white));
         setSupportActionBar(mtoolbar);
-        setTitle("Select payment Method");
+        setTitle("Summary of booking");
 
         mRadioGroupPayment = (RadioGroup) findViewById(R.id.payment_radiogroup);
         mRadioButtonCOD = (RadioButton) findViewById(R.id.payment_rb_mode_COD);
@@ -217,7 +217,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.payment_bt_submit:
                 showProgressDialog();
                 saveOrder();
-                SendConfirmationMessage(ResourceMobileNumber,user.getMobileNumber());
+//                SendConfirmationMessage(ResourceMobileNumber,user.getMobileNumber());
         }
     }
 

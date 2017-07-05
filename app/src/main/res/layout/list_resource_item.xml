@@ -75,7 +75,6 @@
                         android:layout_toRightOf="@+id/list_item_separater"
                         android:paddingBottom="4dp"
                         android:paddingTop="4dp"
-                        android:text="12"
                         android:textSize="@dimen/text_size_normal" />
                 </RelativeLayout>
 
@@ -85,7 +84,6 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="4dp"
                     android:paddingTop="4dp"
-                    android:text="Sec 45,Noida"
                     android:textSize="@dimen/text_size_normal" />
 
                 <LinearLayout
@@ -110,7 +108,6 @@
                         android:layout_weight="1"
                         android:paddingBottom="4dp"
                         android:paddingTop="4dp"
-                        android:text="4"
                         android:textSize="@dimen/text_size_normal" />
                 </LinearLayout>
 
@@ -134,7 +131,6 @@
                         android:layout_marginLeft="5dp"
                         android:paddingBottom="4dp"
                         android:paddingTop="4dp"
-                        android:text="Yes"
                         android:textSize="@dimen/text_size_normal" />
                 </LinearLayout>
                 <LinearLayout
@@ -157,7 +153,6 @@
                         android:layout_marginLeft="5dp"
                         android:paddingBottom="4dp"
                         android:paddingTop="4dp"
-                        android:text="Yes"
                         android:textSize="@dimen/text_size_normal" />
                 </LinearLayout>
 

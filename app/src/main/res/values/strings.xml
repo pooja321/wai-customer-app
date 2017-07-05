@@ -14,7 +14,7 @@
 
     <!-- Activity Titles  -->
     <string name="title_activity_create_account">Create Account</string>
-    <string name="confirm_booking_activity_title">Booking Details</string>
+    <string name="confirm_booking_activity_title">Approximate Bill calculator</string>
     <string name="label_order_confirm">Order Confirmed</string>
     <string name="label_add_address">Add Address</string>
     <string name="label_select_address">Select Address</string>
