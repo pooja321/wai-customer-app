@@ -165,7 +165,7 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
 
     private void calculateAmount() {
         int tempAmount = mBaseAmount + mRoomsAmount + mWashroomsAmount + mUtensilBucketAmount;
-        mServiceTaxAmount = tempAmount * .125;
+        mServiceTaxAmount = 0;
         mTextViewServiceTaxAmount.setText(String.valueOf(mServiceTaxAmount));
         mTotalAmount = (mServiceTaxAmount + tempAmount);
         mTextViewTotalAmount.setText(String.valueOf(mTotalAmount));
@@ -340,7 +340,7 @@ public class CleanBookingConfirmationFragment extends Fragment implements View.O
         float totalDiscount = (mBaseAmount + mRoomsAmount + mWashroomsAmount + mUtensilBucketAmount) * coupon.getDiscount() / 100;
         float discountedAmount = tempAmount - totalDiscount;
 
-        mServiceTaxAmount = discountedAmount * .125;
+        mServiceTaxAmount = 0;
         mTextViewServiceTaxAmount.setText(String.valueOf(mServiceTaxAmount));
         mTotalAmount = (mServiceTaxAmount + discountedAmount);
         mTextViewTotalAmount.setText(String.valueOf(mTotalAmount));

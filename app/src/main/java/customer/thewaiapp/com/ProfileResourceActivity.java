@@ -25,7 +25,8 @@ public class ProfileResourceActivity extends AppCompatActivity {
 
 
     String name,key,callingFragment,Resource_id;
-    TextView TextviewResourceName1,mTextviewResourceNameToolbar;
+    TextView TextviewResourceName1,mTextviewResourceNameToolbar,mTextviewDescription,mTextviewAge,mTextviewExperience,
+            mTextviewAdharNumber,mTextviewPoliceverify,mTextviewMaritalStatus,mTextviewChildren;
     Button btnbook;
     private Realm mRealm;
     private DatabaseReference mDatabase;
@@ -48,6 +49,13 @@ public class ProfileResourceActivity extends AppCompatActivity {
         callingFragment = getIntent().getStringExtra("mCallingFragment");
         TextviewResourceName1 = (TextView) findViewById(R.id.profile_tv_upperusername);
         mTextviewResourceNameToolbar = (TextView) findViewById(R.id.profile_resource_resourcename);
+        mTextviewDescription = (TextView) findViewById(R.id.profileresource_textview_description);
+        mTextviewAge = (TextView) findViewById(R.id.profileresource_textview_age);
+        mTextviewExperience = (TextView) findViewById(R.id.profileresource_textview_experience);
+        mTextviewAdharNumber = (TextView) findViewById(R.id.profileresource_textview_adharnumber);
+        mTextviewChildren = (TextView) findViewById(R.id.profileresource_textview_children);
+        mTextviewMaritalStatus = (TextView) findViewById(R.id.profileresource_textview_maritalstatus);
+        mTextviewPoliceverify = (TextView) findViewById(R.id.profileresource_textview_policeverify);
         btnbook =(Button) findViewById(R.id.profile_btn_book);
         TextviewResourceName1.setText(name);
 
@@ -55,6 +63,13 @@ public class ProfileResourceActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 resource = dataSnapshot.getValue(Resource.class);
+                mTextviewExperience.setText(String.valueOf(resource.getExperience()));
+                mTextviewPoliceverify.setText(resource.getPoliceverification());
+                mTextviewMaritalStatus.setText(resource.getMaritalstatus());
+                mTextviewChildren.setText(String.valueOf(resource.getChildren()));
+                mTextviewAdharNumber.setText(String.valueOf(resource.getAdharnumber()));
+                mTextviewDescription.setText(resource.getDescription());
+                mTextviewAge.setText(String.valueOf(resource.getAge()));
             }
 
             @Override
@@ -65,7 +80,7 @@ public class ProfileResourceActivity extends AppCompatActivity {
         btnbook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.v("Profile123","Resource_id: "+resource.getMobileNumber());
+
                 Intent intent = new Intent(ProfileResourceActivity.this, BookingConfirmationActivity.class);
                 intent.putExtra("resourceKey",key);
                 intent.putExtra("resourceName",name);
