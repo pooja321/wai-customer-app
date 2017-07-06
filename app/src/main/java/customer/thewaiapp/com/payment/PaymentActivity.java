@@ -34,7 +34,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -217,8 +222,97 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.payment_bt_submit:
                 showProgressDialog();
                 saveOrder();
+                sendMessageResource(ResourceMobileNumber);
+                sendMessageCustomer(user.getMobileNumber());
 //                SendConfirmationMessage(ResourceMobileNumber,user.getMobileNumber());
         }
+    }
+
+    private void sendMessageCustomer(long mobileNumber) {
+        String authkey = "163975ALgKqHIMr1K595ce022";
+        //Multiple mobiles numbers separated by comma
+        String mobiles = ""+mobileNumber+"";
+        //Sender ID,While using route4 sender id should be 6 characters long.
+        String senderId = "102234";
+        //Your message to send, Add URL encoding here.
+        String message = "You have been booked by "+String.format("%s %s",user.getFirstName(),user.getLastName())+".Contact at: "+user.getMobileNumber()+"";
+        //define route
+        String route="default";
+        String mainUrl="https://control.msg91.com/api/sendhttp.php?";
+        URLConnection myURLConnection=null;
+        URL myURL=null;
+        BufferedReader reader=null;
+
+        String encoded_message= URLEncoder.encode(message);
+
+        StringBuilder sbPostData= new StringBuilder(mainUrl);
+        sbPostData.append("authkey="+authkey);
+        sbPostData.append("&mobiles="+mobiles);
+        sbPostData.append("&message="+encoded_message);
+        sbPostData.append("&route="+route);
+        sbPostData.append("&sender="+senderId);
+
+        mainUrl = sbPostData.toString();
+        try
+        {
+            myURL = new URL(mainUrl);
+            myURLConnection = myURL.openConnection();
+            myURLConnection.connect();
+            reader= new BufferedReader(new InputStreamReader(myURLConnection.getInputStream()));
+            String response;
+            while ((response = reader.readLine()) != null)
+                System.out.println(response);
+
+            reader.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendMessageResource(Long resourceMobileNumber) {
+        String authkey = "163975ALgKqHIMr1K595ce022";
+        //Multiple mobiles numbers separated by comma
+        String mobiles = ""+resourceMobileNumber+"";
+        //Sender ID,While using route4 sender id should be 6 characters long.
+        String senderId = "102234";
+        //Your message to send, Add URL encoding here.
+        String message = "You have been booked by "+String.format("%s %s",user.getFirstName(),user.getLastName())+".Contact at: "+user.getMobileNumber()+"";
+        //define route
+        String route="default";
+        String mainUrl="https://control.msg91.com/api/sendhttp.php?";
+        URLConnection myURLConnection=null;
+        URL myURL=null;
+        BufferedReader reader=null;
+
+        String encoded_message= URLEncoder.encode(message);
+
+        StringBuilder sbPostData= new StringBuilder(mainUrl);
+        sbPostData.append("authkey="+authkey);
+        sbPostData.append("&mobiles="+mobiles);
+        sbPostData.append("&message="+encoded_message);
+        sbPostData.append("&route="+route);
+        sbPostData.append("&sender="+senderId);
+
+        mainUrl = sbPostData.toString();
+        try
+        {
+            myURL = new URL(mainUrl);
+            myURLConnection = myURL.openConnection();
+            myURLConnection.connect();
+            reader= new BufferedReader(new InputStreamReader(myURLConnection.getInputStream()));
+            String response;
+            while ((response = reader.readLine()) != null)
+                System.out.println(response);
+
+            reader.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     private void SendDetailsMessageUser(long mobileNumber) {
