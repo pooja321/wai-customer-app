@@ -229,13 +229,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void sendMessageCustomer(long mobileNumber) {
+        Log.v("Msg123","Message: "+mobileNumber);
         String authkey = "163975ALgKqHIMr1K595ce022";
         //Multiple mobiles numbers separated by comma
-        String mobiles = ""+mobileNumber+"";
+        String mobiles = String.valueOf(mobileNumber);
         //Sender ID,While using route4 sender id should be 6 characters long.
         String senderId = "102234";
         //Your message to send, Add URL encoding here.
-        String message = "You have been booked by "+String.format("%s %s",user.getFirstName(),user.getLastName())+".Contact at: "+user.getMobileNumber()+"";
+        String message = "Your have succesfully booked "+ResourceName+" for "+ResourceType+".Contact at: "+ResourceMobileNumber+"";
         //define route
         String route="default";
         String mainUrl="https://control.msg91.com/api/sendhttp.php?";
@@ -272,9 +273,10 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void sendMessageResource(Long resourceMobileNumber) {
+        Log.v("Msg123","Message: "+resourceMobileNumber);
         String authkey = "163975ALgKqHIMr1K595ce022";
         //Multiple mobiles numbers separated by comma
-        String mobiles = ""+resourceMobileNumber+"";
+        String mobiles = String.valueOf(resourceMobileNumber);
         //Sender ID,While using route4 sender id should be 6 characters long.
         String senderId = "102234";
         //Your message to send, Add URL encoding here.
