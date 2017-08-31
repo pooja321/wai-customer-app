@@ -22,12 +22,28 @@
             android:paddingLeft="@dimen/feed_item_padding_left_right"
             android:paddingRight="@dimen/feed_item_padding_left_right">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/list_item_profilePic"
-                android:layout_width="@dimen/feed_item_profile_pic"
-                android:layout_height="@dimen/feed_item_profile_pic"
-                android:clickable="true"
-                android:src="@drawable/beforeafter" />
+            <RelativeLayout
+                android:id="@+id/profile_edit_civ_user_notification_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/list_item_profilePic"
+                    android:layout_width="@dimen/feed_item_profile_pic"
+                    android:layout_height="@dimen/feed_item_profile_pic"
+                    android:clickable="true"
+                    android:src="@drawable/beforeafter"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
+                <ProgressBar
+                    android:visibility="gone"
+                    android:id="@+id/Profile_Progressbar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -133,6 +149,7 @@
                         android:paddingTop="4dp"
                         android:textSize="@dimen/text_size_normal" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -88,11 +88,13 @@
             android:text="@string/button_create_account" />
     </LinearLayout>
     <com.google.android.gms.common.SignInButton
+        android:visibility="gone"
         android:id="@+id/login_btn_googlesignin"
         android:paddingTop="8dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"></com.google.android.gms.common.SignInButton>
     <com.facebook.login.widget.LoginButton
+        android:visibility="gone"
         android:id="@+id/login_btn_facebooksignin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -1,32 +1,37 @@
 package customer.thewaiapp.com.Model;
 
-import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
 
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
+import io.realm.annotations.PrimaryKey;
 
 @IgnoreExtraProperties
-public class Resource extends RealmObject implements Serializable {
-
-    private String firstName, lastName, Email, gender,status,adhar,policeverification,maritalstatus,description,placeofbirth,placeofwork;
+public class Resource extends RealmObject implements Serializable{
+    @PrimaryKey
+    private String id;
+    private String type, firstName, lastName, Email, gender,adhar,policeverification,maritalstatus,description,placeofbirth,placeofwork;
     private long mobileNumber,adharnumber;
     private int rating,age,experience,children;
-    private static final long serialVersionUID = 1L;
+
+
+    @Ignore
+    private HashMap<String, Object> timestampJoined;
 
     public Resource()
     {
 
     }
-    public Resource(String firstName, String lastName, String email, String gender, String status, String adhar, String policeverification, String maritalstatus, String description, String placeofbirth, String placeofwork, long mobileNumber, long adharnumber, int rating, int age, int experience, int children) {
+    public Resource(String id, String type, String firstName, String lastName, String email, String gender, String adhar, String policeverification, String maritalstatus, String description, String placeofbirth, String placeofwork, long mobileNumber, long adharnumber, int rating, int age, int experience, int children, HashMap<String, Object> timestampJoined) {
+        this.id = id;
+        this.type = type;
         this.firstName = firstName;
         this.lastName = lastName;
         Email = email;
         this.gender = gender;
-        this.status = status;
         this.adhar = adhar;
         this.policeverification = policeverification;
         this.maritalstatus = maritalstatus;
@@ -39,30 +44,23 @@ public class Resource extends RealmObject implements Serializable {
         this.age = age;
         this.experience = experience;
         this.children = children;
+        this.timestampJoined = timestampJoined;
     }
 
-    @Exclude
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("fname", getFirstName());
-        result.put("lname", getLastName());
-        result.put("email", getEmail());
-        result.put("gender", getGender());
-        result.put("adhar", getAdhar());
-        result.put("policeverification", getPoliceverification());
-        result.put("maritalstatus", getMaritalstatus());
-        result.put("description", getDescription());
-        result.put("placeofbirth", getPlaceofbirth());
-        result.put("placeofwork", getPlaceofwork());
-        result.put("mobileNumber", getMobileNumber());
-        result.put("adharnumber", getAdharnumber());
-        result.put("rating", getRating());
-        result.put("age", getAge());
-        result.put("experience", getExperience());
-        result.put("children", getChildren());
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
-        return result;
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getFirstName() {
@@ -95,14 +93,6 @@ public class Resource extends RealmObject implements Serializable {
 
     public void setGender(String gender) {
         this.gender = gender;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getAdhar() {
@@ -201,7 +191,11 @@ public class Resource extends RealmObject implements Serializable {
         this.children = children;
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+    public HashMap<String, Object> getTimestampJoined() {
+        return timestampJoined;
+    }
+
+    public void setTimestampJoined(HashMap<String, Object> timestampJoined) {
+        this.timestampJoined = timestampJoined;
     }
 }

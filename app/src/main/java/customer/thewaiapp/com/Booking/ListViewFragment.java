@@ -87,6 +87,7 @@ public abstract class ListViewFragment extends Fragment {
             protected void populateViewHolder(ResourceViewHolder viewHolder, final ResourceOnline model, final int position) {
                 mCallingFragment = getCallingFragmentName();
                 CircleImageView cr = (CircleImageView) viewHolder.itemView.findViewById(R.id.list_item_profilePic);
+                cr.setImageResource(R.drawable.blue);
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -96,9 +97,6 @@ public abstract class ListViewFragment extends Fragment {
                                 .putExtra("mCallingFragment", mCallingFragment)
                                 .putExtra("resourceId",model.getResourceId()));
 
-//                        OnResourceSelectedInterface listener = (OnResourceSelectedInterface) getActivity();
-//                        mCallingFragment = getCallingFragmentName();
-//                        listener.onListResourceSelected(model.getResourceId(), model.getName(), mCallingFragment);
                     }
                 });
                 viewHolder.bindView(model);

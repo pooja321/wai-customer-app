@@ -317,15 +317,15 @@
                         android:text="0" />
 
                     <TextView
+                        android:id="@+id/textView"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:padding="4dp"
-                        android:text="Distance(If more than 2 km)"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:id="@+id/textView" />
+                        android:layout_alignParentTop="true"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="Distance(If more than 2 km)" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -359,29 +359,29 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp">
+                    android:layout_height="40dp"
+                    android:visibility="gone">
 
                     <Button
                         android:id="@+id/clean_booking_btn_applycode"
+                        style="@style/buttonStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Apply"
-                        android:layout_marginTop="8dp"
-                        style="@style/buttonStyle"
                         android:layout_alignParentRight="true"
+                        android:layout_marginTop="8dp"
                         android:gravity="center"
-                       />
+                        android:text="Apply" />
 
                     <EditText
                         android:id="@+id/clean_booking_et_promocode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="Have a promocode?"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:textSize="16sp"
-                        android:inputType="textCapCharacters"/>
+                        android:layout_alignParentTop="true"
+                        android:hint="Have a promocode?"
+                        android:inputType="textCapCharacters"
+                        android:textSize="16sp" />
 
 
                 </RelativeLayout>
@@ -398,15 +398,24 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:padding="5dp"
+                android:text="(The final price can be negotiated with the resource)"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
             <Button
                 android:id="@+id/cook_booking_btn_weightchart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Weight Chart"
                 android:layout_gravity="right"
                 android:layout_marginRight="10dp"
-                android:textColor="@color/colorAccent"
-                android:background="#0000"/>
+                android:background="#0000"
+                android:text="Weight Chart"
+                android:textColor="@color/colorAccent" />
 
             <CheckBox
                 android:id="@+id/clean_booking_cb_terms"

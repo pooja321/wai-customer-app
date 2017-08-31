@@ -1,10 +1,15 @@
 package customer.thewaiapp.com.payment;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
@@ -77,13 +82,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     RadioButton mRadioButtonCOD, mRadioButtonPaytm, mRadioButtonPayu;
     Button mButtonSubmit;
     private ProgressDialog mProgressDialog;
-    TextView mTextviewTotal,mmTextviewBaseamount,mTextviewServicetax,mTextviewTotalpayable,mTextviewAddressname,mTextviewHousenum,mTextviewAreaname,mTextviewLandmark,mTextviewCity,mTextviewState,mTextviewPincode;
+    TextView mTextviewTotal, mmTextviewBaseamount, mTextviewServicetax, mTextviewTotalpayable, mTextviewAddressname, mTextviewHousenum, mTextviewAreaname, mTextviewLandmark, mTextviewCity, mTextviewState, mTextviewPincode;
     Long ResourceMobileNumber;
-    String ResourceName,ResourceType;
+    String ResourceName, ResourceType;
     User user;
     HttpClient httpclient = new DefaultHttpClient();
-    private static final String ACCOUNT_SID = "ACa5ff1aeb91ffc0f7247b6651680df2f2" ;
+    private static final String ACCOUNT_SID = "ACa5ff1aeb91ffc0f7247b6651680df2f2";
     private static final String AUTH_TOKEN = "300b72a74d60918828f99bc423b9e9db";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +101,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         realm = Realm.getDefaultInstance();
         UID = Utilities.getUid();
         mOrder = (Order) getIntent().getSerializableExtra("order");
-        ResourceMobileNumber = getIntent().getLongExtra("ResourceMobileNumber",0);
+        ResourceMobileNumber = getIntent().getLongExtra("ResourceMobileNumber", 0);
         ResourceName = getIntent().getStringExtra("ResourceName");
         ResourceType = getIntent().getStringExtra("ResourceType");
         Log.v("wai", "Order id: " + mOrder.getOrderId());
@@ -119,17 +125,17 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
         mRadioButtonPaytm = (RadioButton) findViewById(R.id.payment_rb_mode_paytm);
         mRadioButtonPayu = (RadioButton) findViewById(R.id.payment_rb_mode_payu);
         mButtonSubmit = (Button) findViewById(R.id.payment_bt_submit);
-        mTextviewTotal= (TextView) findViewById(R.id.paymenttotal);
-        mmTextviewBaseamount= (TextView) findViewById(R.id.paymentbaseamount);
-        mTextviewServicetax= (TextView) findViewById(R.id.paymentservicetax);
+        mTextviewTotal = (TextView) findViewById(R.id.paymenttotal);
+        mmTextviewBaseamount = (TextView) findViewById(R.id.paymentbaseamount);
+        mTextviewServicetax = (TextView) findViewById(R.id.paymentservicetax);
         mTextviewTotalpayable = (TextView) findViewById(R.id.paymenttotalPayable);
-        mTextviewAddressname= (TextView) findViewById(R.id.payment_addressname);
-        mTextviewHousenum= (TextView) findViewById(R.id.payment_houseno);
-        mTextviewAreaname= (TextView) findViewById(R.id.payment_item_areaname);
-        mTextviewLandmark= (TextView) findViewById(R.id.payment_item_landmark);
-        mTextviewCity= (TextView) findViewById(R.id.payment_item_cityname);
-        mTextviewState= (TextView) findViewById(R.id.payment_item_statename);
-        mTextviewPincode= (TextView) findViewById(R.id.payment_item_pincode);
+        mTextviewAddressname = (TextView) findViewById(R.id.payment_addressname);
+        mTextviewHousenum = (TextView) findViewById(R.id.payment_houseno);
+        mTextviewAreaname = (TextView) findViewById(R.id.payment_item_areaname);
+        mTextviewLandmark = (TextView) findViewById(R.id.payment_item_landmark);
+        mTextviewCity = (TextView) findViewById(R.id.payment_item_cityname);
+        mTextviewState = (TextView) findViewById(R.id.payment_item_statename);
+        mTextviewPincode = (TextView) findViewById(R.id.payment_item_pincode);
         mButtonSubmit.setOnClickListener(this);
         String UserEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         RealmResults<User> UserResults = realm.where(User.class).equalTo("Email", UserEmail).findAll();
@@ -149,7 +155,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         int baseamount = cleaningOrderAmountValues1.getBaseAmount();
                         double servicetax = cleaningOrderAmountValues1.getServiceTaxAmount();
                         mTextviewTotalpayable.setText(String.valueOf(totalamount));
-                        mTextviewTotal.setText(String.valueOf(roomsamount+washroomamount+utensilamount));
+                        mTextviewTotal.setText(String.valueOf(roomsamount + washroomamount + utensilamount));
                         mTextviewServicetax.setText(String.valueOf(servicetax));
                         mmTextviewBaseamount.setText(String.valueOf(baseamount));
                     }
@@ -168,8 +174,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     CookingOrderAmountValues cookingOrderAmountValues1 = cookingOrderAmountValues.get(0);
                     if (cookingOrderAmountValues != null) {
                         int membersamount = cookingOrderAmountValues1.getMembersAmount();
-                        int maincourseamount=cookingOrderAmountValues1.getMainCourseAmount();
-                        int total = membersamount+maincourseamount;
+                        int maincourseamount = cookingOrderAmountValues1.getMainCourseAmount();
+                        int total = membersamount + maincourseamount;
                         double totalamount = cookingOrderAmountValues1.getTotalAmount();
                         int baseamount = cookingOrderAmountValues1.getBaseAmount();
                         double servicetax = cookingOrderAmountValues1.getServiceTaxAmount();
@@ -222,6 +228,34 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.payment_bt_submit:
                 showProgressDialog();
                 saveOrder();
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+                        PaymentActivity.this);
+                Notification notification = mBuilder.setSmallIcon(R.mipmap.ic_launcher).setWhen(0)
+                        .setAutoCancel(true)
+                        .setContentTitle("WAI")
+                        .setContentText(""+ResourceName + " for " + ResourceType +" booked successfully. Contact at: " + ResourceMobileNumber +"")
+                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                        .build();
+
+                NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(0, notification);
+
+//                NotificationCompat.Builder builder = new NotificationCompat.Builder(PaymentActivity.this);
+//                Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//                Notification notification = builder
+//                        .setContentTitle("WAI")
+//                        .setTicker("New Alert!")
+//                        .setSmallIcon(R.mipmap.ic_launcher)
+//                        .setStyle(new NotificationCompat.BigTextStyle()
+//                                .bigText("Your have succesfully booked " + ResourceName + " for " + ResourceType + ". Contact at: " + ResourceMobileNumber + ""))
+//                        .setAutoCancel(true)
+//                        .setSound(defaultSoundUri)
+//                        .build();
+//
+//                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+//                int Notifid = (int) System.currentTimeMillis();
+//                notificationManager.notify(Notifid, notification);
+
                 sendMessageResource(ResourceMobileNumber);
                 sendMessageCustomer(user.getMobileNumber());
 //                SendConfirmationMessage(ResourceMobileNumber,user.getMobileNumber());
@@ -229,89 +263,83 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void sendMessageCustomer(long mobileNumber) {
-        Log.v("Msg123","Message: "+mobileNumber);
+        Log.v("Msg123", "Message: " + mobileNumber);
         String authkey = "163975ALgKqHIMr1K595ce022";
         //Multiple mobiles numbers separated by comma
         String mobiles = String.valueOf(mobileNumber);
         //Sender ID,While using route4 sender id should be 6 characters long.
-        String senderId = "102234";
+        String senderId = "WaiApp";
         //Your message to send, Add URL encoding here.
-        String message = "Your have succesfully booked "+ResourceName+" for "+ResourceType+".Contact at: "+ResourceMobileNumber+"";
+        String message = "Your have succesfully booked " + ResourceName + " for " + ResourceType + ". Contact at: " + ResourceMobileNumber + "";
         //define route
-        String route="default";
-        String mainUrl="https://control.msg91.com/api/sendhttp.php?";
-        URLConnection myURLConnection=null;
-        URL myURL=null;
-        BufferedReader reader=null;
+        String route = "4";
+        String mainUrl = "https://control.msg91.com/api/sendhttp.php?";
+        URLConnection myURLConnection = null;
+        URL myURL = null;
+        BufferedReader reader = null;
 
-        String encoded_message= URLEncoder.encode(message);
+        String encoded_message = URLEncoder.encode(message);
 
-        StringBuilder sbPostData= new StringBuilder(mainUrl);
-        sbPostData.append("authkey="+authkey);
-        sbPostData.append("&mobiles="+mobiles);
-        sbPostData.append("&message="+encoded_message);
-        sbPostData.append("&route="+route);
-        sbPostData.append("&sender="+senderId);
+        StringBuilder sbPostData = new StringBuilder(mainUrl);
+        sbPostData.append("authkey=" + authkey);
+        sbPostData.append("&mobiles=" + mobiles);
+        sbPostData.append("&message=" + encoded_message);
+        sbPostData.append("&route=" + route);
+        sbPostData.append("&sender=" + senderId);
 
         mainUrl = sbPostData.toString();
-        try
-        {
+        try {
             myURL = new URL(mainUrl);
             myURLConnection = myURL.openConnection();
             myURLConnection.connect();
-            reader= new BufferedReader(new InputStreamReader(myURLConnection.getInputStream()));
+            reader = new BufferedReader(new InputStreamReader(myURLConnection.getInputStream()));
             String response;
             while ((response = reader.readLine()) != null)
                 System.out.println(response);
 
             reader.close();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void sendMessageResource(Long resourceMobileNumber) {
-        Log.v("Msg123","Message: "+resourceMobileNumber);
+        Log.v("Msg123", "Message: " + resourceMobileNumber);
         String authkey = "163975ALgKqHIMr1K595ce022";
         //Multiple mobiles numbers separated by comma
         String mobiles = String.valueOf(resourceMobileNumber);
         //Sender ID,While using route4 sender id should be 6 characters long.
-        String senderId = "102234";
+        String senderId = "WaiApp";
         //Your message to send, Add URL encoding here.
-        String message = "You have been booked by "+String.format("%s %s",user.getFirstName(),user.getLastName())+".Contact at: "+user.getMobileNumber()+"";
+        String message = "You have been booked by " + String.format("%s %s", user.getFirstName(), user.getLastName()) + ". Contact at: " + user.getMobileNumber() + "";
         //define route
-        String route="default";
-        String mainUrl="https://control.msg91.com/api/sendhttp.php?";
-        URLConnection myURLConnection=null;
-        URL myURL=null;
-        BufferedReader reader=null;
+        String route = "4";
+        String mainUrl = "https://control.msg91.com/api/sendhttp.php?";
+        URLConnection myURLConnection = null;
+        URL myURL = null;
+        BufferedReader reader = null;
 
-        String encoded_message= URLEncoder.encode(message);
+        String encoded_message = URLEncoder.encode(message);
 
-        StringBuilder sbPostData= new StringBuilder(mainUrl);
-        sbPostData.append("authkey="+authkey);
-        sbPostData.append("&mobiles="+mobiles);
-        sbPostData.append("&message="+encoded_message);
-        sbPostData.append("&route="+route);
-        sbPostData.append("&sender="+senderId);
+        StringBuilder sbPostData = new StringBuilder(mainUrl);
+        sbPostData.append("authkey=" + authkey);
+        sbPostData.append("&mobiles=" + mobiles);
+        sbPostData.append("&message=" + encoded_message);
+        sbPostData.append("&route=" + route);
+        sbPostData.append("&sender=" + senderId);
 
         mainUrl = sbPostData.toString();
-        try
-        {
+        try {
             myURL = new URL(mainUrl);
             myURLConnection = myURL.openConnection();
             myURLConnection.connect();
-            reader= new BufferedReader(new InputStreamReader(myURLConnection.getInputStream()));
+            reader = new BufferedReader(new InputStreamReader(myURLConnection.getInputStream()));
             String response;
             while ((response = reader.readLine()) != null)
                 System.out.println(response);
 
             reader.close();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -333,9 +361,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             nameValuePairs.add(new BasicNameValuePair("From",
                     "+14158552534"));
             nameValuePairs.add(new BasicNameValuePair("To",
-                    "+91"+mobileNumber+""));
+                    "+91" + mobileNumber + ""));
             nameValuePairs.add(new BasicNameValuePair("Body",
-                    "Your have succesfully booked "+ResourceName+" for "+ResourceType+".Contact at: "+ResourceMobileNumber+""));
+                    "Your have succesfully booked " + ResourceName + " for " + ResourceType + ".Contact at: " + ResourceMobileNumber + ""));
 
             httppost.setEntity(new UrlEncodedFormEntity(
                     nameValuePairs));
@@ -369,9 +397,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             nameValuePairs2.add(new BasicNameValuePair("From",
                     "+14158552534"));
             nameValuePairs2.add(new BasicNameValuePair("To",
-                    "+91"+mobileNumber+""));
+                    "+91" + mobileNumber + ""));
             nameValuePairs2.add(new BasicNameValuePair("Body",
-                    "You have succesfully booked "+ResourceName+" for "+ResourceType+".Contact at: "+ResourceMobileNumber+""));
+                    "You have succesfully booked " + ResourceName + " for " + ResourceType + ".Contact at: " + ResourceMobileNumber + ""));
 
             httppost.setEntity(new UrlEncodedFormEntity(
                     nameValuePairs2));
@@ -381,9 +409,9 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             nameValuePairs.add(new BasicNameValuePair("From",
                     "+14158552534"));
             nameValuePairs.add(new BasicNameValuePair("To",
-                    "+91"+resourceMobileNumber+""));
+                    "+91" + resourceMobileNumber + ""));
             nameValuePairs.add(new BasicNameValuePair("Body",
-                    "You have been booked by "+String.format("%s %s",user.getFirstName(),user.getLastName())+".Contact at: "+user.getMobileNumber()+""));
+                    "You have been booked by " + String.format("%s %s", user.getFirstName(), user.getLastName()) + ".Contact at: " + user.getMobileNumber() + ""));
 
             httppost.setEntity(new UrlEncodedFormEntity(
                     nameValuePairs));

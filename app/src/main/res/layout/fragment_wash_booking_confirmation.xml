@@ -229,6 +229,7 @@
                     android:text="18.75" />
             </RelativeLayout>
                 <RelativeLayout
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="40dp">
 
@@ -269,7 +270,14 @@
                 android:text="172.5"
                 android:textSize="14sp"
                 android:textStyle="bold" />
-
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:padding="5dp"
+                android:text="(The final price can be negotiated with the resource)"
+                android:textSize="12sp"
+                android:textStyle="bold" />
             <Button
                 android:id="@+id/wash_booking_btn_weightchart"
                 android:layout_width="wrap_content"

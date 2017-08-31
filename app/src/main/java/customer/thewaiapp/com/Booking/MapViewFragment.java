@@ -168,7 +168,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
                     startActivity(new Intent(getActivity(), ProfileResourceActivity.class)
                             .putExtra("resourceName", resourceOnline.getName())
                             .putExtra("mCallingFragment", mJobType)
-                            .putExtra("resourceRate",resourceOnline.getRating())
+                            .putExtra("resourceRate", resourceOnline.getRating())
                             .putExtra("resourceId", resourceOnline.getResourceId()));
                     mProgressDialog.dismiss();
                     Toast.makeText(getActivity(), resourceOnline.getName(), Toast.LENGTH_SHORT).show();
@@ -560,11 +560,11 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
     public void onInfoWindowClick(Marker marker) {
         String id = marker.getId();
         ResourceOnline resourceOnline = mMapResourceList.get(id);
-        Log.v("List123","JobType: "+mJobType);
+        Log.v("List123", "JobType: " + mJobType);
         startActivity(new Intent(getActivity(), ProfileResourceActivity.class)
-                .putExtra("resourceName",resourceOnline.getName())
-                .putExtra("mCallingFragment",mJobType)
-                .putExtra("resourceId",resourceOnline.getResourceId()));
+                .putExtra("resourceName", resourceOnline.getName())
+                .putExtra("mCallingFragment", mJobType)
+                .putExtra("resourceId", resourceOnline.getResourceId()));
         Toast.makeText(getActivity(), resourceOnline.getName(), Toast.LENGTH_SHORT).show();
     }
 
@@ -598,7 +598,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
 
         @Override
         public View getInfoWindow(Marker marker) {
-            Log.v("wai","getInfoWindow: " + marker.getId());
+            Log.v("wai", "getInfoWindow: " + marker.getId());
             if (!(marker.getId().equals("m0"))) {
                 View view = getActivity().getLayoutInflater().inflate(R.layout.list_resource_item, null);
                 render(marker, view);
@@ -608,7 +608,7 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
         }
 
         private void render(Marker marker, View view) {
-            TextView mTextViewName, mTextViewResourceRating,mTextviewAge,mTextviewAreaofwork,mTextviewExperience,mTextviewAdhar,mTextviewPoliceVerification;
+            TextView mTextViewName, mTextViewResourceRating, mTextviewAge, mTextviewAreaofwork, mTextviewExperience, mTextviewAdhar, mTextviewPoliceVerification;
             ImageView mImageViewGenderIcon;
             CircleImageView mImageViewResourcePic;
             Uri profilePicUri = null;
@@ -633,51 +633,46 @@ public abstract class MapViewFragment extends Fragment implements OnMapReadyCall
             String id = marker.getId();
             Log.v("wai", "render id: " + id);
             ResourceOnline resource = mMapResourceList.get(id);
-
-            String _fullName = resource.getName();
-            Log.v("Map123","Resource: "+resource.getAge());
-            if (resource.getPicture() != null) {
-                profilePicUri = Uri.parse(resource.getPicture());
+            if (resource != null) {
+                String _fullName = resource.getName();
+                Log.v("Map123", "Resource: " + resource.getAge());
+                if (resource.getPicture() != null) {
+                    profilePicUri = Uri.parse(resource.getPicture());
+                    Glide.with(view.getContext()).load(profilePicUri).placeholder(R.drawable.beforeafter).into(mImageViewResourcePic);
+                } else {
+                    Glide.with(view.getContext()).load(R.drawable.beforeafter).into(mImageViewResourcePic);
+                }
+                mTextViewName.setText(_fullName);
+                if (resource.getAge() != 0) {
+                    mTextviewAge.setText(String.valueOf(resource.getAge()));
+                }
+                if (resource.getPlaceofwork() != null) {
+                    mTextviewAreaofwork.setText(resource.getPlaceofwork());
+                }
+                if (resource.getExperience() != 0) {
+                    mTextviewExperience.setText(String.valueOf(resource.getExperience()));
+                }
+                if (resource.getAdhar() != null) {
+                    mTextviewAdhar.setText(resource.getAdhar());
+                }
+                if (resource.getPolice_verification() != null) {
+                    mTextviewPoliceVerification.setText(resource.getPolice_verification());
+                }
+                mTextViewResourceRating.setText(String.valueOf(resource.getRating()));
                 Glide.with(view.getContext()).load(profilePicUri).placeholder(R.drawable.beforeafter).into(mImageViewResourcePic);
-            } else {
-                Glide.with(view.getContext()).load(R.drawable.beforeafter).into(mImageViewResourcePic);
-            }
-            mTextViewName.setText(_fullName);
-            if (resource.getAge()!=0)
-            {
-                mTextviewAge.setText(String.valueOf(resource.getAge()));
-            }
-            if (resource.getPlaceofwork()!=null)
-            {
-                mTextviewAreaofwork.setText(resource.getPlaceofwork());
-            }
-            if (resource.getExperience()!=0)
-            {
-                mTextviewExperience.setText(String.valueOf(resource.getExperience()));
-            }
-            if (resource.getAdhar()!=null)
-            {
-                mTextviewAdhar.setText(resource.getAdhar());
-            }
-            if (resource.getPolice_verification()!=null)
-            {
-                mTextviewPoliceVerification.setText(resource.getPolice_verification());
-            }
-            mTextViewResourceRating.setText(String.valueOf(resource.getRating()));
-            Glide.with(view.getContext()).load(profilePicUri).placeholder(R.drawable.beforeafter).into(mImageViewResourcePic);
-            switch (resource.getGender()) {
-                case ("Male"): {
-                    mImageViewGenderIcon.setImageResource(R.drawable.human_male);
-                    mImageViewGenderIcon.setColorFilter(Color.rgb(33, 150, 243));
-                    break;
-                }
-                case ("Female"): {
-                    mImageViewGenderIcon.setImageResource(R.drawable.human_female);
-                    mImageViewGenderIcon.setColorFilter(Color.rgb(233, 30, 99));
-                    break;
+                switch (resource.getGender()) {
+                    case ("Male"): {
+                        mImageViewGenderIcon.setImageResource(R.drawable.human_male);
+                        mImageViewGenderIcon.setColorFilter(Color.rgb(33, 150, 243));
+                        break;
+                    }
+                    case ("Female"): {
+                        mImageViewGenderIcon.setImageResource(R.drawable.human_female);
+                        mImageViewGenderIcon.setColorFilter(Color.rgb(233, 30, 99));
+                        break;
+                    }
                 }
             }
-
         }
 
         @Override
