@@ -1,16 +1,18 @@
 package customer.thewaiapp.com.payment;
 
-import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
@@ -228,310 +230,324 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.payment_bt_submit:
                 showProgressDialog();
                 saveOrder();
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-                        PaymentActivity.this);
-                Notification notification = mBuilder.setSmallIcon(R.mipmap.ic_launcher).setWhen(0)
-                        .setAutoCancel(true)
-                        .setContentTitle("WAI")
-                        .setContentText(""+ResourceName + " for " + ResourceType +" booked successfully. Contact at: " + ResourceMobileNumber +"")
-                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                        .build();
-
-                NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.notify(0, notification);
-
-//                NotificationCompat.Builder builder = new NotificationCompat.Builder(PaymentActivity.this);
-//                Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//                Notification notification = builder
-//                        .setContentTitle("WAI")
-//                        .setTicker("New Alert!")
-//                        .setSmallIcon(R.mipmap.ic_launcher)
-//                        .setStyle(new NotificationCompat.BigTextStyle()
-//                                .bigText("Your have succesfully booked " + ResourceName + " for " + ResourceType + ". Contact at: " + ResourceMobileNumber + ""))
-//                        .setAutoCancel(true)
-//                        .setSound(defaultSoundUri)
-//                        .build();
-//
-//                NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-//                int Notifid = (int) System.currentTimeMillis();
-//                notificationManager.notify(Notifid, notification);
-
+                createNotif();
                 sendMessageResource(ResourceMobileNumber);
                 sendMessageCustomer(user.getMobileNumber());
 //                SendConfirmationMessage(ResourceMobileNumber,user.getMobileNumber());
         }
     }
 
-    private void sendMessageCustomer(long mobileNumber) {
-        Log.v("Msg123", "Message: " + mobileNumber);
-        String authkey = "163975ALgKqHIMr1K595ce022";
-        //Multiple mobiles numbers separated by comma
-        String mobiles = String.valueOf(mobileNumber);
-        //Sender ID,While using route4 sender id should be 6 characters long.
-        String senderId = "WaiApp";
-        //Your message to send, Add URL encoding here.
-        String message = "Your have succesfully booked " + ResourceName + " for " + ResourceType + ". Contact at: " + ResourceMobileNumber + "";
-        //define route
-        String route = "4";
-        String mainUrl = "https://control.msg91.com/api/sendhttp.php?";
-        URLConnection myURLConnection = null;
-        URL myURL = null;
-        BufferedReader reader = null;
+    private void createNotif() {
 
-        String encoded_message = URLEncoder.encode(message);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(PaymentActivity.this);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        mBuilder.setContentTitle("New Message");
+        mBuilder.setContentText("Resource booked successfully.");
+        mBuilder.setTicker("New Booking Alert!");
+        mBuilder.setSound(defaultSoundUri);
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher);
 
-        StringBuilder sbPostData = new StringBuilder(mainUrl);
-        sbPostData.append("authkey=" + authkey);
-        sbPostData.append("&mobiles=" + mobiles);
-        sbPostData.append("&message=" + encoded_message);
-        sbPostData.append("&route=" + route);
-        sbPostData.append("&sender=" + senderId);
+        mBuilder.setNumber(1);
 
-        mainUrl = sbPostData.toString();
-        try {
-            myURL = new URL(mainUrl);
-            myURLConnection = myURL.openConnection();
-            myURLConnection.connect();
-            reader = new BufferedReader(new InputStreamReader(myURLConnection.getInputStream()));
-            String response;
-            while ((response = reader.readLine()) != null)
-                System.out.println(response);
+        NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
 
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        String[] events = new String[3];
+        events[0] = new String("Your have succesfully booked "+ResourceName+"");
+        events[1] = new String("for "+ResourceType+".");
+        events[2] = new String("Contact at: "+ResourceMobileNumber+"");
+
+        inboxStyle.setBigContentTitle("Booking Details:");
+
+        for (int i = 0; i < events.length; i++) {
+            inboxStyle.addLine(events[i]);
         }
+        mBuilder.setStyle(inboxStyle);
+
+        Intent resultIntent = new Intent(PaymentActivity.this, MainActivity.class);
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(PaymentActivity.this);
+        stackBuilder.addParentStack(PaymentActivity.class);
+
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        int Notifid = (int) System.currentTimeMillis();
+        mNotificationManager.notify(Notifid, mBuilder.build());
     }
 
-    private void sendMessageResource(Long resourceMobileNumber) {
-        Log.v("Msg123", "Message: " + resourceMobileNumber);
-        String authkey = "163975ALgKqHIMr1K595ce022";
+
+    private void sendMessageCustomer(long mobileNumber){
+        Log.v("Msg123","Message: "+mobileNumber);
+        String authkey="163975ALgKqHIMr1K595ce022";
         //Multiple mobiles numbers separated by comma
-        String mobiles = String.valueOf(resourceMobileNumber);
+        String mobiles=String.valueOf(mobileNumber);
         //Sender ID,While using route4 sender id should be 6 characters long.
-        String senderId = "WaiApp";
+        String senderId="WaiApp";
         //Your message to send, Add URL encoding here.
-        String message = "You have been booked by " + String.format("%s %s", user.getFirstName(), user.getLastName()) + ". Contact at: " + user.getMobileNumber() + "";
+        String message="Your have succesfully booked "+ResourceName+" for "+ResourceType+". Contact at: "+ResourceMobileNumber+"";
         //define route
-        String route = "4";
-        String mainUrl = "https://control.msg91.com/api/sendhttp.php?";
-        URLConnection myURLConnection = null;
-        URL myURL = null;
-        BufferedReader reader = null;
+        String route="4";
+        String mainUrl="https://control.msg91.com/api/sendhttp.php?";
+        URLConnection myURLConnection=null;
+        URL myURL=null;
+        BufferedReader reader=null;
 
-        String encoded_message = URLEncoder.encode(message);
+        String encoded_message= URLEncoder.encode(message);
 
-        StringBuilder sbPostData = new StringBuilder(mainUrl);
-        sbPostData.append("authkey=" + authkey);
-        sbPostData.append("&mobiles=" + mobiles);
-        sbPostData.append("&message=" + encoded_message);
-        sbPostData.append("&route=" + route);
-        sbPostData.append("&sender=" + senderId);
+        StringBuilder sbPostData=new StringBuilder(mainUrl);
+        sbPostData.append("authkey="+authkey);
+        sbPostData.append("&mobiles="+mobiles);
+        sbPostData.append("&message="+encoded_message);
+        sbPostData.append("&route="+route);
+        sbPostData.append("&sender="+senderId);
 
-        mainUrl = sbPostData.toString();
-        try {
-            myURL = new URL(mainUrl);
-            myURLConnection = myURL.openConnection();
-            myURLConnection.connect();
-            reader = new BufferedReader(new InputStreamReader(myURLConnection.getInputStream()));
-            String response;
-            while ((response = reader.readLine()) != null)
-                System.out.println(response);
+        mainUrl=sbPostData.toString();
+        try{
+        myURL=new URL(mainUrl);
+        myURLConnection=myURL.openConnection();
+        myURLConnection.connect();
+        reader=new BufferedReader(new InputStreamReader(myURLConnection.getInputStream()));
+        String response;
+        while((response=reader.readLine())!=null)
+        System.out.println(response);
 
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        reader.close();
+        }catch(IOException e){
+        e.printStackTrace();
+        }
         }
 
-    }
+private void sendMessageResource(Long resourceMobileNumber){
+        Log.v("Msg123","Message: "+resourceMobileNumber);
+        String authkey="163975ALgKqHIMr1K595ce022";
+        //Multiple mobiles numbers separated by comma
+        String mobiles=String.valueOf(resourceMobileNumber);
+        //Sender ID,While using route4 sender id should be 6 characters long.
+        String senderId="WaiApp";
+        //Your message to send, Add URL encoding here.
+        String message="You have been booked by "+String.format("%s %s",user.getFirstName(),user.getLastName())+". Contact at: "+user.getMobileNumber()+"";
+        //define route
+        String route="4";
+        String mainUrl="https://control.msg91.com/api/sendhttp.php?";
+        URLConnection myURLConnection=null;
+        URL myURL=null;
+        BufferedReader reader=null;
 
-    private void SendDetailsMessageUser(long mobileNumber) {
-        HttpPost httppost = new HttpPost(
-                "https://api.twilio.com/2010-04-01/Accounts/ACa5ff1aeb91ffc0f7247b6651680df2f2/SMS/Messages");
-        String base64EncodedCredentials = "Basic "
-                + Base64.encodeToString(
-                (ACCOUNT_SID + ":" + AUTH_TOKEN).getBytes(),
-                Base64.NO_WRAP);
+        String encoded_message=URLEncoder.encode(message);
+
+        StringBuilder sbPostData=new StringBuilder(mainUrl);
+        sbPostData.append("authkey="+authkey);
+        sbPostData.append("&mobiles="+mobiles);
+        sbPostData.append("&message="+encoded_message);
+        sbPostData.append("&route="+route);
+        sbPostData.append("&sender="+senderId);
+
+        mainUrl=sbPostData.toString();
+        try{
+        myURL=new URL(mainUrl);
+        myURLConnection=myURL.openConnection();
+        myURLConnection.connect();
+        reader=new BufferedReader(new InputStreamReader(myURLConnection.getInputStream()));
+        String response;
+        while((response=reader.readLine())!=null)
+        System.out.println(response);
+
+        reader.close();
+        }catch(IOException e){
+        e.printStackTrace();
+        }
+
+        }
+
+private void SendDetailsMessageUser(long mobileNumber){
+        HttpPost httppost=new HttpPost(
+        "https://api.twilio.com/2010-04-01/Accounts/ACa5ff1aeb91ffc0f7247b6651680df2f2/SMS/Messages");
+        String base64EncodedCredentials="Basic "
+        + Base64.encodeToString(
+        (ACCOUNT_SID+":"+AUTH_TOKEN).getBytes(),
+        Base64.NO_WRAP);
 
         httppost.setHeader("Authorization",
-                base64EncodedCredentials);
-        try {
+        base64EncodedCredentials);
+        try{
 
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-            nameValuePairs.add(new BasicNameValuePair("From",
-                    "+14158552534"));
-            nameValuePairs.add(new BasicNameValuePair("To",
-                    "+91" + mobileNumber + ""));
-            nameValuePairs.add(new BasicNameValuePair("Body",
-                    "Your have succesfully booked " + ResourceName + " for " + ResourceType + ".Contact at: " + ResourceMobileNumber + ""));
+        List<NameValuePair> nameValuePairs=new ArrayList<NameValuePair>();
+        nameValuePairs.add(new BasicNameValuePair("From",
+        "+14158552534"));
+        nameValuePairs.add(new BasicNameValuePair("To",
+        "+91"+mobileNumber+""));
+        nameValuePairs.add(new BasicNameValuePair("Body",
+        "Your have succesfully booked "+ResourceName+" for "+ResourceType+".Contact at: "+ResourceMobileNumber+""));
 
-            httppost.setEntity(new UrlEncodedFormEntity(
-                    nameValuePairs));
+        httppost.setEntity(new UrlEncodedFormEntity(
+        nameValuePairs));
 
-            // Execute HTTP Post Request
-            HttpResponse response = httpclient.execute(httppost);
-            HttpEntity entity = response.getEntity();
-            System.out.println("Entity post is: "
-                    + EntityUtils.toString(entity));
+        // Execute HTTP Post Request
+        HttpResponse response=httpclient.execute(httppost);
+        HttpEntity entity=response.getEntity();
+        System.out.println("Entity post is: "
+        + EntityUtils.toString(entity));
 
 
-        } catch (ClientProtocolException e) {
+        }catch(ClientProtocolException e){
 
-        } catch (IOException e) {
+        }catch(IOException e){
 
         }
-    }
+        }
 
-    private void SendConfirmationMessage(Long resourceMobileNumber, long mobileNumber) {
-        HttpPost httppost = new HttpPost(
-                "https://api.twilio.com/2010-04-01/Accounts/ACa5ff1aeb91ffc0f7247b6651680df2f2/SMS/Messages");
-        String base64EncodedCredentials = "Basic "
-                + Base64.encodeToString(
-                (ACCOUNT_SID + ":" + AUTH_TOKEN).getBytes(),
-                Base64.NO_WRAP);
+private void SendConfirmationMessage(Long resourceMobileNumber,long mobileNumber){
+        HttpPost httppost=new HttpPost(
+        "https://api.twilio.com/2010-04-01/Accounts/ACa5ff1aeb91ffc0f7247b6651680df2f2/SMS/Messages");
+        String base64EncodedCredentials="Basic "
+        +Base64.encodeToString(
+        (ACCOUNT_SID+":"+AUTH_TOKEN).getBytes(),
+        Base64.NO_WRAP);
 
         httppost.setHeader("Authorization",
-                base64EncodedCredentials);
-        try {
-            List<NameValuePair> nameValuePairs2 = new ArrayList<NameValuePair>();
-            nameValuePairs2.add(new BasicNameValuePair("From",
-                    "+14158552534"));
-            nameValuePairs2.add(new BasicNameValuePair("To",
-                    "+91" + mobileNumber + ""));
-            nameValuePairs2.add(new BasicNameValuePair("Body",
-                    "You have succesfully booked " + ResourceName + " for " + ResourceType + ".Contact at: " + ResourceMobileNumber + ""));
+        base64EncodedCredentials);
+        try{
+        List<NameValuePair> nameValuePairs2=new ArrayList<NameValuePair>();
+        nameValuePairs2.add(new BasicNameValuePair("From",
+        "+14158552534"));
+        nameValuePairs2.add(new BasicNameValuePair("To",
+        "+91"+mobileNumber+""));
+        nameValuePairs2.add(new BasicNameValuePair("Body",
+        "You have succesfully booked "+ResourceName+" for "+ResourceType+".Contact at: "+ResourceMobileNumber+""));
 
-            httppost.setEntity(new UrlEncodedFormEntity(
-                    nameValuePairs2));
-
-
-            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-            nameValuePairs.add(new BasicNameValuePair("From",
-                    "+14158552534"));
-            nameValuePairs.add(new BasicNameValuePair("To",
-                    "+91" + resourceMobileNumber + ""));
-            nameValuePairs.add(new BasicNameValuePair("Body",
-                    "You have been booked by " + String.format("%s %s", user.getFirstName(), user.getLastName()) + ".Contact at: " + user.getMobileNumber() + ""));
-
-            httppost.setEntity(new UrlEncodedFormEntity(
-                    nameValuePairs));
-
-            // Execute HTTP Post Request
-            HttpResponse response = httpclient.execute(httppost);
-            HttpEntity entity = response.getEntity();
-            System.out.println("Entity post is: "
-                    + EntityUtils.toString(entity));
+        httppost.setEntity(new UrlEncodedFormEntity(
+        nameValuePairs2));
 
 
-        } catch (ClientProtocolException e) {
+        List<NameValuePair> nameValuePairs=new ArrayList<NameValuePair>();
+        nameValuePairs.add(new BasicNameValuePair("From",
+        "+14158552534"));
+        nameValuePairs.add(new BasicNameValuePair("To",
+        "+91"+resourceMobileNumber+""));
+        nameValuePairs.add(new BasicNameValuePair("Body",
+        "You have been booked by "+String.format("%s %s",user.getFirstName(),user.getLastName())+".Contact at: "+user.getMobileNumber()+""));
 
-        } catch (IOException e) {
+        httppost.setEntity(new UrlEncodedFormEntity(
+        nameValuePairs));
+
+        // Execute HTTP Post Request
+        HttpResponse response=httpclient.execute(httppost);
+        HttpEntity entity=response.getEntity();
+        System.out.println("Entity post is: "
+        +EntityUtils.toString(entity));
+
+
+        }catch(ClientProtocolException e){
+
+        }catch(IOException e){
 
         }
-    }
+        }
 
-    private void saveOrder() {
-        int id = mRadioGroupPayment.getCheckedRadioButtonId();
-        String _paymentMode = null;
-        switch (id) {
-            case R.id.payment_rb_mode_COD:
-                Toast.makeText(PaymentActivity.this, "You selected Cash on delivery", Toast.LENGTH_SHORT).show();
-                _paymentMode = "COD";
-                break;
-            case R.id.payment_rb_mode_paytm:
-                Toast.makeText(PaymentActivity.this, "You selected paytm", Toast.LENGTH_SHORT).show();
-                _paymentMode = "PAYTM";
-                break;
-            case R.id.payment_rb_mode_payu:
-                Toast.makeText(PaymentActivity.this, "You selected paytu", Toast.LENGTH_SHORT).show();
-                _paymentMode = "PAYU";
-                break;
+private void saveOrder(){
+        int id=mRadioGroupPayment.getCheckedRadioButtonId();
+        String _paymentMode=null;
+        switch(id){
+        case R.id.payment_rb_mode_COD:
+        Toast.makeText(PaymentActivity.this,"You selected Cash on delivery",Toast.LENGTH_SHORT).show();
+        _paymentMode="COD";
+        break;
+        case R.id.payment_rb_mode_paytm:
+        Toast.makeText(PaymentActivity.this,"You selected paytm",Toast.LENGTH_SHORT).show();
+        _paymentMode="PAYTM";
+        break;
+        case R.id.payment_rb_mode_payu:
+        Toast.makeText(PaymentActivity.this,"You selected paytu",Toast.LENGTH_SHORT).show();
+        _paymentMode="PAYU";
+        break;
         }
         mOrder.setPaymentMode(_paymentMode);
         mOrder.setOrderStatus(Constants.ORDER_STATUS_ORDERED);
         mOrder.setOrderProgressStatus(Constants.ORDER_PROGRESS_STATUS_RESOURCE_CONFIRMATION_AWAITED);
-        HashMap<String, Object> orderbookingTime = new HashMap<>();
+        HashMap<String, Object> orderbookingTime=new HashMap<>();
         orderbookingTime.put(Constants.FIREBASE_PROPERTY_TIMESTAMP, ServerValue.TIMESTAMP);
         mOrder.setOrderbookingTime(orderbookingTime);
 
-        mOrderKey = mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDERS).push().getKey();
+        mOrderKey=mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDERS).push().getKey();
 
-        mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDERS).child(UID).child(mOrderKey).setValue(mOrder).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (!task.isSuccessful()) {
-                    Toast.makeText(PaymentActivity.this, "Order saving failed", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(PaymentActivity.this, "Order Saved successfully", Toast.LENGTH_SHORT).show();
-                    updateUserOrderHistory();
-                    updateResourceOrderHistory();
-                    final OrderKey orderKey = new OrderKey();
-                    orderKey.setId(UID);
-                    orderKey.setOrderkey(mOrderKey);
-                    realm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
-                            realm.copyToRealmOrUpdate(orderKey);
-                        }
-                    });
-                    startActivity(new Intent(PaymentActivity.this, OrderConfirmActivity.class).putExtra("orderKey", mOrderKey).putExtra("orderId", mOrder.getOrderId()));
-                    closeProgressDialog();
-                }
-            }
+        mDatabase.child(Constants.FIREBASE_CHILD_USER_ORDERS).child(UID).child(mOrderKey).setValue(mOrder).addOnCompleteListener(new OnCompleteListener<Void>(){
+@Override
+public void onComplete(@NonNull Task<Void> task){
+        if(!task.isSuccessful()){
+        Toast.makeText(PaymentActivity.this,"Order saving failed",Toast.LENGTH_SHORT).show();
+        }else{
+        Toast.makeText(PaymentActivity.this,"Order Saved successfully",Toast.LENGTH_SHORT).show();
+        updateUserOrderHistory();
+        updateResourceOrderHistory();
+final OrderKey orderKey=new OrderKey();
+        orderKey.setId(UID);
+        orderKey.setOrderkey(mOrderKey);
+        realm.executeTransaction(new Realm.Transaction(){
+@Override
+public void execute(Realm realm){
+        realm.copyToRealmOrUpdate(orderKey);
+        }
+        });
+        startActivity(new Intent(PaymentActivity.this,OrderConfirmActivity.class).putExtra("orderKey",mOrderKey).putExtra("orderId",mOrder.getOrderId()));
+        closeProgressDialog();
+        }
+        }
         });
 
-    }
+        }
 
-    private void updateResourceOrderHistory() {
+private void updateResourceOrderHistory(){
         mDatabase.child(Constants.FIREBASE_CHILD_RESOURCE_ORDERS).child(mresourceKey).child(mOrderKey).setValue(mOrder);
-    }
+        }
 
-    private void updateUserOrderHistory() {
+private void updateUserOrderHistory(){
         mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER).setValue(mOrder);
 //        mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(mOrderAmount);
         mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ADDRESS).setValue(mAddress);
-        switch (mOrderType) {
-            case Constants.ORDER_TYPE_CLEANING:
-                CleaningOrderAmountValues cleaningOrderAmountValues = realm.where(CleaningOrderAmountValues.class).equalTo("OrderId", mOrderId).findFirst();
-                mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(cleaningOrderAmountValues);
-                break;
-            case Constants.ORDER_TYPE_COOKING:
-                CookingOrderAmountValues cookingOrderAmountValues = realm.where(CookingOrderAmountValues.class).equalTo("OrderId", mOrderId).findFirst();
-                mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(cookingOrderAmountValues);
-                break;
-            case Constants.ORDER_TYPE_WASHING:
-                WashingOrderAmountValues washingOrderAmountValues = realm.where(WashingOrderAmountValues.class).equalTo("OrderId", mOrderId).findFirst();
-                mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(washingOrderAmountValues);
-                break;
+        switch(mOrderType){
+        case Constants.ORDER_TYPE_CLEANING:
+        CleaningOrderAmountValues cleaningOrderAmountValues=realm.where(CleaningOrderAmountValues.class).equalTo("OrderId",mOrderId).findFirst();
+        mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(cleaningOrderAmountValues);
+        break;
+        case Constants.ORDER_TYPE_COOKING:
+        CookingOrderAmountValues cookingOrderAmountValues=realm.where(CookingOrderAmountValues.class).equalTo("OrderId",mOrderId).findFirst();
+        mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(cookingOrderAmountValues);
+        break;
+        case Constants.ORDER_TYPE_WASHING:
+        WashingOrderAmountValues washingOrderAmountValues=realm.where(WashingOrderAmountValues.class).equalTo("OrderId",mOrderId).findFirst();
+        mDatabase.child(Constants.FIREBASE_CHILD_ORDER_DETAILS).child(mOrderKey).child(Constants.FIREBASE_CHILD_ORDER_AMOUNT).setValue(washingOrderAmountValues);
+        break;
         }
 
-    }
-
-    @Override
-    public void onBackPressed() {
-        ExitAlertDialogFragment exitAlertDialogFragment = new ExitAlertDialogFragment();
-        exitAlertDialogFragment.show(getSupportFragmentManager(), DIALOG_ALERT);
-    }
-
-    @Override
-    public void ExitOrder(Boolean exit) {
-        if (exit) {
-            startActivity(new Intent(PaymentActivity.this, MainActivity.class));
         }
-    }
 
-    void showProgressDialog() {
-        mProgressDialog = new ProgressDialog(this);
+@Override
+public void onBackPressed(){
+        ExitAlertDialogFragment exitAlertDialogFragment=new ExitAlertDialogFragment();
+        exitAlertDialogFragment.show(getSupportFragmentManager(),DIALOG_ALERT);
+        }
+
+@Override
+public void ExitOrder(Boolean exit){
+        if(exit){
+        startActivity(new Intent(PaymentActivity.this,MainActivity.class));
+        }
+        }
+
+        void showProgressDialog(){
+        mProgressDialog=new ProgressDialog(this);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setCancelable(false);
         mProgressDialog.setTitle("Saving...");
         mProgressDialog.show();
-    }
-
-    void closeProgressDialog() {
-        if (mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
         }
-    }
-}
+
+        void closeProgressDialog(){
+        if(mProgressDialog.isShowing()){
+        mProgressDialog.dismiss();
+        }
+        }
+        }
